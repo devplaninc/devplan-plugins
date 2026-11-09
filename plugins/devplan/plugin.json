@@ -1,0 +1,35 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "devplan",
+  "version": "0.1.0",
+  "description": "Daily Radar, Demand Report, Spec, Engineering Analytics and more, built from your team's tools. Upgrades to Weaver's knowledge graph when you connect Devplan.",
+  "author": {
+    "name": "Devplan",
+    "url": "https://devplan.com"
+  },
+  "homepage": "https://devplan.com/plugin",
+  "repository": "https://github.com/devplaninc/devplan-plugins",
+  "license": "MIT",
+  "keywords": ["devplan", "weaver", "radar", "demand-report", "spec", "engineering-analytics", "product-intelligence"],
+  "extensions": {
+    "com.openai": {
+      "onboardingSkill": "./skills/devplan-setup/SKILL.md",
+      "interface": {
+        "displayName": "Devplan",
+        "shortDescription": "Daily Radar, Demand Report, specs and engineering analytics for product and engineering teams",
+        "longDescription": "See what moved, what is stuck, what customers need, and how fast you ship, and write grounded specs, built from GitHub, Linear, Jira, Slack, Zendesk, Gong and more. Connect Devplan to upgrade every dashboard to Weaver's knowledge graph and unlock Suggested Projects and engineering analytics.",
+        "developerName": "Devplan",
+        "category": "Productivity",
+        "capabilities": ["Read"],
+        "websiteURL": "https://devplan.com",
+        "privacyPolicyURL": "https://devplan.com/privacy",
+        "termsOfServiceURL": "https://devplan.com/terms",
+        "defaultPrompt": [
+          "Run my Daily Radar",
+          "Build my demand report",
+          "Write a spec for SSO"
+        ]
+      }
+    }
+  }
+}

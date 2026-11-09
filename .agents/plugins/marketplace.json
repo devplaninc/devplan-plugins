@@ -1,0 +1,20 @@
+{
+  "name": "devplan",
+  "interface": {
+    "displayName": "Devplan"
+  },
+  "plugins": [
+    {
+      "name": "devplan",
+      "source": {
+        "source": "local",
+        "path": "./plugins/devplan"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

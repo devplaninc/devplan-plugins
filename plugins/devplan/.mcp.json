@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "devplan": {
+      "type": "http",
+      "url": "https://app.devplan.com/api/v1/mcp"
+    }
+  }
+}

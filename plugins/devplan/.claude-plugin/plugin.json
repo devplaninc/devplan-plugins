@@ -1,0 +1,13 @@
+{
+  "name": "devplan",
+  "version": "0.1.0",
+  "description": "Daily Radar, Demand Report, Spec, Engineering Analytics and more, built from your team's tools. Upgrades to Weaver's knowledge graph when you connect Devplan.",
+  "author": {
+    "name": "Devplan",
+    "url": "https://devplan.com"
+  },
+  "homepage": "https://devplan.com/plugin",
+  "repository": "https://github.com/devplaninc/devplan-plugins",
+  "license": "MIT",
+  "keywords": ["devplan", "weaver", "radar", "demand-report", "spec", "engineering-analytics", "product-intelligence"]
+}

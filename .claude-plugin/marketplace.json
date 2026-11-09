@@ -1,0 +1,21 @@
+{
+  "name": "devplan",
+  "owner": {
+    "name": "Devplan Technologies, Inc.",
+    "url": "https://devplan.com"
+  },
+  "metadata": {
+    "description": "Weaver product intelligence for Claude and Codex",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "devplan",
+      "source": "./plugins/devplan",
+      "description": "Daily Radar, Demand Report, Spec, Engineering Analytics and more, built from your team's tools. Upgrades to Weaver's knowledge graph when you connect Devplan.",
+      "version": "0.1.0",
+      "category": "productivity",
+      "homepage": "https://devplan.com/plugin"
+    }
+  ]
+}
