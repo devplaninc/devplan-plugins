@@ -2,7 +2,7 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "devplan",
   "version": "0.1.0",
-  "description": "Product intelligence for software teams, inside Claude and Codex. Get a Daily Radar of what shipped, what's moving and what's stuck; a Demand Report of what customers need and what nobody is building; grounded specs with technical plans and estimates; and engineering analytics, all built from the tools you already use: GitHub, Linear, Jira, Slack, Notion, Zendesk, Gong and more. Sign in free to save your company context so every answer starts out knowing your company. Connect Devplan to run everything on its knowledge graph and unlock Suggested Projects, Customer Release Briefs, Stale Commitments and Changelogs.",
+  "description": "Product intelligence for software teams. Get a Daily Radar of what shipped and what's stuck, a Demand Report of what customers need, grounded specs with estimates, and engineering analytics, built from GitHub, Linear, Jira, Slack, Notion, Zendesk, Gong and more. Sign in free to save your company context. Connect Devplan to run on its knowledge graph and unlock Suggested Projects, Customer Release Briefs, Stale Commitments and Changelogs.",
   "author": {
     "name": "Devplan",
     "url": "https://devplan.com"
