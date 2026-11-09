@@ -9,6 +9,23 @@ Draft only. Never send or schedule messages.
 
 Apply `devplan-product-context` to gather context quietly.
 
+## How this runs
+
+Open with one friendly line and the plan, for example:
+
+> 1. Load your context and check your tools
+> 2. Find what shipped
+> 3. Match it to customers who asked
+> 4. Draft the updates
+
+Then work through it in order:
+
+- Start each step with a short progress line ("Step 2 of 4: ...").
+- Ask at most one question at a time, only when the answer changes the result. Offer 2 to 4 short options when that helps.
+- Keep the tone friendly and plain. No tool names, IDs, or jargon.
+- Start from the user's saved company context (see `devplan-product-context`). Don't ask for anything it already says.
+- Finish with one suggested next step.
+
 ## 0. Pick access
 
 Test overrides first: "free mode" or "preview" forces Preview run; "graph mode" forces Full run.

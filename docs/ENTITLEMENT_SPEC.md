@@ -65,6 +65,41 @@ Rules:
 
 This is the input to the key funnel analysis: conversion rate by the size of the attribution gap the user saw.
 
+## Tools: `get_workspace_context` and `save_workspace_context`
+
+Saved company context is the main reason to sign in. Setup writes it once; every skill reads it at the start, on every surface.
+
+`get_workspace_context` (no input) returns:
+
+```json
+{
+  "company_description": "string",
+  "target_customers": "string",
+  "competitors": "string",
+  "company_goals": "string",
+  "product_overview": "string",
+  "additional_context": "string",
+  "settings": {
+    "team_channels": ["#eng"],
+    "customer_channels": ["#customers"],
+    "repos": ["org/repo"],
+    "tracker_scope": ["Linear team ENG"],
+    "time_zone": "America/Los_Angeles"
+  },
+  "updated_at": "ISO-8601"
+}
+```
+
+Empty fields are empty strings. A workspace with no saved context returns all fields empty, not an error.
+
+`save_workspace_context` takes the same shape. Fields left out are unchanged. Returns the saved context.
+
+Rules:
+
+- The five company fields map to the existing workspace context in the Devplan web app (Company description, Target customers, Competitors, Company goals, Additional context). Product overview is new. Edits in either place show up in the other.
+- Available on the `free` tier. Never metered.
+- Store text and settings only. Skills never send customer content, tickets, or code here.
+
 ## Metering
 
 - Meter graph-backed tool calls (`query_workspace_graph`, `search_entities`, `start_feature_planning`, and others) in dollars per call or per tokens of graph context returned. Price so that $100 covers about 2 to 3 weeks of daily use by a 10-person team.

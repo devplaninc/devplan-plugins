@@ -7,6 +7,23 @@ description: Engineering and productivity analytics such as cycle time, PR throu
 
 Read-only. Report team and system metrics. Do not rank individual engineers unless the user explicitly asks, and even then show context alongside the numbers.
 
+## How this runs
+
+Open with one friendly line and the plan, for example:
+
+> 1. Load your context and check your tools
+> 2. Pull PRs and issues
+> 3. Work out the metrics
+> 4. Build your dashboard
+
+Then work through it in order:
+
+- Start each step with a short progress line ("Step 2 of 4: ...").
+- Ask at most one question at a time, only when the answer changes the result. Offer 2 to 4 short options when that helps.
+- Keep the tone friendly and plain. No tool names, IDs, or jargon.
+- Start from the user's saved company context (see `devplan-product-context`). Don't ask for anything it already says.
+- Finish with one suggested next step.
+
 ## 0. Pick a mode
 
 Test overrides first: "free mode" or "connector mode" forces Connector mode; "graph mode" forces Graph mode.

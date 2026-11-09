@@ -16,7 +16,7 @@ Every output states its mode on the first line.
 
 ## Test script
 
-1. "Set up Devplan". Check the connector table is accurate and the product context summary is right, with inferred lines marked.
+1. "Set up Devplan". Check it shows the 5-step plan, goes one step at a time, offers the two sign-in options, drafts each of the six context parts and asks about them one at a time, and marks inferred lines. `get_workspace_context` and `save_workspace_context` don't exist yet, so context should fall back to the Project block.
 2. "Run my Daily Radar in free mode". Check the coverage footer numbers.
 3. "Run my Daily Radar in graph mode". Compare against step 2. The gap between the two is your sales pitch.
 4. Repeat steps 2 and 3 for Demand Report and Eng Analytics.

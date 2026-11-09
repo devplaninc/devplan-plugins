@@ -24,8 +24,8 @@ Then say "set up Devplan".
 
 | Skill | Tier | Without Devplan sources | With Devplan sources |
 |---|---|---|---|
-| `devplan-setup` | Free | Detects and connects your tools, sets up a Project and a scheduled radar | Same |
-| `devplan-product-context` | Free | Ambient: grounds everyday product questions in your connected tools | Grounds them in Weaver's graph |
+| `devplan-setup` | Free | Guided 5-step setup: sign in, check tools, capture company context, first dashboard, keep it running | Same |
+| `devplan-product-context` | Free | Ambient: starts every answer from your saved company context and connected tools | Plus Weaver's graph |
 | `daily-radar` | Free | Built from GitHub, Linear or Jira, Slack | Weaver graph, full attribution |
 | `demand-report` | Free | Recurring demand, uncaptured asks and blockers from support, calls, Slack, tracker | Deduplicated and linked to projects and code |
 | `spec` | Free | Discovery questions, product and technical plan, estimate from tracker history | Full product graph, estimates from real velocity |

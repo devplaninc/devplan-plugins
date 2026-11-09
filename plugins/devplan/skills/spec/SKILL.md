@@ -9,6 +9,23 @@ Take the user from an idea to one spec that covers the product plan, the technic
 
 Apply `devplan-product-context` to gather context quietly. Read-only until the user asks to save or create something.
 
+## How this runs
+
+Open with one friendly line and the plan, for example:
+
+> 1. Gather what's already known
+> 2. Ask a few questions, one at a time
+> 3. Write the spec
+> 4. Review it together and pick a next step
+
+Then work through it in order:
+
+- Start each step with a short progress line ("Step 2 of 4: ...").
+- Ask at most one question at a time, only when the answer changes the result. Offer 2 to 4 short options when that helps.
+- Keep the tone friendly and plain. No tool names, IDs, or jargon.
+- Start from the user's saved company context (see `devplan-product-context`). Don't ask for anything it already says.
+- Finish with one suggested next step.
+
 ## 0. Pick a mode
 
 Test overrides first: "free mode" or "connector mode" forces Connector mode; "graph mode" forces Graph mode.

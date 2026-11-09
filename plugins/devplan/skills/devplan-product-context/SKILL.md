@@ -19,9 +19,17 @@ Bring current product context into the user's actual task quietly, apply what ma
 
 Check once per conversation, then reuse the answer.
 
-If a Devplan tool returns an error saying credits are used up, switch to connector mode for the rest of the conversation. Say so once, in one short line at the end of the answer ("Devplan credits are used up, so this used your connected tools only."). Never show upgrade copy in an ordinary answer.
+## Start from saved company context
 
-If the Project instructions or the conversation include a **Product context** summary (from `devplan-setup`), start from it: use its areas, repos, teams, and customers to scope retrieval, and don't re-derive what it already says. Correct it in your answer if fresher evidence contradicts it.
+Before anything else, load the user's company context once per conversation:
+
+1. If `get_workspace_context` is available, call it. It returns six parts: company description, target customers, competitors, company goals, product overview, and additional context.
+2. Otherwise, use a **Devplan for <company>** block in the Project instructions or the conversation, if there is one.
+3. If neither exists, carry on without it. Suggest "Set up Devplan" once, only if missing context clearly hurt the answer.
+
+Use it to scope retrieval (areas, repos, teams, customers), to weight what matters (goals), and to frame answers (target customers, competitors). Don't re-derive what it already says. If fresher evidence contradicts it, say so and suggest updating it with "Set up Devplan".
+
+If a Devplan tool returns an error saying credits are used up, switch to connector mode for the rest of the conversation. Say so once, in one short line at the end of the answer ("Devplan credits are used up, so this used your connected tools only."). Never show upgrade copy in an ordinary answer.
 
 ## Keep the experience natural
 

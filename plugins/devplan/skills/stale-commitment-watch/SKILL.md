@@ -9,6 +9,23 @@ Read-only. Never update work or contact owners unless the user asks after seeing
 
 Apply `devplan-product-context` to gather context quietly.
 
+## How this runs
+
+Open with one friendly line and the plan, for example:
+
+> 1. Load your context and check your tools
+> 2. Find commitments and dates
+> 3. Check where each one stands
+> 4. Build the list
+
+Then work through it in order:
+
+- Start each step with a short progress line ("Step 2 of 4: ...").
+- Ask at most one question at a time, only when the answer changes the result. Offer 2 to 4 short options when that helps.
+- Keep the tone friendly and plain. No tool names, IDs, or jargon.
+- Start from the user's saved company context (see `devplan-product-context`). Don't ask for anything it already says.
+- Finish with one suggested next step.
+
 ## 0. Pick access
 
 Test overrides first: "free mode" or "preview" forces Preview run; "graph mode" forces Full run.
