@@ -86,6 +86,6 @@ The HTML must be self-contained: no external data calls, light and dark mode, re
 
 ## 6. Footer (connector mode only)
 
-> Coverage: {attributed} of {total} signals linked to a project. {unattributed} couldn't be linked. Weaver links them automatically across every tool. Connect sources for $100 in free credits: https://app.devplan.com/connect?src=plugin&skill=daily-radar
+> Coverage: {attributed} of {total} signals linked to a project. {unattributed} couldn't be linked. Weaver links them automatically across every tool. Connect your team's sources in Devplan once, for everyone, and get $100 in free credits: https://app.devplan.com/connect?src=plugin&skill=daily-radar
 
 No footer upsell in graph mode.
