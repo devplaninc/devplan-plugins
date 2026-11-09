@@ -43,7 +43,10 @@
           "Set up Devplan",
           "Run my Daily Radar",
           "Build my demand report"
-        ]
+        ],
+        "brandColor": "#1F3DFF",
+        "logo": "./assets/logo.png",
+        "composerIcon": "./assets/icon.png"
       }
     }
   }

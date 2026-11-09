@@ -1,3 +1,5 @@
+<p align="center"><img src="assets/logo.png" width="96" alt="Devplan" /></p>
+
 # Devplan plugin for Claude and Codex
 
 Daily Radar, Demand Report, Spec, Engineering Analytics and more, built from your team's tools. Connect Devplan to upgrade every skill to Weaver's knowledge graph.
