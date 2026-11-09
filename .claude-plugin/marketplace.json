@@ -5,17 +5,18 @@
     "url": "https://devplan.com"
   },
   "metadata": {
-    "description": "Weaver product intelligence for Claude and Codex",
+    "description": "Devplan: product intelligence for software teams, in Claude and Codex",
     "version": "0.1.0"
   },
   "plugins": [
     {
       "name": "devplan",
       "source": "./plugins/devplan",
-      "description": "Daily Radar, Demand Report, Spec, Engineering Analytics and more, built from your team's tools. Upgrades to Weaver's knowledge graph when you connect Devplan.",
+      "description": "Product intelligence for software teams, inside Claude and Codex. Get a Daily Radar of what shipped, what's moving and what's stuck; a Demand Report of what customers need and what nobody is building; grounded specs with technical plans and estimates; and engineering analytics, all built from the tools you already use: GitHub, Linear, Jira, Slack, Notion, Zendesk, Gong and more. Sign in free to save your company context so every answer starts out knowing your company. Connect Devplan to run everything on its knowledge graph and unlock Suggested Projects, Customer Release Briefs, Stale Commitments and Changelogs.",
       "version": "0.1.0",
       "category": "productivity",
-      "homepage": "https://devplan.com/plugin"
+      "homepage": "https://devplan.com",
+      "displayName": "Devplan"
     }
   ]
 }

@@ -2,32 +2,47 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "devplan",
   "version": "0.1.0",
-  "description": "Daily Radar, Demand Report, Spec, Engineering Analytics and more, built from your team's tools. Upgrades to Weaver's knowledge graph when you connect Devplan.",
+  "description": "Product intelligence for software teams, inside Claude and Codex. Get a Daily Radar of what shipped, what's moving and what's stuck; a Demand Report of what customers need and what nobody is building; grounded specs with technical plans and estimates; and engineering analytics, all built from the tools you already use: GitHub, Linear, Jira, Slack, Notion, Zendesk, Gong and more. Sign in free to save your company context so every answer starts out knowing your company. Connect Devplan to run everything on its knowledge graph and unlock Suggested Projects, Customer Release Briefs, Stale Commitments and Changelogs.",
   "author": {
     "name": "Devplan",
     "url": "https://devplan.com"
   },
-  "homepage": "https://devplan.com/plugin",
+  "homepage": "https://devplan.com",
   "repository": "https://github.com/devplaninc/devplan-plugins",
   "license": "MIT",
-  "keywords": ["devplan", "weaver", "radar", "demand-report", "spec", "engineering-analytics", "product-intelligence"],
+  "keywords": [
+    "devplan",
+    "weaver",
+    "product-intelligence",
+    "product-management",
+    "daily-radar",
+    "customer-demand",
+    "specs",
+    "engineering-analytics",
+    "changelog",
+    "linear",
+    "github",
+    "slack"
+  ],
   "extensions": {
     "com.openai": {
       "onboardingSkill": "./skills/devplan-setup/SKILL.md",
       "interface": {
         "displayName": "Devplan",
-        "shortDescription": "Daily Radar, Demand Report, specs and engineering analytics for product and engineering teams",
-        "longDescription": "See what moved, what is stuck, what customers need, and how fast you ship, and write grounded specs, built from GitHub, Linear, Jira, Slack, Zendesk, Gong and more. Connect Devplan to upgrade every dashboard to Weaver's knowledge graph and unlock Suggested Projects and engineering analytics.",
+        "shortDescription": "Daily Radar, Demand Report, specs and engineering analytics from your team's tools",
+        "longDescription": "Devplan is the product intelligence layer for software teams. This plugin brings it into Codex.\n\nFree: a Daily Radar of what shipped, what's moving and what's stuck; a Demand Report of recurring customer needs, adoption blockers and demand nobody is building; grounded specs with a short discovery conversation, technical plan and estimate; and engineering analytics on cycle time, reviews, throughput and flow. Everything is built from the tools you already use: GitHub, Linear, Jira, Slack, Notion, Zendesk, Gong and more. Your tool data stays in your tools.\n\nSign in free to save your company context (what you do, who you serve, your goals and your product) so every answer starts out knowing your company.\n\nConnect Devplan for $100 in free credits to run everything on its knowledge graph and unlock Suggested Projects, Customer Release Briefs, Stale Commitments and Changelogs.",
         "developerName": "Devplan",
         "category": "Productivity",
-        "capabilities": ["Read"],
+        "capabilities": [
+          "Read"
+        ],
         "websiteURL": "https://devplan.com",
         "privacyPolicyURL": "https://devplan.com/privacy",
         "termsOfServiceURL": "https://devplan.com/terms",
         "defaultPrompt": [
+          "Set up Devplan",
           "Run my Daily Radar",
-          "Build my demand report",
-          "Write a spec for SSO"
+          "Build my demand report"
         ]
       }
     }
