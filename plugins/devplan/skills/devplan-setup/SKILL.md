@@ -1,6 +1,6 @@
 ---
 name: devplan-setup
-description: Set up the Devplan plugin - sign in to save company context, connect tools, capture company and product context, run a first dashboard, and keep it running. Use right after install, when the user says "set up Devplan", asks what to connect, wants to update their company context, or another Devplan skill reports a missing sign-in or connector.
+description: Set up the Devplan plugin - sign in to save company context, connect tools, capture company and product context, run a first dashboard, and schedule a daily email of your dashboards. Use right after install, when the user says "set up Devplan", asks what to connect, wants to update their company context, or another Devplan skill reports a missing sign-in or connector.
 ---
 
 # Devplan setup (test build)
@@ -16,7 +16,7 @@ Open with a short welcome and the plan:
 > 2. Check your tools
 > 3. Capture your company context
 > 4. Run your first dashboard
-> 5. Keep it running
+> 5. Get it in your inbox daily
 
 Then go one step at a time:
 
@@ -118,7 +118,7 @@ Offer the most valuable ready dashboard: "Want to see your Daily Radar now?" If 
 
 Note any settings the user gives along the way: team Slack channels, repos, tracker teams or projects, customer and support channels, and their time zone. If saving is available, save them with the context.
 
-## Step 5 of 5: Keep it running
+## Step 5 of 5: Get it in your inbox daily
 
 **Claude Project.** If the context was saved to Devplan, a Project is optional: offer it only as a place to keep Devplan chats together. If it wasn't saved, a Project is how settings stick, so give one ready-to-paste block:
 
@@ -149,11 +149,20 @@ Defaults:
 - Dashboard links: <artifact links, if any>
 ```
 
-**Scheduled Daily Radar.** Offer once: "Want your Daily Radar ready every weekday morning?" If yes:
+**Daily email.** Offer once, by default: "Want your dashboards emailed to you every weekday morning?" Let them pick which dashboards (default: Daily Radar; add Demand Report or Eng Analytics if they're ready) and a time (default 7:47 in their time zone).
 
-- If the `schedule-radar` skill is available, follow it.
-- Otherwise, if you have a scheduling tool in this session, create a recurring scheduled task on weekdays at a morning time the user picks (default 7:47 in their time zone). Each run starts fresh, so write the prompt as a complete standalone instruction: run the `daily-radar` skill, include the settings above (or say the saved Devplan context will load), and update the same artifact (give its link) rather than create a new one. Tell the user in one sentence whether runs need their approval and where to find the task.
-- If no scheduling tool is available, say so and suggest running "Daily Radar" first thing each morning.
+If yes:
+
+- If the `schedule-radar` skill is available, follow it, then apply the email settings below.
+- Otherwise, if you have a scheduling tool in this session, create **one** recurring scheduled task on weekdays at that time, with email notifications turned on (and push if they want it). The user asked for email by saying yes, so turning it on is expected.
+- Each run starts fresh with no memory of this chat, so write the task's prompt as a complete standalone instruction:
+  1. Run each chosen Devplan skill (for example `daily-radar`) using the saved Devplan company context, or the settings above if nothing is saved.
+  2. Update each dashboard's existing artifact (give the links) rather than creating new ones.
+  3. End with a short email-ready summary: the three things that matter most today across the dashboards, one line each, then a link to each dashboard. This final message is what lands in their inbox.
+- Tell the user in one or two sentences: it's scheduled, what time, that the email goes to their account's address, whether runs need their approval, and where to find or change the task.
+- If no scheduling tool is available, say scheduled email isn't available here and suggest running "Daily Radar" first thing each morning.
+
+The email goes to the user's own inbox only. For teammates, suggest they install the plugin themselves, or share the dashboard links. Never send email to anyone else on the user's behalf.
 
 Scheduled runs only see connectors on the user's own account. If a needed connector is missing, say so before creating the task.
 
