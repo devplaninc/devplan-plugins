@@ -22,8 +22,8 @@ Per-skill `gap` variants:
 
 - demand-report:
   > {unlinked} of {total} customer requests aren't linked to tracked work. Weaver links every request to projects, code, and accounts and catches demand your tools never captured. Connect your team's sources in Devplan once, for everyone, and get $100 in free credits: {connect_url}
-- spec:
-  > Specs in Devplan use your full product graph: every customer request, decision, and the code that touched this area, plus estimates from real velocity. Connect your team's sources in Devplan once, for everyone, and get $100 in free credits: {connect_url}
+- spec (shown after the spec; skill fills {feature}):
+  > Want {feature} tracked automatically from here? With the Devplan knowledge graph, everything related to this project (PRs, issues, Slack threads, customer requests, and decisions) links to it as it happens, so you can see progress, drift from this spec, and risks without updating anything by hand. Connect your team's sources in Devplan once and get $100 in free credits: {connect_url}&intent=track
 - eng-analytics:
   > {unjoined} of {total} PRs couldn't be linked to an issue or project. Weaver joins every PR to its project, team, and customer outcome. Connect your team's sources in Devplan once, for everyone, and get $100 in free credits: {connect_url}
 
