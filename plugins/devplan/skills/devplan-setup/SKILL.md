@@ -1,21 +1,21 @@
 ---
 name: devplan-setup
-description: Set up the Devplan plugin - sign in to save company context, connect tools, capture company and product context, run a first dashboard, and schedule a daily email of your dashboards. Use right after install, when the user says "set up Devplan", asks what to connect, wants to update their company context, or another Devplan skill reports a missing sign-in or connector.
+description: Set up the Devplan plugin - sign in to save company context, connect tools, capture company and product context, build every dashboard your tools support, and schedule a daily email of them. Use right after install, when the user says "set up Devplan", asks what to connect, wants to update their company context, or another Devplan skill reports a missing sign-in or connector.
 ---
 
 # Devplan setup (test build)
 
-Goal: in about five minutes, the user is signed in, their company context is saved, and they've seen a first useful dashboard.
+Goal: the user is signed in, their company context is saved, every dashboard their tools support is built, and a daily email is scheduled.
 
 ## How this runs
 
 Open with a short welcome and the plan:
 
-> Let's get you set up. It takes about five minutes:
+> Let's get you set up. It takes about ten minutes:
 > 1. Sign in to Devplan (free)
 > 2. Check your tools
 > 3. Capture your company context
-> 4. Run your first dashboard
+> 4. Build your dashboards
 > 5. Get it in your inbox daily
 
 Then go one step at a time:
@@ -112,12 +112,34 @@ Company context has six parts:
 
 Then tell the user in one line that product context is on: ordinary product questions will now start from this context and their tools, without naming a skill.
 
-## Step 4 of 5: Run your first dashboard
+## Step 4 of 5: Build your dashboards
 
-Offer the most valuable ready dashboard: "Want to see your Daily Radar now?" If yes, follow the `daily-radar` skill.
+Build every dashboard the user's connections support, so setup ends with a full set rather than one sample.
 
-Note any settings the user gives along the way: team Slack channels, repos, tracker teams or projects, customer and support channels, and their time zone. If saving is available, save them with the context.
+**Pick what to build.** Use what steps 1 and 2 found. Premium dashboards need the Devplan graph: build them only if step 1 found Devplan connected with data (graph mode). Never build premium previews during setup.
 
+| Dashboard | Tier | Build when | Refresh |
+|---|---|---|---|
+| Daily Radar | Free | Code or Work tracking connected | Daily |
+| Demand Report | Free | Support, Calls, Slack, or customer requests in the tracker | Weekly |
+| Engineering Analytics | Free | Code connected | Weekly |
+| Stale Commitments | Premium | Devplan graph connected | Daily |
+| Suggested Projects | Premium | Devplan graph connected | Weekly |
+| Changelog | Premium | Devplan graph connected | Weekly |
+| Customer Release Brief | Premium | Devplan graph connected | Weekly |
+
+Spec isn't a dashboard; it needs a topic. Mention it at the end instead.
+
+**Confirm once.** Say what you'll build and roughly how long it takes, for example: "Your tools support 3 dashboards: Daily Radar, Demand Report, and Engineering Analytics. Building them takes a few minutes. Build all of them?" Options: **Build all**, **Pick which**, **Just Daily Radar**. If Devplan isn't connected with data, add one line naming the four premium dashboards they'd also get with the Devplan graph.
+
+**Build them one at a time,** in the table's order. For each:
+
+- Say "Building 2 of 3: Demand Report".
+- Follow that dashboard's skill, using the saved company context and the settings gathered so far. Ask the skill's one-time questions (for example, which Slack channels) only once across all dashboards, and reuse the answer.
+- Publish it as its own artifact and keep its link.
+- If one fails or has too little data, say so in one line, skip it, and continue. Never let one dashboard stop setup.
+
+**Finish with a list** of every dashboard built, each with its link and one line on what it shows. Note any settings gathered (team Slack channels, repos, tracker teams or projects, customer channels, time zone); if saving is available, save them with the context.
 ## Step 5 of 5: Get it in your inbox daily
 
 **Claude Project.** If the context was saved to Devplan, a Project is optional: offer it only as a place to keep Devplan chats together. If it wasn't saved, a Project is how settings stick, so give one ready-to-paste block:
@@ -149,16 +171,16 @@ Defaults:
 - Dashboard links: <artifact links, if any>
 ```
 
-**Daily email.** Offer once, by default: "Want your dashboards emailed to you every weekday morning?" Let them pick which dashboards (default: Daily Radar; add Demand Report or Eng Analytics if they're ready) and a time (default 7:47 in their time zone).
+**Daily email.** Offer once, by default: "Want your dashboards emailed to you every weekday morning?" Default time 7:47 in their time zone. The email covers every dashboard built in step 4: daily dashboards every weekday, and weekly dashboards added on Mondays.
 
 If yes:
 
 - If the `schedule-radar` skill is available, follow it, then apply the email settings below.
 - Otherwise, if you have a scheduling tool in this session, create **one** recurring scheduled task on weekdays at that time, with email notifications turned on (and push if they want it). The user asked for email by saying yes, so turning it on is expected.
 - Each run starts fresh with no memory of this chat, so write the task's prompt as a complete standalone instruction:
-  1. Run each chosen Devplan skill (for example `daily-radar`) using the saved Devplan company context, or the settings above if nothing is saved.
+  1. Every weekday, refresh the daily dashboards built in step 4 (Daily Radar, and Stale Commitments if built). On Mondays, also refresh the weekly ones (Demand Report, Engineering Analytics, and any premium weekly dashboards built). List each by its skill name. Use the saved Devplan company context, or the settings above if nothing is saved. Skip premium dashboards if the Devplan graph is no longer connected, and say so in the summary.
   2. Update each dashboard's existing artifact (give the links) rather than creating new ones.
-  3. End with a short email-ready summary: the three things that matter most today across the dashboards, one line each, then a link to each dashboard. This final message is what lands in their inbox.
+  3. End with a short email-ready summary: the three things that matter most today across the refreshed dashboards, one line each, then a link to every dashboard. This final message is what lands in their inbox.
 - Tell the user in one or two sentences: it's scheduled, what time, that the email goes to their account's address, whether runs need their approval, and where to find or change the task.
 - If no scheduling tool is available, say scheduled email isn't available here and suggest running "Daily Radar" first thing each morning.
 
@@ -168,6 +190,6 @@ Scheduled runs only see connectors on the user's own account. If a needed connec
 
 **Wrap up** with a short recap of what's set up and three things to try. If Devplan sources aren't connected, end with one line: "When you're ready to roll this out to your team, connect your sources in Devplan once and manage everyone's context, dashboards, and reports centrally."
 
-- "Run my Daily Radar"
-- "Build my demand report"
 - "Write a spec for <something on their roadmap>"
+- "What should I know before changing <an area of their product>?"
+- Open any dashboard and ask a follow-up question about it
