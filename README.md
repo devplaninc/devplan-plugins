@@ -57,6 +57,44 @@ Then type `/plugins`, open the **Devplan** marketplace tab, and install **Devpla
 - Claude Code: `/plugin marketplace update devplan`
 - ChatGPT, Codex app and CLI: `codex plugin marketplace upgrade`, then restart the app.
 
+## Getting started
+
+Setup takes about ten minutes. Start a new chat and say:
+
+> **Set up Devplan**
+
+Setup walks you through six steps, one at a time:
+
+1. **Choose how Devplan runs.** On your own connections (free, nothing to sign in to), or on Devplan for your whole team (connect your sources once, $100 in free credits).
+2. **Check your tools.** Setup shows what's connected and what each dashboard needs. Connect at least one of GitHub, Linear, Jira, or Slack to get going; support and call tools (Zendesk, Intercom, Gong, Granola) add customer demand.
+3. **Capture your company context.** Setup drafts your company description, customers, competitors, goals, and product overview from your website and tools. Approve it in one click or edit any part.
+4. **Save it.** Sign in to Devplan (free) so it follows you everywhere and your teammates start with it filled in, or keep it just for you.
+5. **Build your dashboards.** Every dashboard your tools support, built in a few minutes.
+6. **Get them daily.** Optionally schedule an email every weekday morning with the top three things and links to every dashboard.
+
+### Try these next
+
+| Say | What you get |
+|---|---|
+| "Run my Daily Radar" | What shipped, what's moving, what's stuck, and who owns it |
+| "What are customers asking for?" | Your Demand Report: recurring asks, blockers, and demand nobody is building |
+| "Write a spec for <a feature>" | A few questions, then a spec with a technical plan and estimate |
+| "How fast are we shipping?" | Cycle time, review waits, and throughput |
+| "What slipped this week?" | Commitments that went quiet, slipped, or got blocked |
+| "What shipped today?" | A plain-language changelog |
+| "What should we build next?" | Project ideas backed by evidence |
+| "Who should we tell about what shipped?" | Releases matched to customers, with drafts |
+
+You don't need to name a skill. Ask product questions as you normally would ("why are we building X?", "what should I know before changing billing?") and the answer starts from your company context and tools.
+
+### Tips
+
+- **Work in one place.** On Claude.ai, run Devplan chats inside a Devplan Project if you didn't sign in, so your context sticks.
+- **Change the scope in plain words:** "Daily Radar for the last week", "Demand Report for Acme only".
+- **Everything is read-only.** Nothing is posted, sent, or changed unless you ask after seeing the result.
+- **Each report says which mode it ran in.** On your own connections, it ends with what the run took and what the Devplan graph would add.
+- **Update your context any time** by saying "Set up Devplan" again.
+
 ## Skills
 
 | Skill | Refresh | On your own connections | On the Devplan graph |
