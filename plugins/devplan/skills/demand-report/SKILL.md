@@ -82,6 +82,25 @@ Title: "Demand Report". Sections, in order:
 
 Every item links to its source with a readable name and date.
 
+## Dashboard format
+
+Build the HTML from [references/dashboard-template.html](references/dashboard-template.html). Do not write your own layout or CSS.
+
+1. Copy the template's `<head>` and `<style>` exactly. Change only the title.
+2. Put everything inside the one `<main class="wrap">`. Nothing goes after `</main>` except `</body></html>`.
+3. Use only the template's patterns:
+   - **Pattern A** (`li.item`): titled items with counts and status badges on the right.
+   - **Pattern B** (`li.entry`): dated one-liners, with the date in its own `div.date` on the **same row**. Never put a date on a separate line or row.
+   - **Pattern C** (`table`): only when items share 4 or more fields.
+   - Badges: `b-good` (delivered, on track), `b-partial` (partial, at risk), `b-none` (none, blocked, slipped), `b-info` (neutral).
+4. Every `<section>` holds one `<h2>` and one `<ul class="list">`, `<table>`, or `<p class="empty">`. Every `<li>` sits inside a `<ul class="list">`.
+5. Delete the template comments and any optional block you don't use. Never leave `{{...}}` placeholders.
+6. Escape `&`, `<` and `>` in text from sources.
+
+Before publishing, check the HTML once: every `<section>`, `<ul>`, `<li>` and `<div>` you opened is closed, in order, and no list item sits outside a list. Fix anything that isn't, then publish.
+
+When updating an existing dashboard, rebuild the whole page from the template rather than patching the old HTML.
+
 ## 5. Output
 
 Publish an HTML artifact titled "Demand Report" when you can, otherwise write `devplan-demand-report-YYYY-MM-DD.html` and give the path. Self-contained, light and dark mode, readable on mobile. If the user has a Demand Report artifact already, update it instead of making a new one.

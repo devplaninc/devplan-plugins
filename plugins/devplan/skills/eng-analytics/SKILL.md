@@ -63,6 +63,25 @@ Teams come from the tracker. Without a tracker, report by repo instead of team.
 
 Add 3 findings that explain the biggest changes from the prior period, each with links to example PRs or issues.
 
+## Dashboard format
+
+Build the HTML from [references/dashboard-template.html](references/dashboard-template.html). Do not write your own layout or CSS.
+
+1. Copy the template's `<head>` and `<style>` exactly. Change only the title.
+2. Put everything inside the one `<main class="wrap">`. Nothing goes after `</main>` except `</body></html>`.
+3. Use only the template's patterns:
+   - **Pattern A** (`li.item`): titled items with counts and status badges on the right.
+   - **Pattern B** (`li.entry`): dated one-liners, with the date in its own `div.date` on the **same row**. Never put a date on a separate line or row.
+   - **Pattern C** (`table`): only when items share 4 or more fields.
+   - Badges: `b-good` (delivered, on track), `b-partial` (partial, at risk), `b-none` (none, blocked, slipped), `b-info` (neutral).
+4. Every `<section>` holds one `<h2>` and one `<ul class="list">`, `<table>`, or `<p class="empty">`. Every `<li>` sits inside a `<ul class="list">`.
+5. Delete the template comments and any optional block you don't use. Never leave `{{...}}` placeholders.
+6. Escape `&`, `<` and `>` in text from sources.
+
+Before publishing, check the HTML once: every `<section>`, `<ul>`, `<li>` and `<div>` you opened is closed, in order, and no list item sits outside a list. Fix anything that isn't, then publish.
+
+When updating an existing dashboard, rebuild the whole page from the template rather than patching the old HTML.
+
 ## 4. Output
 
 Title: "Engineering Analytics". A compact header row of the key numbers with their change from the prior period, then the metrics by team or repo, then the findings. Use charts for trends over weeks.

@@ -125,7 +125,7 @@ Build every dashboard the user's connections support, so setup ends with a full 
 | Engineering Analytics | Free | Code connected | Weekly |
 | Stale Commitments | Premium | Devplan graph connected | Daily |
 | Suggested Projects | Premium | Devplan graph connected | Weekly |
-| Changelog | Premium | Devplan graph connected | Weekly |
+| Changelog | Premium | Devplan graph connected | Daily |
 | Customer Release Brief | Premium | Devplan graph connected | Weekly |
 
 Spec isn't a dashboard; it needs a topic. Mention it at the end instead.
@@ -178,7 +178,7 @@ If yes:
 - If the `schedule-radar` skill is available, follow it, then apply the email settings below.
 - Otherwise, if you have a scheduling tool in this session, create **one** recurring scheduled task on weekdays at that time, with email notifications turned on (and push if they want it). The user asked for email by saying yes, so turning it on is expected.
 - Each run starts fresh with no memory of this chat, so write the task's prompt as a complete standalone instruction:
-  1. Every weekday, refresh the daily dashboards built in step 4 (Daily Radar, and Stale Commitments if built). On Mondays, also refresh the weekly ones (Demand Report, Engineering Analytics, and any premium weekly dashboards built). List each by its skill name. Use the saved Devplan company context, or the settings above if nothing is saved. Skip premium dashboards if the Devplan graph is no longer connected, and say so in the summary.
+  1. Every weekday, refresh the daily dashboards built in step 4 (Daily Radar, plus Stale Commitments and Changelog if built). On Mondays, also refresh the weekly ones (Demand Report, Engineering Analytics, and any premium weekly dashboards built). List each by its skill name. Use the saved Devplan company context, or the settings above if nothing is saved. Skip premium dashboards if the Devplan graph is no longer connected, and say so in the summary.
   2. Update each dashboard's existing artifact (give the links) rather than creating new ones.
   3. End with a short email-ready summary: the three things that matter most today across the refreshed dashboards, one line each, then a link to every dashboard. This final message is what lands in their inbox.
 - Tell the user in one or two sentences: it's scheduled, what time, that the email goes to their account's address, whether runs need their approval, and where to find or change the task.
