@@ -1,9 +1,12 @@
 # Test build (0.1.0-test)
 
-This build does not call `get_entitlement`. Each skill picks its mode by calling `list_workspace_members` on the Devplan MCP:
+Each skill picks its mode on its own:
 
-- Works: graph mode (free skills) or full run (premium skills).
-- Missing or errors: connector mode or preview run, with upsell copy inline.
+1. If the Devplan MCP has `get_entitlement`, it uses that.
+2. Otherwise it checks whether `list_workspace_projects` or `list_repository_descriptions` returns data: yes means graph mode, no means connector mode.
+3. If Devplan isn't connected at all, it runs in connector mode.
+
+Every output states its mode on the first line. To test connector mode on an account that has Devplan data, disconnect the Devplan connector for that chat.
 
 ## Force a path
 
@@ -26,6 +29,10 @@ Every output states its mode on the first line.
 8. "Write a spec for <a real upcoming feature> in free mode". Check it asks one question at a time and stops at 2 to 5. Repeat in graph mode.
 9. Ask an ordinary product question ("why are we building X?") without naming a skill. Check product context kicks in quietly, with no upsell.
 
-## Before production
+## When the server tools ship
 
-Swap step 0 in every skill back to `get_entitlement` (see the main build and `docs/ENTITLEMENT_SPEC.md`), remove the overrides, and move the upsell copy server-side.
+When the Devplan MCP adds `get_entitlement`, `get_workspace_context` and `save_workspace_context` (see `docs/ENTITLEMENT_SPEC.md`), the skills pick them up automatically. Check that:
+
+- each skill logs a `get_entitlement` call with its skill name
+- setup saves company context to Devplan and a second teammate sees it already filled in
+- footers show the server's `upsell.gap` copy instead of the built-in list

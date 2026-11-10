@@ -1,6 +1,6 @@
 # Devplan MCP: entitlement and metering spec
 
-The plugin repo is public. All gating, metering and upsell copy live server-side in the Devplan MCP. Skills only read what the server returns.
+The plugin repo is public. Metering and upsell copy live server-side in the Devplan MCP. Skills call `get_entitlement` when it exists and fall back to their own mode check and built-in footer when it doesn't, so the plugin needs no release when these tools ship.
 
 ## Tiers
 
@@ -104,7 +104,7 @@ Rules:
 
 - Meter graph-backed tool calls (`query_workspace_graph`, `search_entities`, `start_feature_planning`, and others) in dollars per call or per tokens of graph context returned. Price so that $100 covers about 2 to 3 weeks of daily use by a 10-person team.
 - `get_entitlement` and `report_skill_result` are never metered.
-- Return a structured error with `upsell.blocked` text from any metered tool at zero balance, so a skill that skips the entitlement check still upsells.
+- At zero balance, metered tools return a structured error; skills then fall back to connector mode.
 
 ## Auth
 

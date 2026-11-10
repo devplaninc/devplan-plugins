@@ -31,8 +31,8 @@ Then go one step at a time:
 
 Check where the user stands, quietly:
 
-- Call `list_workspace_projects` from the Devplan MCP.
-- It succeeds: signed in. If it or `list_repository_descriptions` returns results, Devplan also has their data.
+- If the Devplan MCP has a `get_entitlement` tool, call it with `{"skill": "devplan-setup", "surface": "<surface>"}`. It succeeds: signed in, and `tier` `credits` or `paid` means Devplan has their data.
+- Otherwise call `list_workspace_projects`. It succeeds: signed in. If it or `list_repository_descriptions` returns results, Devplan has their data.
 - Tools missing or an auth error: not signed in.
 
 If Devplan already has their data, say so in one line ("You're connected to Devplan: everything will run on your team's knowledge graph") and go to step 2.

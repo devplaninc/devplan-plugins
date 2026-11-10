@@ -60,5 +60,5 @@ docs/
 
 - Keep `.mcp.json` and `mcp.json` in sync. Claude reads the first, Codex the second.
 - Keep `.claude-plugin/plugin.json` and `plugin.json` versions in sync. Bump both on every release.
-- Never put gating logic or upsell copy in skills. Skills read `get_entitlement` and render what it returns.
+- Skills call `get_entitlement` when the Devplan MCP has it, and use its mode and upsell copy. Until it ships, they fall back to checking whether Devplan has data, and to the built-in Why Devplan footer. Nothing needs to change in the plugin when the server tools go live.
 - No lifecycle hooks: hooks make the plugin ineligible for OpenAI's public directory.
