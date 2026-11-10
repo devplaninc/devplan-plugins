@@ -1,26 +1,61 @@
 <p align="center"><img src="assets/logo.png" width="96" alt="Devplan" /></p>
 
-# Devplan plugin for Claude and Codex
+# Devplan plugin for Claude, ChatGPT and Codex
 
 Daily product and engineering dashboards, built from your team's tools. Connect Devplan to run them all on a shared knowledge graph.
 
 ## Install
 
-**Claude (web and desktop):** Customize > Plugins > Add > Add marketplace > `https://github.com/devplaninc/devplan-plugins` > add Devplan, then connect Devplan on the plugin's Connectors tab.
+Pick the app you use. Once it's installed, say **"Set up Devplan"** in a new chat.
 
-**Claude Code:**
+### Claude (web and desktop app)
+
+1. Go to **Customize > Plugins > Add > Add marketplace** and enter `devplaninc/devplan-plugins`.
+2. Find **Devplan** and select **Add**.
+3. Open the plugin's **Connectors** tab and connect **Devplan** (optional, free).
+
+Installed on Claude, the plugin also shows up in Cowork and Claude Code.
+
+### Claude Code
+
 ```
 /plugin marketplace add devplaninc/devplan-plugins
 /plugin install devplan@devplan
 ```
 
-**Codex:**
+Then run `/mcp`, select **devplan**, and sign in (optional, free).
+
+### ChatGPT and Codex desktop app
+
+1. Add the Devplan marketplace once, from a terminal:
+   ```
+   codex plugin marketplace add devplaninc/devplan-plugins
+   ```
+2. Restart the app, open the **Plugins** directory (in Work mode or Codex), and choose the **Devplan** marketplace.
+3. Open **Devplan** and select the **+** button to install it.
+4. Connect Devplan when prompted (optional, free).
+
+Installed plugins work in both ChatGPT (Chat or Work) and Codex. In ChatGPT, @-mention **Devplan** or pick it from **+ > More**. In a Codex task, use **Sources > Use plugins**.
+
+### Codex CLI
+
 ```
 codex plugin marketplace add devplaninc/devplan-plugins
+codex
 ```
-Then Plugins > Devplan > Add to Codex.
 
-Then say "set up Devplan".
+Then type `/plugins`, open the **Devplan** marketplace tab, and install **Devplan**. Start a new session before using it. Plugins aren't available in the Codex IDE extension.
+
+### For workspace admins
+
+- **ChatGPT Business, Enterprise and Edu:** import `devplaninc/devplan-plugins` as a marketplace under **Workspace settings > Plugins > Marketplaces**. It syncs daily; use **Sync now** to pull changes. Set Devplan to **Installed** to install it for everyone.
+- **Claude Team and Enterprise:** add the marketplace in your organization's plugin settings to make Devplan available to everyone.
+
+### Updating
+
+- Claude: the marketplace syncs from GitHub; reinstall Devplan if a new version doesn't appear.
+- Claude Code: `/plugin marketplace update devplan`
+- ChatGPT, Codex app and CLI: `codex plugin marketplace upgrade`, then restart the app.
 
 ## Skills
 
