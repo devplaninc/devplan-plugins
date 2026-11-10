@@ -3,7 +3,7 @@ name: devplan-setup
 description: Set up the Devplan plugin - sign in to save company context, connect tools, capture company and product context, build every dashboard your tools support, and schedule a daily email of them. Use right after install, when the user says "set up Devplan", asks what to connect, wants to update their company context, or another Devplan skill reports a missing sign-in or connector.
 ---
 
-# Devplan setup (test build)
+# Devplan setup
 
 Goal: the user is signed in, their company context is saved, every dashboard their tools support is built, and a daily email is scheduled.
 
@@ -58,14 +58,14 @@ Check which tool families are available from the tools you can see. Do not call 
 
 | Family | Examples | Used by |
 |---|---|---|
-| Code | GitHub, GitLab | Daily Radar, Spec, Eng Analytics, Changelog (premium) |
-| Work tracking | Linear, Jira, Asana | Daily Radar, Spec, Demand Report, Eng Analytics, Suggested Projects (premium), Customer Release Brief (premium), Stale Commitments (premium) |
-| Chat | Slack | Daily Radar, Demand Report |
+| Code | GitHub, GitLab | Daily Radar, Spec, Eng Analytics, Changelog, Customer Release Brief |
+| Work tracking | Linear, Jira, Asana | Daily Radar, Spec, Demand Report, Eng Analytics, Suggested Projects, Customer Release Brief, Stale Commitments |
+| Chat | Slack | Daily Radar, Demand Report, Stale Commitments |
 | Support | Zendesk, Intercom, Front | Demand Report |
-| Calls / meetings | Gong, Granola | Demand Report |
+| Calls / meetings | Gong, Granola | Demand Report, Stale Commitments |
 | Docs | Notion, Confluence, Google Drive | Spec, company context |
 
-Show a short table: connected, missing, and which skills are ready now. Minimums: Daily Radar and Spec need Code or Work tracking. Demand Report needs Support, Calls, Slack, or customer requests in the tracker. Eng Analytics needs Code.
+Show a short table: connected, missing, and which skills are ready now. Minimums: Daily Radar, Spec, and Customer Release Brief need Code or Work tracking. Demand Report needs Support, Calls, Slack, or customer requests in the tracker. Eng Analytics and Changelog need Code. Stale Commitments and Suggested Projects need Work tracking.
 
 Offer help only for tools that unlock something the user wants. Always use the standard, listed connector. Never send the user to add a custom connector by URL, never give MCP endpoint URLs, and never run `claude mcp add` or `codex mcp add` for them. If a tool has no listed connector, say so and move on.
 
@@ -116,21 +116,19 @@ Then tell the user in one line that product context is on: ordinary product ques
 
 Build every dashboard the user's connections support, so setup ends with a full set rather than one sample.
 
-**Pick what to build.** Use what steps 1 and 2 found. Premium dashboards need the Devplan graph: build them only if step 1 found Devplan connected with data (graph mode). Never build premium previews during setup.
+**Pick what to build.** Use what steps 1 and 2 found. Every dashboard works from the user's own connections; with the Devplan graph connected, each one runs on the graph instead.
 
-| Dashboard | Tier | Build when | Refresh |
-|---|---|---|---|
-| Daily Radar | Free | Code or Work tracking connected | Daily |
-| Demand Report | Free | Support, Calls, Slack, or customer requests in the tracker | Weekly |
-| Engineering Analytics | Free | Code connected | Weekly |
-| Stale Commitments | Premium | Devplan graph connected | Daily |
-| Suggested Projects | Premium | Devplan graph connected | Weekly |
-| Changelog | Premium | Devplan graph connected | Daily |
-| Customer Release Brief | Premium | Devplan graph connected | Weekly |
+| Dashboard | Build when | Refresh |
+|---|---|---|
+| Daily Radar | Code or Work tracking connected | Daily |
+| Demand Report | Support, Calls, Slack, or customer requests in the tracker | Daily |
+| Engineering Analytics | Code connected | Daily |
+| Stale Commitments | Work tracking connected | Daily |
+| Suggested Projects | Work tracking connected | Daily |
+| Changelog | Code connected | Daily |
+| Customer Release Brief | Work tracking or Code connected | Daily |
 
-Spec isn't a dashboard; it needs a topic. Mention it at the end instead.
-
-**Confirm once.** Say what you'll build and roughly how long it takes, for example: "Your tools support 3 dashboards: Daily Radar, Demand Report, and Engineering Analytics. Building them takes a few minutes. Build all of them?" Options: **Build all**, **Pick which**, **Just Daily Radar**. If Devplan isn't connected with data, add one line naming the four premium dashboards they'd also get with the Devplan graph.
+**Confirm once.** Say what you'll build and roughly how long it takes, for example: "Your tools support 5 dashboards: Daily Radar, Demand Report, Engineering Analytics, Stale Commitments, and Changelog. Building them takes a few minutes. Build all of them?" Options: **Build all**, **Pick which**, **Just Daily Radar**. If the Devplan graph isn't connected, add one line: "These will run on your own connections. Connected to Devplan, they run faster and cheaper, stay up to date on their own, and are shared with your team."
 
 **Build them one at a time,** in the table's order. For each:
 
@@ -171,14 +169,14 @@ Defaults:
 - Dashboard links: <artifact links, if any>
 ```
 
-**Daily email.** Offer once, by default: "Want your dashboards emailed to you every weekday morning?" Default time 7:47 in their time zone. The email covers every dashboard built in step 4: daily dashboards every weekday, and weekly dashboards added on Mondays.
+**Daily email.** Offer once, by default: "Want your dashboards emailed to you every weekday morning?" Default time 7:47 in their time zone. The email covers every dashboard built in step 4, refreshed every weekday.
 
 If yes:
 
 - If the `schedule-radar` skill is available, follow it, then apply the email settings below.
 - Otherwise, if you have a scheduling tool in this session, create **one** recurring scheduled task on weekdays at that time, with email notifications turned on (and push if they want it). The user asked for email by saying yes, so turning it on is expected.
 - Each run starts fresh with no memory of this chat, so write the task's prompt as a complete standalone instruction:
-  1. Every weekday, refresh the daily dashboards built in step 4 (Daily Radar, plus Stale Commitments and Changelog if built). On Mondays, also refresh the weekly ones (Demand Report, Engineering Analytics, and any premium weekly dashboards built). List each by its skill name. Use the saved Devplan company context, or the settings above if nothing is saved. Skip premium dashboards if the Devplan graph is no longer connected, and say so in the summary.
+  1. Refresh every dashboard built in step 4 (list each by its skill name). Use the saved Devplan company context, or the settings above if nothing is saved. Each skill picks graph or connector mode on its own, so the email keeps working if the Devplan connection changes.
   2. Update each dashboard's existing artifact (give the links) rather than creating new ones.
   3. End with a short email-ready summary: the three things that matter most today across the refreshed dashboards, one line each, then a link to every dashboard. This final message is what lands in their inbox.
 - Tell the user in one or two sentences: it's scheduled, what time, that the email goes to their account's address, whether runs need their approval, and where to find or change the task.

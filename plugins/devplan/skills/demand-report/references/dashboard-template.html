@@ -35,6 +35,7 @@ table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;p
 .empty{color:var(--faint);font-size:14px;padding:12px 0}
 .foot{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:var(--dim);font-size:13px}
 .foot .cta{margin-top:8px;background:var(--paper);border:1px solid var(--rule);border-radius:10px;padding:12px 14px;color:var(--ink2)}
+.foot .cta ul{margin:6px 0 6px;padding-left:18px}.foot .cta li{margin:2px 0}
 @media (max-width:600px){.item,.entry{grid-template-columns:1fr}.entry{gap:2px}.meta{text-align:left}}
 </style>
 </head>
@@ -100,8 +101,15 @@ table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;p
   </section>
 
   <footer class="foot">
-    <div>{{COVERAGE LINE, connector mode only}}</div>
-    <div class="cta">{{UPSELL LINE, connector mode only}}</div>
+    <!-- Connector mode only. Delete the whole footer in graph mode. -->
+    <div>{{COVERAGE LINE}}</div>
+    <div>{{THIS RUN LINE}}</div>
+    <div class="cta">Run this on the Devplan knowledge graph instead:
+      <ul>
+        <li>{{REASON}}</li>
+      </ul>
+      {{CONNECT LINE with link}}
+    </div>
   </footer>
 
 </main>

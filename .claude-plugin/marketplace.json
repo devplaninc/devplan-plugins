@@ -12,7 +12,7 @@
     {
       "name": "devplan",
       "source": "./plugins/devplan",
-      "description": "Product intelligence for software teams. Get a Daily Radar of what shipped and what's stuck, a Demand Report of what customers need, grounded specs with estimates, and engineering analytics, built from GitHub, Linear, Jira, Slack, Notion, Zendesk, Gong and more. Sign in free to save your company context. Connect Devplan to run on its knowledge graph and unlock Suggested Projects, Customer Release Briefs, Stale Commitments and Changelogs.",
+      "description": "Product intelligence for software teams. Daily Radar, Demand Report, specs, engineering analytics, changelogs, stale commitments, suggested projects and customer release briefs, built from GitHub, Linear, Jira, Slack, Notion, Zendesk, Gong and more. Everything works on your own connections. Connect Devplan to run it all on a shared knowledge graph: faster, cheaper, always up to date, and the same for your whole team.",
       "version": "0.1.0",
       "category": "productivity",
       "homepage": "https://devplan.com",

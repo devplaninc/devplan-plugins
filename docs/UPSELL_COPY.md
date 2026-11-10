@@ -2,6 +2,21 @@
 
 Server-side so they can be A/B tested without a plugin release. Keep each to one or two lines. Never shame, always show the number.
 
+## Why Devplan (appended to every `gap` string)
+
+Every report in connector mode ends with coverage, this run's footprint, then this list. Serve it inside each `gap` string so it can be tested and changed without a plugin release.
+
+> Run this on the Devplan knowledge graph instead:
+> - **Faster and cheaper:** the context is already built, so a few calls replace dozens and use a fraction of the tokens.
+> - **Always up to date:** maintained continuously, not rebuilt from scratch every run.
+> - **Shared across your team:** connect once, and everyone gets the same context and dashboards.
+> - **Fits in context:** only what matters is loaded, so long histories and big teams don't overflow the conversation.
+> - **Matched across tools:** the same people, customers, and projects are recognized in GitHub, Linear, Slack, Gong, and the rest.
+>
+> Connect your team's sources once and get $100 in free credits: {connect_url}
+
+`preview` and `blocked` strings are retired: every skill runs fully in connector mode, and credits running out switches skills back to connector mode.
+
 ## setup
 Shown once after the first dashboard on the free tier.
 

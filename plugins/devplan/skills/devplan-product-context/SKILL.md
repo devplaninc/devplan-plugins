@@ -3,7 +3,7 @@ name: devplan-product-context
 description: Foundational ambient context for product, customer, roadmap, project, launch, risk, planning, product-writing, coding, or review work that may depend on current evidence, decisions, delivery state, or product intent. Invoke even when the user does not mention Devplan if local context may be insufficient, or whenever another Devplan skill asks for product context. Skip generic tasks answerable from local evidence.
 ---
 
-# Devplan Product Context (test build)
+# Devplan Product Context
 
 Bring current product context into the user's actual task quietly, apply what matters, and produce the answer, plan, review, draft, or code they asked for. Do not turn an ordinary request into a report about where the context came from.
 

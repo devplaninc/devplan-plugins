@@ -2,7 +2,7 @@
 
 # Devplan plugin for Claude and Codex
 
-Daily Radar, Demand Report, Spec, Engineering Analytics and more, built from your team's tools. Connect Devplan to upgrade every skill to Weaver's knowledge graph.
+Daily product and engineering dashboards, built from your team's tools. Connect Devplan to run them all on a shared knowledge graph.
 
 ## Install
 
@@ -24,18 +24,20 @@ Then say "set up Devplan".
 
 ## Skills
 
-| Skill | Tier | Without Devplan sources | With Devplan sources |
+| Skill | Refresh | On your own connections | On the Devplan graph |
 |---|---|---|---|
-| `devplan-setup` | Free | Guided 5-step setup: sign in, check tools, capture company context, first dashboard, keep it running | Same |
-| `devplan-product-context` | Free | Ambient: starts every answer from your saved company context and connected tools | Plus Weaver's graph |
-| `daily-radar` | Free | Built from GitHub, Linear or Jira, Slack | Weaver graph, full attribution |
-| `demand-report` | Free | Recurring demand, uncaptured asks and blockers from support, calls, Slack, tracker | Deduplicated and linked to projects and code |
-| `spec` | Free | Discovery questions, product and technical plan, estimate from tracker history | Full product graph, estimates from real velocity |
-| `eng-analytics` | Free | Cycle time, review latency, throughput, WIP from GitHub and tracker | Every PR joined to project and team, full flow |
-| `suggested-projects` | Premium | Preview: 3 themes | Full suggestions with evidence and owners |
-| `customer-release-brief` | Premium | Preview: tracker-linked releases only | Releases matched to every customer who asked, with drafts |
-| `stale-commitment-watch` | Premium | Preview: overdue and blocked tracker items | Commitments from Slack, meetings and calls, tracked to the work |
-| `changelog` | Premium | Preview: merged PRs by repo | Plain-language changelog by feature, availability verified |
+| `devplan-setup` | Once | Guided 5-step setup: sign in, check tools, capture company context, build every dashboard your tools support, daily email | Same |
+| `devplan-product-context` | Always on | Starts every answer from your saved company context and connected tools | Plus the graph |
+| `daily-radar` | Daily | What shipped, moved and stuck, from code, tracker and Slack | Every signal attributed to people and projects |
+| `demand-report` | Daily | Recurring demand, uncaptured asks and blockers from support, calls, Slack, tracker | Deduplicated and linked to projects and code |
+| `eng-analytics` | Daily | Cycle time, reviews, throughput, WIP from GitHub and tracker | Every PR joined to project and team |
+| `stale-commitment-watch` | Daily | Slipped, quiet and blocked commitments from tracker, Slack, meetings | Commitments tracked to the work across every tool |
+| `suggested-projects` | Daily | Project ideas from tracker demand, incidents and roadmap docs | Full evidence, scope and owners from the graph |
+| `changelog` | Daily | Plain-language changelog from merged PRs | Grouped by feature, availability verified |
+| `customer-release-brief` | Daily | Recent releases matched to customers by search, with drafts | Every customer who asked, availability checked |
+| `spec` | On demand | Discovery questions, product and technical plan, estimate | Full graph, estimates from real velocity, tracked automatically |
+
+Every report ends with what this run cost (tool calls, tools, items read) and why the Devplan graph is better: faster and cheaper, always up to date, shared across the team, fits in context, and matched across tools.
 
 ## Repo layout
 

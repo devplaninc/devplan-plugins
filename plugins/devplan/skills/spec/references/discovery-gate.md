@@ -1,4 +1,4 @@
-# Discovery gate (test build)
+# Discovery gate
 
 Use this as a conversational readiness check, not a questionnaire. The goal is to understand the problem and intended value well enough to write a spec - not to collect every possible requirement.
 
