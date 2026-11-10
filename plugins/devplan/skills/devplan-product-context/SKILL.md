@@ -24,8 +24,9 @@ Check once per conversation, then reuse the answer.
 Before anything else, load the user's company context once per conversation:
 
 1. If `get_workspace_context` is available, call it. It returns six parts: company description, target customers, competitors, company goals, product overview, and additional context.
-2. Otherwise, use a **Devplan for <company>** block in the Project instructions or the conversation, if there is one.
-3. If neither exists, carry on without it. Suggest "Set up Devplan" once, only if missing context clearly hurt the answer.
+2. Otherwise, read the local copy if there is one: `${CLAUDE_PLUGIN_DATA}/company-context.md` in Claude Code, or `~/.codex/devplan/company-context.md` in Codex.
+3. Otherwise, use a **Devplan for <company>** block in the Project instructions or the conversation, if there is one.
+4. If none exists, carry on without it. Suggest "Set up Devplan" once, only if missing context clearly hurt the answer.
 
 Use it to scope retrieval (areas, repos, teams, customers), to weight what matters (goals), and to frame answers (target customers, competitors). Don't re-derive what it already says. If fresher evidence contradicts it, say so and suggest updating it with "Set up Devplan".
 

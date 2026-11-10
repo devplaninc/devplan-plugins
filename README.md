@@ -26,7 +26,7 @@ Then say "set up Devplan".
 
 | Skill | Refresh | On your own connections | On the Devplan graph |
 |---|---|---|---|
-| `devplan-setup` | Once | Guided 5-step setup: sign in, check tools, capture company context, build every dashboard your tools support, daily email | Same |
+| `devplan-setup` | Once | Guided 6-step setup: choose Devplan or your own connections, check tools, capture company context, save it (Devplan or locally), build every dashboard your tools support, daily email | Same |
 | `devplan-product-context` | Always on | Starts every answer from your saved company context and connected tools | Plus the graph |
 | `daily-radar` | Daily | What shipped, moved and stuck, from code, tracker and Slack | Every signal attributed to people and projects |
 | `demand-report` | Daily | Recurring demand, uncaptured asks and blockers from support, calls, Slack, tracker | Deduplicated and linked to projects and code |
