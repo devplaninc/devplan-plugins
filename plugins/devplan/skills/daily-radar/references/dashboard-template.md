@@ -1,3 +1,8 @@
+# Dashboard template
+
+Copy this HTML as the starting point for every dashboard. Keep the `<head>` and `<style>` exactly as written; fill in the body using the patterns described in the comments.
+
+```html
 <!doctype html>
 <html lang="en">
 <head>
@@ -115,3 +120,4 @@ table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;p
 </main>
 </body>
 </html>
+```

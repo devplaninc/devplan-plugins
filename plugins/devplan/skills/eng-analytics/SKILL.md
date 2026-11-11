@@ -64,7 +64,7 @@ Add 3 findings that explain the biggest changes from the prior period, each with
 
 ## Dashboard format
 
-Build the HTML from [references/dashboard-template.html](references/dashboard-template.html). Do not write your own layout or CSS.
+Build the HTML from the template in [references/dashboard-template.md](references/dashboard-template.md). Do not write your own layout or CSS.
 
 1. Copy the template's `<head>` and `<style>` exactly. Change only the title.
 2. Put everything inside the one `<main class="wrap">`. Nothing goes after `</main>` except `</body></html>`.
