@@ -16,7 +16,32 @@
       "version": "0.1.0",
       "category": "productivity",
       "homepage": "https://devplan.com",
-      "displayName": "Devplan"
+      "displayName": "Devplan",
+      "keywords": [
+        "devplan",
+        "product-management",
+        "engineering-management",
+        "daily-standup",
+        "standup",
+        "team-status",
+        "customer-feedback",
+        "feature-requests",
+        "voice-of-customer",
+        "prd",
+        "spec",
+        "technical-plan",
+        "estimates",
+        "engineering-metrics",
+        "dora",
+        "cycle-time",
+        "changelog",
+        "release-notes",
+        "roadmap",
+        "linear",
+        "jira",
+        "github",
+        "slack"
+      ]
     }
   ]
 }
