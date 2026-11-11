@@ -32,6 +32,8 @@ Then work through it in order:
 2. If there is no `get_entitlement` tool, call `list_workspace_projects` and `list_repository_descriptions`. Either returns results: **Graph mode**. Both empty: **Connector mode**.
 3. Devplan tools missing or calls failing: **Connector mode**.
 
+Check your available tools for Devplan before deciding it's missing. If your client loads tools on demand, search for "devplan" or `get_entitlement` first. Never call a Devplan tool just to find out whether it exists.
+
 This skill works fully in Connector mode. Don't use Devplan graph tools in that mode. State the mode in one line at the top of the output.
 
 ## 1. Gather context before asking
