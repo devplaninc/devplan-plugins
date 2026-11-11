@@ -70,7 +70,7 @@ Also give a plain markdown copy the user can paste into Slack, Notion, or a rele
 
 ## Dashboard format
 
-Build the HTML from [references/dashboard-template.html](references/dashboard-template.html). Do not write your own layout or CSS.
+Build the HTML from the template in [references/dashboard-template.md](references/dashboard-template.md). Do not write your own layout or CSS.
 
 1. Copy the template's `<head>` and `<style>` exactly. Change only the title.
 2. Put everything inside the one `<main class="wrap">`. Nothing goes after `</main>` except `</body></html>`.
