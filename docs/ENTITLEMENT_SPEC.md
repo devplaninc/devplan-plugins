@@ -31,7 +31,7 @@ Output:
   "access": "full | preview | blocked",
   "credits": { "granted_usd": 100, "remaining_usd": 63.20 },
   "connected_sources": ["github", "linear"],
-  "connect_url": "https://app.devplan.com/connect?src=plugin&skill=daily-radar",
+  "connect_url": "https://app.devplan.com/?mode=signup&src=plugin&skill=daily-radar",
   "upgrade_url": "https://app.devplan.com/billing?src=plugin&skill=daily-radar",
   "upsell": {
     "setup": "string or null",
@@ -50,6 +50,7 @@ Rules:
 - All `upsell` strings are null when tier is `paid`.
 - Include `low_credits` in `upsell.gap` and `upsell.preview` when remaining is under 20%.
 - URLs carry `src=plugin` and `skill` so conversion is attributable per skill and surface.
+- `connect_url` always points to sign-up (`app.devplan.com/?mode=signup`), never sign-in. Sign-up keeps `src`, `skill` and `intent`, and sends a user who is already signed in straight to connecting sources.
 
 ## Tool: `report_skill_result` (optional, recommended)
 

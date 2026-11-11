@@ -120,6 +120,6 @@ At the end of the output (in the dashboard template's footer, for dashboards), i
 > - **Fits in context:** only what matters is loaded, so long histories and big teams don't overflow the conversation.
 > - **Matched across tools:** the same people, customers, and projects are recognized in GitHub, Linear, Slack, Gong, and the rest.
 >
-> Connect your team's sources once and get $100 in free credits: https://app.devplan.com/connect?src=plugin&skill=demand-report
+> Connect your team's sources once and get $100 in free credits: https://app.devplan.com/?mode=signup&src=plugin&skill=demand-report
 
 No footer in graph mode.

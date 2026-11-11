@@ -43,10 +43,10 @@ Otherwise, offer the choice:
 > - **On Devplan, for the whole team** - connect your team's sources once. Everyone shares the same company context, dashboards, and daily reports, and every skill runs on Devplan's knowledge graph: faster, cheaper, and always up to date. $100 in free credits.
 > - **On my own connections** - skills run on the tools you've already connected here. Free, and your tool data stays in your tools.
 
-- **On Devplan:** if they aren't signed in, give the sign-in steps below first. Then give the connect link (https://app.devplan.com/connect?src=plugin&skill=devplan-setup&intent=team) and continue setup. Sources take a while to sync, so don't wait for them.
+- **On Devplan:** if they don't have a Devplan account yet, send them to create one: https://app.devplan.com/?mode=signup&src=plugin&skill=devplan-setup&intent=team. Sign-up is where they connect their team's sources. Then connect the plugin with the sign-in steps below. If they already have an account, give the sign-in steps and the same link (it takes signed-in users straight to connecting sources). Continue setup either way; sources take a while to sync, so don't wait for them.
 - **On my own connections:** say "Great, nothing to sign in to yet. You can move to Devplan any time." Then go to step 2.
 
-Sign-in steps, by surface:
+Sign-in steps, by surface (new users create their account at the sign-up link first):
 
 - Claude.ai / desktop: Customize > Plugins > Devplan > Connectors tab > Connect Devplan.
 - Claude Code: run `/mcp`, select `devplan`, and sign in.
@@ -119,7 +119,7 @@ Then tell the user in one line that product context is on: ordinary product ques
 
 Options: **Sign in and save**, **Save it just for me, here**.
 
-- **Sign in and save:** give the sign-in steps from step 1, then save as above.
+- **Sign in and save:** if they don't have a Devplan account yet, link https://app.devplan.com/?mode=signup&src=plugin&skill=devplan-setup&intent=save first. Then give the sign-in steps from step 1 and save as above.
 - **Save it just for me, here:** use the local fallback below, and say in one line where it lives and that it isn't shared.
 
 **Local fallback, by surface.** Write the context block below, filled in, leaving out lines with no value:
@@ -189,7 +189,7 @@ If yes:
 
 Scheduled runs only see connectors on the user's own account. If a needed connector is missing, say so before creating the task.
 
-The email goes to the user's own inbox only. Never send email to anyone else on the user's behalf. If they ask about teammates, or once after scheduling if Devplan isn't connected, say: "Want this for your whole team? Connect your sources in Devplan once and everyone gets the same context, dashboards, and daily reports, managed in one place, without each person setting up their own tools: https://app.devplan.com/connect?src=plugin&skill=devplan-setup&intent=team"
+The email goes to the user's own inbox only. Never send email to anyone else on the user's behalf. If they ask about teammates, or once after scheduling if Devplan isn't connected, say: "Want this for your whole team? Connect your sources in Devplan once and everyone gets the same context, dashboards, and daily reports, managed in one place, without each person setting up their own tools: https://app.devplan.com/?mode=signup&src=plugin&skill=devplan-setup&intent=team"
 
 **Wrap up** with a short recap of what's set up and three things to try:
 
