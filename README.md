@@ -27,13 +27,10 @@ Then run `/mcp`, select **devplan**, and sign in (optional, free).
 
 ### ChatGPT and Codex desktop app
 
-1. Add the Devplan marketplace once, from a terminal:
-   ```
-   codex plugin marketplace add devplaninc/devplan-plugins
-   ```
-2. Restart the app, open the **Plugins** directory (in Work mode or Codex), and choose the **Devplan** marketplace.
+1. Open **Plugins**, choose to add a marketplace, and enter `devplaninc/devplan-plugins`. (Or from a terminal: `codex plugin marketplace add devplaninc/devplan-plugins`.)
+2. Open the **Plugins** directory (in Work mode or Codex), and choose the **Devplan** marketplace.
 3. Open **Devplan** and select the **+** button to install it.
-4. Connect Devplan when prompted (optional, free).
+4. Connect Devplan when a skill asks (optional, free). Every skill works without it.
 
 Installed plugins work in both ChatGPT (Chat or Work) and Codex. In ChatGPT, @-mention **Devplan** or pick it from **+ > More**. In a Codex task, use **Sources > Use plugins**.
 
