@@ -33,7 +33,7 @@ This skill runs on the user's Devplan workspace.
 Call `list_workspace_projects` (not done, not archived; page through all of them). Include both kinds:
 
 - **Planned projects:** projects with a spec or requirements in Devplan.
-- **Inferred projects:** initiatives Devplan detected from the team's work without a plan. Use the project's own flag if it has one. Otherwise treat a project with linked activity but no requirements document as inferred.
+- **Inferred projects:** initiatives Devplan detected from the team's work without a plan. Use the project's own `inferred` flag or `origin: "inferred"` when Devplan returns one. Otherwise treat a project with linked activity but no requirements document as inferred, and label that section "Likely inferred".
 
 Window for activity: the last 14 days, compared with the 14 before.
 

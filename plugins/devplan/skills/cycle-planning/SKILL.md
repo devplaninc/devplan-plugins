@@ -50,22 +50,47 @@ Quietly collect, using `list_workspace_projects`, `query_workspace_graph`, `sear
 
 ## 3. Size capacity and effort
 
-Base everything on observed history, not ideal hours. Use the last 90 to 180 days from the graph:
+Follow "How to estimate" below for the team's pace and each candidate's PRs.
 
-- **Pace:** merged changes per active engineer per week, and median PR cycle time (opened to merged). Count only people who authored changes in the window, and leave out bots.
-- **Project size:** for projects with linked work in that window, the number of linked changes and distinct authors. Group them into small, medium, and large by changes. Projects have no completion date, and their earliest linked change can be an old backfilled one, so don't measure size by elapsed days.
-- **Effort conversion:** engineer-weeks for a project ≈ its expected changes ÷ changes per engineer-week. Check the result against any spec estimate.
-- **Focus:** the share of merged changes not linked to any project is unplanned work (support, bugs, interrupts). Reserve that share of capacity. If it can't be measured, reserve 25%.
+- **Unplanned work:** the share of merged changes not linked to any project (support, bugs, interrupts). Reserve that share of capacity. If it can't be measured, reserve 25%.
+- **Capacity** in engineer-weeks = engineers × working weeks × (1 − unplanned share), minus known time off. Keep about 10% as buffer on top. Capacity in PRs = that × PRs per engineer-week.
+- **Each candidate:** PRs required (low-high), converted to engineer-weeks. For in-progress work, only the PRs still to go. Where a spec already has an estimate, compare it with the PR-based one and use the PR-based one unless the spec explains the difference.
 
-Capacity in engineer-weeks = engineers × working weeks × (1 − unplanned share), minus known time off. Keep about 10% as buffer on top.
+If a candidate can't be sized, say so and give it a wide range.
 
-Effort for each candidate, in engineer-weeks, as a range:
+<!-- shared:estimating -->
+## How to estimate
 
-- An existing spec estimate, if there is one, checked against history.
-- Otherwise the closest comparable projects by size and area (name them), converted to engineer-weeks with the team's pace.
-- In-progress work: remaining effort from its completion and pace so far.
+Estimate from the team's git history in Devplan, not from ideal hours. Use the last 90 days and leave bots out (authors ending in `[bot]`, dependabot, renovate). Timestamps are epoch milliseconds; write the computed number in place of `$since`.
 
-Use the median for the plan and the 85th percentile as the risk case. Never invent precision: if a candidate can't be sized, say so and give it a wide range.
+1. **Team pace from git.**
+   ```
+   MATCH (a:Person)-[:AUTHORED]->(pr:PullRequest)
+   WHERE pr.mergedAt >= $since AND NOT coalesce(a.name,'') ENDS WITH '[bot]'
+   RETURN count(DISTINCT a) AS engineers, count(DISTINCT pr) AS prs,
+     percentileCont((pr.mergedAt - pr.openedAt)/3600000.0, 0.5) AS p50_hours,
+     percentileCont((pr.mergedAt - pr.openedAt)/3600000.0, 0.85) AS p85_hours
+   ```
+   PRs per engineer-week = prs ÷ engineers ÷ weeks in the window.
+2. **PRs per project, from comparable work.** Count the PRs behind each project's linked changes. Recent changes often link to commits rather than PRs, so count both, and convert commits to PRs with the workspace's ratio of merged PRs to commits over the same window (close to 1 when the team squash-merges).
+   ```
+   MATCH (c:Change)-[:LINKED_TO]->(p:Project) WHERE c.periodEnd >= $since
+   MATCH (c)-[:USED]->(x) WHERE x:PullRequest OR x:GitCommit
+   RETURN p.projectId,
+     count(DISTINCT CASE WHEN x:PullRequest THEN x END) AS prs,
+     count(DISTINCT CASE WHEN x:GitCommit THEN x END) AS commits
+   ORDER BY prs + commits DESC LIMIT 50
+   ```
+   Join project IDs to `list_workspace_projects` for titles. Pick the 2 or 3 projects closest in area and scope as comparables.
+3. **PRs this work needs.** Break the scope into pieces (from the technical approach, or the project's description), estimate PRs for each piece from the comparables, and add them up as a low-high range. For work already in progress, subtract the PRs already linked to it.
+4. **Convert to time.**
+   - Effort in engineer-weeks = PRs ÷ PRs per engineer-week.
+   - Calendar time = the larger of (effort ÷ engineers on it) and (the longest chain of PRs that must land one after another × p85 cycle time).
+   - Plan on the low PR count and median pace. Use the high PR count and p85 cycle time as the risk case.
+5. **Show the basis in one line,** for example: "Based on 410 PRs from 4 engineers over 90 days (8 PRs per engineer-week; cycle time 0.9 hours median, 41 hours at p85). Comparable projects took 28 to 40 PRs."
+
+Never invent precision. With no comparable project, give a wide range and say what would narrow it.
+<!-- /shared:estimating -->
 
 ## 4. Pick a strategic direction
 
@@ -82,7 +107,7 @@ For each direction show, in 3 lines: what it prioritizes, the top 3 items it wou
 
 Fit work into capacity in this order: commitments inside the cycle, then in-progress work for the chosen direction, then new work by the direction's ranking. Stop at capacity. The next items that would fit at the median but not the 85th percentile are **Stretch**. Everything else waits, with a reason.
 
-For each planned item: owner (from who's working in that area; leave blank rather than guess), effort range, why it's in (direction, goal, evidence), dependencies, and the main risk. Flag any engineer who would be on more than two items at once.
+For each planned item: owner (from who's working in that area; leave blank rather than guess), PRs required and effort range, why it's in (direction, goal, evidence), dependencies, and the main risk. Flag any engineer who would be on more than two items at once.
 
 ## 6. Cycle plan
 
@@ -94,7 +119,7 @@ Title: "Cycle Plan". Masthead window: the cycle dates and working weeks; scope: 
 4. **Committed:** one group per planned item, ordered by sequence. Parent row: title linked to the Devplan project if there is one, why it's in, owner, effort range, and the evidence trail. Child rows: dependencies and risks. Items without a spec get a **Write spec** button.
 5. **Stretch:** rows, each with what would need to go right.
 6. **Not this cycle:** rows with the reason (capacity, direction, not ready, blocked).
-7. **How this was sized** (table): engineers, working weeks, unplanned share, throughput, median cycle time, and the comparable projects used.
+7. **How this was sized** (table): engineers, working weeks, unplanned share, PRs per engineer-week, cycle time (median and p85), capacity in PRs, and the comparable projects with their PR counts.
 8. **Assumptions and risks:** rows for the assumptions that would change the plan most.
 
 The **Write spec** button's `data-prompt`:
