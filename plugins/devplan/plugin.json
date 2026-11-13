@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "devplan",
-  "version": "0.1.0",
-  "description": "Product intelligence for software teams. Daily Radar, Demand Report, specs, engineering analytics, changelogs, stale commitments, suggested projects and customer release briefs, built from GitHub, Linear, Jira, Slack, Notion, Zendesk, Gong and more. Everything works on your own connections. Connect Devplan to run it all on a shared knowledge graph: faster, cheaper, always up to date, and the same for your whole team.",
+  "version": "0.2.0",
+  "description": "Product intelligence for software teams, powered by your Devplan workspace. Six dashboards refreshed every weekday: Daily Radar, Execution Monitoring, Demand Report with suggested projects and market trends, Stale Commitments, a searchable Changelog, and Engineering Analytics. Plan cycles from your team's real pace, and write specs that are tracked in Devplan automatically. Requires a Devplan account; setup walks you through creating one.",
   "author": {
     "name": "Devplan",
     "url": "https://devplan.com"
@@ -15,24 +15,27 @@
     "product-management",
     "engineering-management",
     "daily-standup",
-    "standup",
     "team-status",
+    "project-tracking",
+    "cycle-planning",
+    "sprint-planning",
+    "execution",
     "customer-feedback",
     "feature-requests",
     "voice-of-customer",
+    "competitive-intelligence",
     "prd",
     "spec",
     "technical-plan",
     "estimates",
     "engineering-metrics",
-    "dora",
     "cycle-time",
     "changelog",
     "release-notes",
     "roadmap",
+    "github",
     "linear",
     "jira",
-    "github",
     "slack"
   ],
   "extensions": {
@@ -40,8 +43,8 @@
       "onboardingSkill": "./skills/devplan-setup/SKILL.md",
       "interface": {
         "displayName": "Devplan",
-        "shortDescription": "Daily product and engineering dashboards from your team's tools",
-        "longDescription": "Devplan is the product intelligence layer for software teams. This plugin brings it into Codex.\n\nDaily Radar, Demand Report, Engineering Analytics, Stale Commitments, Suggested Projects, Changelog and Customer Release Brief, refreshed daily, plus grounded specs with a discovery conversation, technical plan and estimate. Everything runs on the tools you already use: GitHub, Linear, Jira, Slack, Notion, Zendesk, Gong and more. Your tool data stays in your tools.\n\nSign in free to save your company context so every answer starts out knowing your company.\n\nConnect Devplan to run everything on a shared knowledge graph: faster and cheaper (a few calls instead of dozens), always up to date, the same for your whole team, and people, customers and projects matched across every tool. $100 in free credits.",
+        "shortDescription": "Product intelligence for teams",
+        "longDescription": "Devplan is the product intelligence layer for software teams. It reads your code, tickets, Slack, docs, calls and support, and keeps a live map of your product: what exists, what's shipping, what customers ask for, and what was decided.\n\nThis plugin brings that map into ChatGPT and Codex. Setup builds six dashboards and refreshes them every weekday: Daily Radar (tailored to you), Execution Monitoring for planned and inferred projects, a Demand Report that turns customer demand and market moves into suggested projects, Stale Commitments, a searchable Changelog, and Engineering Analytics.\n\nPlan a cycle from your team's real pace, choosing between a few strategic directions. Write specs with a short discovery conversation, a technical plan and an estimate, and every spec is tracked in Devplan automatically. Ask any product question and get answers that cite the PRs, tickets, calls and decisions behind them.\n\nRequires a Devplan account. Setup walks you through creating one and connecting your sources.",
         "developerName": "Devplan",
         "category": "Productivity",
         "capabilities": [
@@ -53,7 +56,7 @@
         "defaultPrompt": [
           "Set up Devplan",
           "Run my Daily Radar",
-          "Build my demand report"
+          "What are customers asking for that we haven't planned?"
         ],
         "brandColor": "#1F3DFF",
         "logo": "./assets/logo.png",

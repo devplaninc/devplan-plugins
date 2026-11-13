@@ -1,112 +1,80 @@
 ---
 name: changelog
-description: Write a product changelog of what actually changed in a period, grouped by feature area in plain language, with each change's delivery state stated. Use for "changelog", "release notes", "what shipped today", "what shipped this week", "what changed in the product", or "ship log".
+description: Build a searchable product changelog of what actually changed, grouped by product area in plain language, with each change's delivery state. Use for "changelog", "release notes", "what shipped today", "what shipped this week", "what changed in the product", "when did we ship", or "ship log".
 ---
 
 # Changelog
 
-Read-only. Never publish to a public site, post, or send. Draft only.
+What changed in the product, searchable. Read-only: never publish to a public site, post, or send. Draft only.
 
 ## How this runs
 
-Open with one friendly line and the plan, for example:
+Open with one friendly line and the plan:
 
-> 1. Load your context and check your tools
-> 2. Find what changed
-> 3. Group and describe it
-> 4. Build the changelog
+> 1. Find what changed
+> 2. Describe it in plain language
+> 3. Build your changelog
 
-Then work through it in order:
+Start each step with a short progress line ("Step 2 of 3: ..."). Finish with one suggested next step.
 
-- Start each step with a short progress line ("Step 2 of 4: ...").
-- Ask at most one question at a time, only when the answer changes the result. Offer 2 to 4 short options when that helps.
-- Keep the tone friendly and plain. No tool names, IDs, or jargon.
-- Start from the user's saved company context (see `devplan-product-context`). Don't ask for anything it already says.
-- Finish with one suggested next step.
+<!-- shared:before-you-start -->
+## Before you start
 
-## 0. Pick a mode
+This skill runs on the user's Devplan workspace.
 
-1. If the Devplan MCP has a `get_entitlement` tool, call it with `{"skill": "changelog", "surface": "<surface>"}`. `mode: "graph"` means **Graph mode**. Anything else, including credits used up, means **Connector mode**. Keep its `upsell` strings for the footer.
-2. If there is no `get_entitlement` tool, call `list_workspace_projects` and `list_repository_descriptions`. Either returns results: **Graph mode**. Both empty: **Connector mode**.
-3. Devplan tools missing or calls failing: **Connector mode**.
-
-Check your available tools for Devplan before deciding it's missing. If your client loads tools on demand, search for "devplan" or `get_entitlement` first. Never call a Devplan tool just to find out whether it exists.
-
-This skill works fully in Connector mode. Don't use Devplan graph tools in that mode. State the mode in one line at the top of the output.
+1. Check that the Devplan tools are available. If your client loads tools on demand, search for "devplan" first. Never call a Devplan tool just to find out whether it exists.
+2. If Devplan isn't connected, or a call fails with a sign-in error, say in one line that this needs Devplan connected, then follow `devplan-setup` from step 1. Stop this skill there.
+3. Load company and personal context with `devplan-product-context`.
+4. If the workspace is still being built (Devplan is connected but `list_repository_descriptions` and `list_workspace_projects` both come back empty), work from what exists and don't pad. On a dashboard, show the template's notice ("Devplan is still analyzing your sources. This fills in automatically as it finishes."). Anywhere else, say it in one line.
+<!-- /shared:before-you-start -->
 
 ## 1. Scope
 
-Default: since the last working day (the last 24 hours, or since Friday on Mondays). Honor any window, product area, or audience the user gives. Audience defaults to internal. For customer-facing notes, write for customers and drop internal-only changes.
+The dashboard keeps a rolling 30 days so it's worth searching, with the latest working day as the focus (the last 24 hours, or since Friday on Mondays). Honor any window, product area, or audience the user gives. Audience defaults to internal. For customer-facing notes, write for customers and drop internal-only changes.
 
-## 2a. Graph mode
+## 2. Find what changed
 
-Use `query_workspace_graph` and `search_entities` for changes (summaries of PRs and commits), projects, and catalog features completed or changed in the window. Group by catalog feature area.
-
-## 2b. Connector mode
-
-Needs a code connector. If none is connected, run `devplan-setup` instead.
-
-1. Merged PRs in the window in the repos from the saved context (ask once if none are saved). Skip dependency bots, version bumps, and docs-only changes.
-2. Read each PR's title, description, and linked issue (if the tracker is connected) to understand what changed for users.
-3. Group by product area, using the areas in the saved product overview, then repo and labels.
+Use `query_workspace_graph` and `search_entities` (`change`) for changes in the window with their PRs, projects, and the features they created, updated, or deprecated. Group by product area from `list_product_feature_catalog`. Skip bot authors, dependency bumps, docs-only, and test-only changes.
 
 ## 3. Write entries
 
-- Merge PRs that make up one change into a single entry.
+- Merge changes that make up one improvement into a single entry.
 - Write each entry in plain language: what someone can now do, or what got better. One or two sentences, not the implementation.
-- State delivery: merged, deployed, enabled for some, or generally available. Merged code is not proof that customers have it. In connector mode, say "merged, availability not verified" unless a deploy record, flag, or release note says otherwise.
-- Link the project and any customer requests it answers, where you can see them.
+- State delivery: merged, deployed, enabled for some, or generally available. Merged code isn't proof customers have it; say "merged" unless Devplan shows a deploy, flag, or release.
+- Link the project and any customer requests it answers.
 
-## 4. Changelog
+## 4. Dashboard
 
-Title: "Changelog <date range>". Sections:
+Title: "Changelog".
 
-1. **Highlights:** the 3 changes that matter most.
-2. **By area:** each entry with its state, project, customers who asked (if any), and links to the PRs.
-3. **Fixes and improvements:** smaller items, one line each.
+1. **Today:** the three changes from the latest working day that matter most.
+2. **Figures:** changes in the latest working day, in the last 7 days, and in 30 days; areas touched.
+3. **Changes:** dated entries for the full 30 days, newest first, with a search box (`placeholder="Search changes"`) and one chip per product area. Each entry: date, area label, plain-language description with links to the PRs and project, and a state pill (`s-ok` generally available, `s-info` merged or deployed, `s-warn` enabled for some).
 4. **Not yet available:** merged but not enabled or deployed, so nobody announces them early.
 
-Also give a plain markdown copy the user can paste into Slack, Notion, or a release-notes page.
+Give every entry `data-area` set to its product area so the chips filter it.
 
+In chat, also offer a plain markdown copy of the latest day's changes for Slack, Notion, or a release-notes page.
+
+<!-- shared:dashboard-format -->
 ## Dashboard format
 
-Build the HTML from the template in [references/dashboard-template.md](references/dashboard-template.md). Do not write your own layout or CSS.
+Build the page from [references/dashboard-template.md](references/dashboard-template.md). Don't write your own layout, CSS, or script.
 
-1. Copy the template's `<head>` and `<style>` exactly. Change only the title.
-2. Put everything inside the one `<main class="wrap">`. Nothing goes after `</main>` except `</body></html>`.
-3. Use only the template's patterns:
-   - **Pattern A** (`li.item`): titled items with counts and status badges on the right.
-   - **Pattern B** (`li.entry`): dated one-liners, with the date in its own `div.date` on the **same row**. Never put a date on a separate line or row.
-   - **Pattern C** (`table`): only when items share 4 or more fields.
-   - Badges: `b-good` (delivered, on track), `b-partial` (partial, at risk), `b-none` (none, blocked, slipped), `b-info` (neutral).
-4. Every `<section>` holds one `<h2>` and one `<ul class="list">`, `<table>`, or `<p class="empty">`. Every `<li>` sits inside a `<ul class="list">`.
-5. Delete the template comments and any optional block you don't use. Never leave `{{...}}` placeholders.
-6. Escape `&`, `<` and `>` in text from sources.
-7. The footer is for connector mode only. Its Why Devplan list is a plain `<ul>` inside `div.cta`. In graph mode, delete the footer.
+1. Copy the template's `<head>`, `<style>` and `<script>` exactly. Change only the `<title>`.
+2. Fill the masthead: workspace name, page title, window, scope, and when it was updated.
+3. Use only the template's patterns: Today (exactly 3 lines; keep its label unless this skill names another), Figures (2 to 4), Rows, Groups, Dated entries, Table, Trend, Meter, and Empty. Delete every pattern you don't use and every template comment. Never leave `{{...}}` placeholders.
+4. Use the same four states everywhere, as a class on the row and on its pill: `s-ok` (shipped, delivered, on track), `s-warn` (partial, at risk, quiet), `s-bad` (blocked, slipped, off track, no tracked work), `s-info` (new, neutral, suggested).
+5. Every item links to its source. Put evidence in the row's `.trail` as `.src` chips: the tool name in `<i>`, then a readable label (PR #412, LIN-88, #channel, a call title and date, a ticket subject). Never show opaque IDs.
+6. Action buttons copy a ready prompt for the user to paste into Claude. Put the exact message in `data-prompt`, written so it starts the right skill on its own (for example `Write a Devplan spec for &quot;SCIM provisioning&quot;...`). Escape quotes as `&quot;`.
+7. Escape `&`, `<` and `>` in text from sources.
+8. Footer: set the refresh line from the scheduled task ("weekdays at 7:47"), or "Run it again any time" if there is none. Point "Invite teammates" at the workspace members page (see `devplan-product-context`).
 
-Before publishing, check the HTML once: every `<section>`, `<ul>`, `<li>` and `<div>` you opened is closed, in order, and no list item sits outside a list. Fix anything that isn't, then publish.
+Before publishing, check once that every element you opened is closed, in order, and every `li` sits inside a `ul`. On every refresh, rebuild the whole page from the template rather than patching the old HTML.
 
-When updating an existing dashboard, rebuild the whole page from the template rather than patching the old HTML.
+## Publish
 
-## Output
-
-Publish an HTML artifact titled "Changelog" when you can, and update the same artifact on later runs. Otherwise write `devplan-changelog-YYYY-MM-DD.html` to the working directory and give the path.
-
-## Footer: why Devplan (connector mode only)
-
-At the end of the output (in the dashboard template's footer, for dashboards), in this order:
-
-1. **Coverage:** Areas were inferred from PR titles and repos, and availability is not verified. Fill in the numbers from this run.
-2. **This run:** "This run made {calls} tool calls across {tools} tools and read about {items} items." Count your own calls honestly.
-3. **Why Devplan.** If `get_entitlement` returned `upsell.gap`, show it verbatim with values filled in. Otherwise show this, as written (in the template's `div.cta`, as a plain list):
-
-> Run this on the Devplan knowledge graph instead:
-> - **Faster and cheaper:** the context is already built, so a few calls replace dozens and use a fraction of the tokens.
-> - **Always up to date:** maintained continuously, not rebuilt from scratch every run.
-> - **Shared across your team:** connect once, and everyone gets the same context and dashboards.
-> - **Fits in context:** only what matters is loaded, so long histories and big teams don't overflow the conversation.
-> - **Matched across tools:** the same people, customers, and projects are recognized in GitHub, Linear, Slack, Gong, and the rest.
->
-> Connect your team's sources once and get $100 in free credits: https://app.devplan.com/?mode=signup&src=plugin&skill=changelog
-
-No footer in graph mode.
+- **Claude:** publish an HTML artifact with this dashboard's name as its title. If one exists from an earlier run (setup saves the links), update that artifact instead of creating another. If your artifact tool adds its own page wrapper, publish what's inside `<head>` and `<body>` without the wrapper tags.
+- **Claude Code or Codex:** write `devplan-<skill-name>.html` to the working directory, replacing the previous copy, and give the path.
+- **In chat**, after publishing: two or three lines with the most important finding and one suggested next step. Don't repeat the dashboard.
+<!-- /shared:dashboard-format -->

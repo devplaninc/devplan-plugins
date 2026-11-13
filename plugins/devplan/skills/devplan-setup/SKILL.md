@@ -1,200 +1,161 @@
 ---
 name: devplan-setup
-description: Set up the Devplan plugin - choose Devplan or your own connections, check tools, capture company and product context, save it, build every dashboard your tools support, and schedule a daily email of them. Use right after install, when the user says "set up Devplan", asks what to connect, wants to update their company context, or another Devplan skill reports a missing sign-in or connector.
+description: Set up Devplan - connect or create a Devplan workspace, confirm company context, build every dashboard, and schedule weekday refreshes. Use right after install, when the user says "set up Devplan", "get started", "what does Devplan do", wants to change their dashboards, schedule, or company context, or another Devplan skill finds Devplan isn't connected.
 ---
 
 # Devplan setup
 
-Goal: the user's company context is captured and saved, every dashboard their tools support is built, and a daily email is scheduled.
+Goal: by the end, the user has Devplan connected, their company context confirmed, a full set of live dashboards, and a weekday refresh scheduled. They should also know what Devplan does for them and their team, and what to expect while it builds.
 
 ## How this runs
 
-Open with a short welcome and the plan:
+Open with a short welcome that shows what they're about to get, then the plan:
 
-> Let's get you set up. It takes about ten minutes:
-> 1. Choose how Devplan runs
-> 2. Check your tools
-> 3. Capture your company context
-> 4. Save it
-> 5. Build your dashboards
-> 6. Get them in your inbox daily
+> Welcome to Devplan. In about ten minutes you'll have:
+> - Six dashboards built from your team's real work, refreshed every weekday morning
+> - Product answers in any chat, grounded in your code, tickets, calls, and Slack, with sources
+> - A shared memory of what your company decided and why
+>
+> 1. Connect Devplan
+> 2. Check your workspace
+> 3. Confirm your company context
+> 4. Build your dashboards and schedule updates
+> 5. A quick tour
 
 Then go one step at a time:
 
-- Start each step with "Step N of 6: <what's happening>".
-- Ask one question at a time, only when the answer matters. Offer 2 to 4 short options when that helps, using the client's question tool if there is one.
+- Start each step with "Step N of 5: <what's happening>".
+- Ask one question at a time, only when the answer matters. Offer 2 to 4 short options, using the client's question tool if there is one.
 - Keep the tone friendly and plain. No tool names, IDs, or jargon.
 - End each step with one line on what's next.
 - If the user wants to skip a step, skip it and move on.
+- If setup already ran (saved settings list dashboard links), say so and ask what to change: **Company context**, **Dashboards**, **Schedule**, **Start over**. Jump to that step.
 
-## Step 1 of 6: Choose how Devplan runs
+## Step 1 of 5: Connect Devplan
 
-Check where the user stands, quietly:
+Check whether the Devplan tools are available. If your client loads tools on demand, search for "devplan" first. Never call a Devplan tool just to find out whether it exists.
 
-- If the Devplan MCP has a `get_entitlement` tool, call it with `{"skill": "devplan-setup", "surface": "<surface>"}`. It succeeds: signed in, and `tier` `credits` or `paid` means Devplan has their data.
-- Otherwise call `list_workspace_projects`. It succeeds: signed in. If it or `list_repository_descriptions` returns results, Devplan has their data.
-- Tools missing or an auth error: not signed in.
+**Connected:** call `list_workspace_projects` with a small limit. If it answers, say "You're connected to Devplan." and go to step 2. If it fails with a sign-in error, treat Devplan as not connected.
 
-If Devplan already has their data, say so in one line ("You're connected to Devplan: everything will run on your team's knowledge graph") and go to step 2.
+**Not connected:** ask "Do you have a Devplan account?" with options **Yes, connect it**, **No, create one**, **What is Devplan?**
 
-Otherwise, offer the choice:
+- **What is Devplan?** Answer in four lines, then ask again:
+  > Devplan connects to your code, tickets, Slack, docs, calls, and support, and keeps a live map of your product: what exists, what's shipping, what customers are asking for, and what was decided.
+  > It links every PR, ticket, conversation, and customer request to the people, projects, and features it belongs to, across all your tools.
+  > Claude, Slack, and your team work from that same map, so nobody starts from scratch.
+  > Setup takes about ten minutes of your time. Devplan does the rest in the background.
 
-> How do you want Devplan to run?
-> - **On Devplan, for the whole team** - connect your team's sources once. Everyone shares the same company context, dashboards, and daily reports, and every skill runs on Devplan's knowledge graph: faster, cheaper, and always up to date. $100 in free credits.
-> - **On my own connections** - skills run on the tools you've already connected here. Free, and your tool data stays in your tools.
+- **No, create one.** Show what to expect, then the link:
+  > Here's what happens in Devplan:
+  > 1. **Create your account and workspace.** If your company already has a Devplan workspace, join it instead so you share the same context.
+  > 2. **Describe your company and product.** Devplan drafts this from your website. Fix anything important, like who your customers are.
+  > 3. **Connect a code repository.** This is required. Then add the rest of your team's tools: Linear or Jira, Slack, Notion or Confluence, Gong or Granola, Zendesk or Intercom. For each one, pick the repos, channels, and projects Devplan should read.
+  > 4. **Devplan builds your knowledge graph.** It reads the code to learn what your product does, then links tickets, PRs, conversations, and customer requests to the people, projects, and features they belong to. How long it takes depends on how much you connect. Early results appear before it finishes, and it keeps enriching in the background.
+  > 5. **Come back here and connect Devplan.** You don't need to wait for the graph to finish.
+  >
+  > Start here: https://app.devplan.com/?mode=signup&src=plugin&skill=devplan-setup
 
-- **On Devplan:** if they don't have a Devplan account yet, send them to create one: https://app.devplan.com/?mode=signup&src=plugin&skill=devplan-setup&intent=team. Sign-up is where they connect their team's sources. Then connect the plugin with the sign-in steps below. If they already have an account, give the sign-in steps and the same link (it takes signed-in users straight to connecting sources). Continue setup either way; sources take a while to sync, so don't wait for them.
-- **On my own connections:** say "Great, nothing to sign in to yet. You can move to Devplan any time." Then go to step 2.
+  Then give the connect steps below, and say: "Once you've connected a repo, connect Devplan here and say 'continue'."
 
-Sign-in steps, by surface (new users create their account at the sign-up link first):
+- **Yes, connect it.** Give the connect steps.
 
-- Claude.ai / desktop: Customize > Plugins > Devplan > Connectors tab > Connect Devplan.
-- Claude Code: run `/mcp`, select `devplan`, and sign in.
-- Codex: Plugins > Devplan, then connect when prompted.
+Connect steps, by surface:
 
-## Step 2 of 6: Check your tools
+- **Claude (web and desktop):** Customize > Plugins > Devplan > Connectors tab > Connect Devplan, then sign in.
+- **Claude Code:** run `/mcp`, select `devplan`, and sign in.
+- **ChatGPT and Codex:** open Plugins > Devplan and connect, or @-mention Devplan in a chat and sign in when asked.
 
-Check which tool families are available from the tools you can see. Do not call any write tools.
+When the user says they're connected, check again. If the tools still don't appear, say: "Start a new chat and say 'Set up Devplan'. I'll pick up at step 2."
 
-| Family | Examples | Used by |
-|---|---|---|
-| Code | GitHub, GitLab | Daily Radar, Spec, Eng Analytics, Changelog, Customer Release Brief |
-| Work tracking | Linear, Jira, Asana | Daily Radar, Spec, Demand Report, Eng Analytics, Suggested Projects, Customer Release Brief, Stale Commitments |
-| Chat | Slack | Daily Radar, Demand Report, Stale Commitments |
-| Support | Zendesk, Intercom, Front | Demand Report |
-| Calls / meetings | Gong, Granola | Demand Report, Stale Commitments |
-| Docs | Notion, Confluence, Google Drive | Spec, company context |
+## Step 2 of 5: Check your workspace
 
-Show a short table: connected, missing, and which skills are ready now. Minimums: Daily Radar, Spec, and Customer Release Brief need Code or Work tracking. Demand Report needs Support, Calls, Slack, or customer requests in the tracker. Eng Analytics and Changelog need Code. Stale Commitments and Suggested Projects need Work tracking.
+Quietly find out what Devplan has, in a few calls:
 
-Offer help only for tools that unlock something the user wants. Always use the standard, listed connector. Never send the user to add a custom connector by URL, never give MCP endpoint URLs, and never run `claude mcp add` or `codex mcp add` for them. If a tool has no listed connector, say so and move on.
+- `get_workspace_context`, if available (workspace name, settings, links).
+- `list_repository_descriptions`: repos analyzed.
+- `list_workspace_projects`: planned and inferred projects.
+- `list_workspace_members`: team size.
+- One `search_entities` call over the last 30 days with `change`, `discussion_topic`, `call_note`, `customer_support_ticket`, and `document`, a few results each, to see which kinds of sources have data.
 
-- Claude.ai / desktop: Customize > Connectors > Discover, search the tool, Connect.
-- Claude Code: connect the tool in Claude.ai with the same account (those connectors carry over), then run `/mcp` to confirm.
-- Codex: Plugins > search the tool > install the vendor's official plugin and connect when prompted.
+Show a short summary: the workspace name, what Devplan can see (for example "4 repos, Linear, Slack, Gong; no support tool yet"), and which dashboards are ready:
 
-If the user has a custom connector for a tool that fails to connect (GitHub custom connectors fail with a 404), tell them to remove it and use the listed one.
-
-## Step 3 of 6: Capture your company context
-
-Company context has six parts:
-
-| Part | What it holds |
+| Dashboard | Needs |
 |---|---|
-| Company description | What the company does and the products or services it offers. |
-| Target customers | The roles and segments the company builds for. |
-| Competitors | Who customers also consider, and how the company is different. |
-| Company goals | What the company is trying to achieve right now. Used to weight insights and projects. |
-| Product overview | Main product areas, teams and owners, repos, active projects, and key customers. |
-| Additional context | Background, briefs, and anything that doesn't fit elsewhere. |
+| Daily Radar | Code or ticket activity |
+| Execution Monitoring | Projects or code activity |
+| Demand Report | Customer evidence: support tickets, calls, customer Slack, or requests |
+| Stale Commitments | Projects, tickets, or discussions |
+| Changelog | Code changes |
+| Engineering Analytics | Pull requests |
 
-**If saved context already exists** (in Devplan via `get_workspace_context`, or in a local file or Project block from an earlier setup): say who it came from if known ("Your team already saved your company context"), show one line per part, and ask "Still right, or anything to update?" with options **Looks good**, **Update some**. Update only what they change, then go to step 4.
+- **Graph still building** (repos and projects both empty): "Devplan is still building your graph. I'll set everything up now. Your dashboards fill in as the analysis finishes, and each morning's refresh picks up the rest."
+- **A source type is missing:** one line per gap, only where it unlocks a dashboard: "Connect a support tool in Devplan (Integrations) to fill in your Demand Report." Link https://app.devplan.com.
 
-**Otherwise, draft it before asking anything:**
+## Step 3 of 5: Confirm your company context
 
-1. Ask once for the company website, unless you already know it.
-2. Read the website for the description, target customers, and competitors.
-3. Look in connected docs (Notion, Confluence, Drive) for a strategy, goals, or roadmap page, and in Devplan or the tracker for active projects.
-4. Build the product overview from the tools: product areas, teams, repos, active projects, and the most frequent customers in support or calls.
+Company context has six parts: company description, target customers, competitors, company goals, product overview, and additional context. Every Devplan skill starts from it, and it's shared with the whole workspace.
 
-**Then confirm it:**
+**If Devplan already has it** (from `get_workspace_context`, or written during Devplan onboarding): show one line per part and ask "Still right?" with options **Looks good**, **Update some**. Update only what they change.
 
-- First offer the fast path: show all six drafts together, 2 to 4 sentences each, and ask "Look right?" with options **Looks good, all of it**, **Go through it one by one**.
-- One by one: show each part and ask "Looks right?" with options **Looks good**, **Edit**, **Skip**. On Edit, use their words as they are.
-- Mark anything you inferred rather than read as "(inferred)". Never invent customers, competitors, goals, owners, or numbers.
-- Company goals are rarely public. If no doc states them, ask directly: "What are the 2 or 3 things the company is focused on right now?"
+**If parts are missing,** draft them before asking anything:
 
-Then tell the user in one line that product context is on: ordinary product questions will now start from this context and their tools, without naming a skill.
+1. Read the company website (ask once for the URL if you don't know it) for the description, target customers, and competitors.
+2. Build the product overview from Devplan: product areas from the feature catalog, repos, active projects, and the customers who come up most in support and calls.
+3. Company goals are rarely public. Look for a strategy or goals document in Devplan. If there isn't one, ask: "What are the 2 or 3 things the company is focused on right now?"
+4. Show all parts together, 2 to 4 sentences each, with options **Looks good, all of it**, **Go through it one by one**. Mark anything inferred as "(inferred)". Never invent customers, competitors, goals, owners, or numbers.
 
-## Step 4 of 6: Save it
+**Save it:** if `save_workspace_context` is available, save the parts and say "Saved to Devplan. Your teammates start from this too." Otherwise say "Add this under Knowledge > Workspace in Devplan so your whole team shares it," and show the text to copy.
 
-**If signed in and `save_workspace_context` is available:** save all six parts, plus the settings gathered so far, and say: "Saved to Devplan. Your teammates will start with this too; they'll just confirm it." Go to step 5.
+**Then personalize the Daily Radar.** If you already know the user's role and focus from memory or earlier conversations, confirm it in one line. Otherwise ask once: "What should your Daily Radar focus on?" with options **My team's work**, **Specific projects**, **Customers and revenue**, **Everything**. Follow up for names only if they pick specific projects. Keep the answer as the radar focus for step 4.
 
-**Otherwise, ask once:**
+## Step 4 of 5: Build your dashboards and schedule updates
 
-> Want to save this to Devplan? It's free.
-> - It follows you into every chat, in Claude and Codex, so you never set this up again.
-> - Your company context belongs to the whole team. Saved in Devplan, your teammates start with it already filled in and just confirm it. Saved only here, each teammate repeats this setup, and the copies drift apart.
-> - Your tool data stays in your tools. Only this context is saved.
+**Confirm once.** Name what you'll build and when it refreshes:
 
-Options: **Sign in and save**, **Save it just for me, here**.
+> Your workspace supports 6 dashboards: Daily Radar, Execution Monitoring, Demand Report, Stale Commitments, Changelog, and Engineering Analytics. I'll build them now (a few minutes) and refresh them every weekday at 7:47 AM your time, with a short summary emailed to you.
 
-- **Sign in and save:** if they don't have a Devplan account yet, link https://app.devplan.com/?mode=signup&src=plugin&skill=devplan-setup&intent=save first. Then give the sign-in steps from step 1 and save as above.
-- **Save it just for me, here:** use the local fallback below, and say in one line where it lives and that it isn't shared.
+Options: **Build and schedule**, **Pick a different time**, **Build without scheduling**. Only list dashboards step 2 found ready; mention the rest will be added once their sources are connected.
 
-**Local fallback, by surface.** Write the context block below, filled in, leaving out lines with no value:
+**Build them one at a time,** in this order: Daily Radar, Execution Monitoring, Demand Report, Stale Commitments, Changelog, Engineering Analytics. For each:
 
-- **Claude Code:** write it to `${CLAUDE_PLUGIN_DATA}/company-context.md`. This is the plugin's own folder for this user. It survives plugin updates and isn't in any repository. Never write company context into a project repository.
-- **Codex:** write it to `~/.codex/devplan/company-context.md` (create the folder if needed). Never write it into a project repository.
-- **Claude.ai / desktop:** chats can't keep files, so use a Claude Project. Say: "Create a Project so this sticks: Projects > New project, name it Devplan, and paste this into its instructions." Show the block, and run future Devplan chats inside that Project.
+- Say "Building 2 of 6: Execution Monitoring".
+- Follow that dashboard's skill, using the company context, the radar focus, and the settings gathered so far.
+- Publish it as its own artifact (or file) and keep its link.
+- If one fails or has too little data, say so in one line and continue. Never let one dashboard stop setup.
+
+**Schedule the refresh.** If you have a scheduling tool in this session, create **one** recurring scheduled task on weekdays at the chosen time in the user's time zone, with email notifications on (and push if they want it). Each run starts fresh with no memory of this chat, so write its prompt as a complete standalone instruction:
 
 ```
-Devplan for <company>.
+Refresh my Devplan dashboards. Use the Devplan plugin skills.
 
-Company description: <...>
-Target customers: <...>
-Competitors: <...>
-Company goals: <...>
-Product overview: <...>
-Additional context: <...>
-
-Connected tools: <list>
-Team Slack channels: <#channels>
-Customer and support channels: <#channels>
-Repos: <owner/repo list>
-Tracker: <teams or projects>
-Time zone: <IANA zone>
-Dashboard links: <artifact links, added after step 5>
+1. Rebuild each dashboard below with its skill, and update the existing artifact at its link instead of creating a new one:
+   - Daily Radar (daily-radar): <link>
+   - Execution Monitoring (execution-monitoring): <link>
+   - Demand Report (demand-report): <link>
+   - Stale Commitments (stale-commitments): <link>
+   - Changelog (changelog): <link>
+   - Engineering Analytics (eng-analytics): <link>
+2. Daily Radar is for <name> (<email>), <role>. Focus: <radar focus>.
+3. Time zone: <IANA zone>. In each footer, the refresh line is "Refreshes weekdays at <time>".
+4. If Devplan isn't connected, skip the dashboards and reply only: "Your Devplan dashboards didn't refresh because Devplan isn't connected. Open Claude and say 'Set up Devplan'."
+5. Finish with an email-ready summary: the three things that matter most today across all dashboards, one line each with a link, then a link to every dashboard. This final message is the email.
 ```
 
-## Step 5 of 6: Build your dashboards
+Then tell the user in one or two sentences: it's scheduled, at what time, that the summary goes to their account's email, whether runs need their approval, and where to change it. If no scheduling tool is available, say scheduled refresh isn't available here and suggest saying "Refresh my Devplan dashboards" each morning.
 
-Build every dashboard the user's connections support, so setup ends with a full set rather than one sample. Every dashboard works from the user's own connections; with the Devplan graph connected, each one runs on the graph instead.
+If `save_workspace_context` is available, save the dashboard links, schedule, and time zone in the workspace settings.
 
-| Dashboard | Build when | Refresh |
-|---|---|---|
-| Daily Radar | Code or Work tracking connected | Daily |
-| Demand Report | Support, Calls, Slack, or customer requests in the tracker | Daily |
-| Engineering Analytics | Code connected | Daily |
-| Stale Commitments | Work tracking connected | Daily |
-| Suggested Projects | Work tracking connected | Daily |
-| Changelog | Code connected | Daily |
-| Customer Release Brief | Work tracking or Code connected | Daily |
+## Step 5 of 5: A quick tour
 
-**Confirm once.** Say what you'll build and roughly how long it takes, for example: "Your tools support 5 dashboards: Daily Radar, Demand Report, Engineering Analytics, Stale Commitments, and Changelog. Building them takes a few minutes. Build all of them?" Options: **Build all**, **Pick which**, **Just Daily Radar**. If the Devplan graph isn't connected, add one line: "These will run on your own connections. On Devplan, they run faster and cheaper, stay up to date on their own, and are shared with your team."
+Finish with a short recap of what's set up (dashboards with links, refresh time), then what they can do now:
 
-**Build them one at a time,** in the table's order. For each:
+- **Act from a dashboard.** "Write spec" and "New project" buttons copy a ready message. Paste it here and I'll take it from there.
+- **Ask anything about the product.** "What did we decide about pricing?", "What should I know before changing billing?", "Who's working on SSO?" Answers cite the PRs, tickets, calls, and decisions behind them.
+- **Ask in Slack.** Mention Devplan in a channel and get the answer with its sources. If Slack isn't connected in Devplan yet, add it under Integrations.
+- **Decisions don't get lost.** Devplan captures decisions from Slack, meetings, and specs with their reasoning, so the team stops reopening settled questions.
+- **Plan a cycle.** "Plan the next 6 weeks" sizes what the team can do from how it actually ships, offers a few strategic directions, and lays out what fits.
+- **Specs are tracked automatically.** Any spec written here becomes a Devplan project, and the PRs, tickets, and conversations that touch it link to it as they happen.
 
-- Say "Building 2 of 5: Demand Report".
-- Follow that dashboard's skill, using the saved company context and the settings gathered so far. Ask the skill's one-time questions (for example, which Slack channels) only once across all dashboards, and reuse the answer.
-- Publish it as its own artifact and keep its link.
-- If one fails or has too little data, say so in one line, skip it, and continue. Never let one dashboard stop setup.
+Then one subtle team line, once: "Devplan works best when your team shares it: everyone gets the same context, dashboards, and decision history. [Invite teammates](<members page>)." Build the members link as described in `devplan-product-context`.
 
-**Finish with a list** of every dashboard built, each with its link and one line on what it shows. Add the links and any new settings to wherever the context was saved in step 4.
-
-## Step 6 of 6: Get them in your inbox daily
-
-Offer once: "Want your dashboards emailed to you every weekday morning?" Default time 7:47 in their time zone. The email covers every dashboard built in step 5.
-
-If yes:
-
-- If the `schedule-radar` skill is available, follow it, then apply the email settings below.
-- Otherwise, if you have a scheduling tool in this session, create **one** recurring scheduled task on weekdays at that time, with email notifications turned on (and push if they want it). The user asked for email by saying yes, so turning it on is expected.
-- Each run starts fresh with no memory of this chat, so write the task's prompt as a complete standalone instruction:
-  1. Refresh every dashboard built in step 5 (list each by its skill name). Load the company context from where step 4 saved it (Devplan, or give the local file path or say it's in the Devplan Project). Each skill picks graph or connector mode on its own, so the email keeps working if the Devplan connection changes.
-  2. Update each dashboard's existing artifact (give the links) rather than creating new ones.
-  3. End with a short email-ready summary: the three things that matter most today across the dashboards, one line each, then a link to every dashboard. This final message is what lands in their inbox.
-- Tell the user in one or two sentences: it's scheduled, what time, that the email goes to their account's address, whether runs need their approval, and where to find or change the task.
-- If no scheduling tool is available, say scheduled email isn't available here and suggest running "Daily Radar" first thing each morning.
-
-Scheduled runs only see connectors on the user's own account. If a needed connector is missing, say so before creating the task.
-
-The email goes to the user's own inbox only. Never send email to anyone else on the user's behalf. If they ask about teammates, or once after scheduling if Devplan isn't connected, say: "Want this for your whole team? Connect your sources in Devplan once and everyone gets the same context, dashboards, and daily reports, managed in one place, without each person setting up their own tools: https://app.devplan.com/?mode=signup&src=plugin&skill=devplan-setup&intent=team"
-
-**Wrap up** with a short recap of what's set up and three things to try:
-
-- "Write a spec for <something on their roadmap>"
-- "What should I know before changing <an area of their product>?"
-- Open any dashboard and ask a follow-up question about it
-
-If Devplan isn't connected, end with one line: "When you're ready to roll this out to your team, connect your sources in Devplan once and manage everyone's context, dashboards, and reports centrally."
+Suggest one first thing to try, based on what you saw in step 2, for example "Write a spec for <the top suggested project in your Demand Report>".

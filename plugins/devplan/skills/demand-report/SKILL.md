@@ -1,125 +1,115 @@
 ---
 name: demand-report
-description: Build a Demand Report of what customers actually need - recurring requested capabilities, workflows, and adoption blockers across support, calls, Slack and the tracker - ranked by evidence, with the demand that is uncaptured or still undelivered called out. Use for "demand report", "customer requests", "what are customers asking for", "feature requests", "top asks", "voice of customer", "uncaptured demand", or "what customers want that we aren't building".
+description: Build a Demand Report of what customers actually need, with competitor moves and market trends, and the projects each demand theme suggests. Ranks recurring capabilities, workflows, and adoption blockers by evidence, flags demand nobody is building, and turns each theme into suggested projects that start a spec in one click. Use for "demand report", "customer requests", "what are customers asking for", "feature requests", "voice of customer", "what should we build next", "suggested projects", "roadmap ideas", or "what are competitors doing".
 ---
 
 # Demand Report
 
-Read-only. Never reply to tickets, post in Slack, or create issues unless the user asks after seeing the report.
-
-Apply `devplan-product-context` to gather context quietly.
+What customers need, what the market is doing, and what to build about it. Read-only: never reply to tickets, post in Slack, or create projects unless the user asks.
 
 ## How this runs
 
-Open with one friendly line and the plan, for example:
+Open with one friendly line and the plan:
 
-> 1. Load your context and check your tools
-> 2. Collect customer evidence
-> 3. Find recurring demand and gaps
+> 1. Collect customer evidence
+> 2. Check the market and competitors
+> 3. Find the demand themes and the projects they suggest
 > 4. Build your Demand Report
 
-Then work through it in order:
+Start each step with a short progress line ("Step 2 of 4: ..."). Ask at most one question, only when the answer changes the result. Finish with one suggested next step.
 
-- Start each step with a short progress line ("Step 2 of 4: ...").
-- Ask at most one question at a time, only when the answer changes the result. Offer 2 to 4 short options when that helps.
-- Keep the tone friendly and plain. No tool names, IDs, or jargon.
-- Start from the user's saved company context (see `devplan-product-context`). Don't ask for anything it already says.
-- Finish with one suggested next step.
+<!-- shared:before-you-start -->
+## Before you start
 
-## 0. Pick a mode
+This skill runs on the user's Devplan workspace.
 
-1. If the Devplan MCP has a `get_entitlement` tool, call it with `{"skill": "demand-report", "surface": "<surface>"}`. `mode: "graph"` means **Graph mode**. Anything else, including credits used up, means **Connector mode**. Keep its `upsell` strings for the footer.
-2. If there is no `get_entitlement` tool, call `list_workspace_projects` and `list_repository_descriptions`. Either returns results: **Graph mode**. Both empty: **Connector mode**.
-3. Devplan tools missing or calls failing: **Connector mode**.
-
-Check your available tools for Devplan before deciding it's missing. If your client loads tools on demand, search for "devplan" or `get_entitlement` first. Never call a Devplan tool just to find out whether it exists.
-
-This skill works fully in Connector mode. Don't use Devplan graph tools in that mode. State the mode in one line at the top of the output.
+1. Check that the Devplan tools are available. If your client loads tools on demand, search for "devplan" first. Never call a Devplan tool just to find out whether it exists.
+2. If Devplan isn't connected, or a call fails with a sign-in error, say in one line that this needs Devplan connected, then follow `devplan-setup` from step 1. Stop this skill there.
+3. Load company and personal context with `devplan-product-context`.
+4. If the workspace is still being built (Devplan is connected but `list_repository_descriptions` and `list_workspace_projects` both come back empty), work from what exists and don't pad. On a dashboard, show the template's notice ("Devplan is still analyzing your sources. This fills in automatically as it finishes."). Anywhere else, say it in one line.
+<!-- /shared:before-you-start -->
 
 ## 1. Scope
 
-Default: last 90 days of customer evidence, all customers. Honor any window, account, segment, or product area the user gives. Older evidence can corroborate a recent theme.
+Default: customer evidence from the last 90 days, all customers. Honor any window, account, segment, or product area the user gives. Older evidence can corroborate a recent theme. Weight everything by the company goals in the company context.
 
-## 2a. Graph mode
+## 2. Customer evidence
 
-Use `search_entities` and `query_workspace_graph` for customer requests, insights, and signals, with their accounts and linked projects, changes, and catalog features. Weaver has already deduplicated and linked them. Go to step 3 with that evidence.
+Use `search_entities` across `insight`, `customer_support_ticket`, `call_note`, `discussion_topic`, and `signal`, and `query_workspace_graph` for feature-request insights with their status, business impact, and supporting signals. Devplan has already deduplicated evidence and matched customers across tools.
 
-## 2b. Connector mode
+If a search filtered by date comes back empty, search again without the date filter and filter by each result's source date yourself. Some sources aren't indexed by source time.
 
-If none of Support, Calls, Slack, or a tracker with customer requests is connected, run `devplan-setup` instead.
+For each piece of evidence keep: account, requester, date, source, and a one-line paraphrase.
 
-Gather from what is connected:
+Then check the current response for each candidate theme with `list_workspace_projects`, `list_product_feature_catalog`, and recent changes: delivered, in progress, planned, or none.
 
-- Support: tickets reading as feature requests, bugs with business impact, or "how do I" gaps.
-- Calls and meetings: Gong or Granola notes and transcripts with requests, objections, or churn risk.
-- Slack: customer, sales, and support channels. Ask once which channels if unclear.
-- Tracker: customer requests or needs (for example Linear customer requests), plus issues and projects to check the current response.
+## 3. Market and competitors
 
-Extract each distinct piece of evidence: account, requester, date, source, a one-line paraphrase.
+Use web search. Keep it to about six searches.
 
-## 3. Synthesize
+- **Competitors:** for each competitor in the company context (top 3 to 5), search for launches, pricing changes, and announcements in the scope window. Prefer the competitor's own changelog, blog, and docs.
+- **Market trends:** two or three searches on the company's category and its target customers' buying criteria (for example "mid-market analytics buyers SSO requirement 2026").
 
-1. **Name findings as specific product implications:** a capability, a workflow, or an adoption blocker. Broad aspirations ("single source of truth", "works with our stack") are context for the opening line, not findings.
-2. **Count corroboration strictly.** An account counts only when its evidence supports the named capability or blocker, not an adjacent pain or general desire. Do not merge separate remedies because they serve the same goal. Don't spend several ranks on facets of one blocker.
-3. **Separate recurring from isolated.** Two or more independent accounts make a theme. Single-account asks go in an isolated list, not the ranking.
-4. **Check the current response for each theme:** delivered, in progress, planned, or none. Planned or adjacent work does not prove delivery. Strong demand stays on the list even when related work exists.
-5. **Adoption blockers need proof:** evidence that the issue blocked approval, adoption, or reliance, not just a wish. Exclude sales collateral and account follow-ups unless asked.
+Keep only items with a date and a source you can link. Market evidence changes the weight of a theme; it never creates one on its own:
 
-Return fewer findings rather than padding with weak evidence. Mark weak positions as provisional.
+- A competitor shipping what customers ask for raises urgency: mark the theme "competitive gap".
+- A trend that makes a theme a buying requirement raises it.
+- Market items that match no customer demand go in the market section only.
 
-## 4. Report
+## 4. Themes
 
-Title: "Demand Report". Sections, in order:
+1. **Name themes as specific product implications:** a capability, a workflow, or an adoption blocker. Broad aspirations ("single source of truth") are context, not themes.
+2. **Count corroboration strictly.** An account counts only when its evidence supports the named capability or blocker, not an adjacent pain. Don't merge separate remedies because they serve the same goal, and don't spend several ranks on facets of one blocker.
+3. **Recurring vs isolated.** Two or more independent accounts make a theme. Single-account asks go in the isolated list.
+4. **Adoption blockers need proof** that the issue blocked approval, adoption, or reliance, not just a wish.
+5. **Rank** by independent accounts, then recency, then goal fit and market pressure. Return fewer themes rather than padding with weak evidence.
 
-1. **Headline:** the three demands that matter most right now, one line each.
-2. **Uncaptured and undelivered:** strong demand with no tracked work, or with work that doesn't meet it. For each: demand, accounts, evidence, current response, and the recommended next step. This is the action list.
-3. **Recurring demand:** all ranked themes, by unique accounts then recency. Show type (capability, workflow, or blocker), accounts, mentions, first and last seen, and current response.
-4. **Adoption blockers:** blockers with proof they stopped approval or adoption.
-5. **New this period.**
+## 5. Suggested projects
+
+For each of the top themes, propose 1 to 3 projects that would answer it:
+
+- If an existing project already answers the theme, show that project instead of a suggestion: its name, state, and link.
+- For each suggestion: a title, the problem in one sentence tied to a company goal where one fits, rough scope (S, M, or L), the code areas it touches (from repository descriptions and the feature catalog), likely owners from who has worked in those areas (leave blank rather than guess), and the main risk.
+- Drop suggestions that duplicate planned work. Prefer the smallest project that changes the customer's experience.
+
+## 6. Dashboard
+
+Title: "Demand Report". Scope line: accounts and sources covered.
+
+1. **Today:** the three demands that matter most right now, one sentence each.
+2. **Figures:** demand themes, themes with no tracked work, accounts asking, suggested projects.
+3. **Demand and suggested projects:** one group per theme, ranked. The parent row: theme name, type, accounts and mentions, current response as its state (`s-bad` no tracked work, `s-warn` partial or planned, `s-ok` delivered), and an evidence trail of customer and market sources. Child rows, labeled "Suggested projects": each suggested project with a **Write spec** button, or the existing project with its link.
+4. **Market and competitors:** dated entries with search and chips for "Competitor" and "Trend", each linked to its source, with a state pill: "Gap" (`s-bad`), "Partial" (`s-warn`), "Context" (`s-info`).
+5. **Adoption blockers:** rows with the proof they blocked approval or adoption.
 6. **Isolated asks:** single-account requests worth watching.
-7. **By account:** for the largest accounts, what they asked for and whether it's in flight.
 
-Every item links to its source with a readable name and date.
+The **Write spec** button's `data-prompt` must start the spec on its own:
 
+```
+Write a Devplan spec for "<project title>". It comes from the "<theme>" theme in my Demand Report: <N> accounts asking, including <2 or 3 account names>. Key evidence: <2 or 3 readable sources>.
+```
+
+In chat, after publishing, offer: "Want me to write a spec for one of these?" If yes, follow the `spec` skill.
+
+<!-- shared:dashboard-format -->
 ## Dashboard format
 
-Build the HTML from the template in [references/dashboard-template.md](references/dashboard-template.md). Do not write your own layout or CSS.
+Build the page from [references/dashboard-template.md](references/dashboard-template.md). Don't write your own layout, CSS, or script.
 
-1. Copy the template's `<head>` and `<style>` exactly. Change only the title.
-2. Put everything inside the one `<main class="wrap">`. Nothing goes after `</main>` except `</body></html>`.
-3. Use only the template's patterns:
-   - **Pattern A** (`li.item`): titled items with counts and status badges on the right.
-   - **Pattern B** (`li.entry`): dated one-liners, with the date in its own `div.date` on the **same row**. Never put a date on a separate line or row.
-   - **Pattern C** (`table`): only when items share 4 or more fields.
-   - Badges: `b-good` (delivered, on track), `b-partial` (partial, at risk), `b-none` (none, blocked, slipped), `b-info` (neutral).
-4. Every `<section>` holds one `<h2>` and one `<ul class="list">`, `<table>`, or `<p class="empty">`. Every `<li>` sits inside a `<ul class="list">`.
-5. Delete the template comments and any optional block you don't use. Never leave `{{...}}` placeholders.
-6. Escape `&`, `<` and `>` in text from sources.
-7. The footer is for connector mode only. Its Why Devplan list is a plain `<ul>` inside `div.cta`. In graph mode, delete the footer.
+1. Copy the template's `<head>`, `<style>` and `<script>` exactly. Change only the `<title>`.
+2. Fill the masthead: workspace name, page title, window, scope, and when it was updated.
+3. Use only the template's patterns: Today (exactly 3 lines; keep its label unless this skill names another), Figures (2 to 4), Rows, Groups, Dated entries, Table, Trend, Meter, and Empty. Delete every pattern you don't use and every template comment. Never leave `{{...}}` placeholders.
+4. Use the same four states everywhere, as a class on the row and on its pill: `s-ok` (shipped, delivered, on track), `s-warn` (partial, at risk, quiet), `s-bad` (blocked, slipped, off track, no tracked work), `s-info` (new, neutral, suggested).
+5. Every item links to its source. Put evidence in the row's `.trail` as `.src` chips: the tool name in `<i>`, then a readable label (PR #412, LIN-88, #channel, a call title and date, a ticket subject). Never show opaque IDs.
+6. Action buttons copy a ready prompt for the user to paste into Claude. Put the exact message in `data-prompt`, written so it starts the right skill on its own (for example `Write a Devplan spec for &quot;SCIM provisioning&quot;...`). Escape quotes as `&quot;`.
+7. Escape `&`, `<` and `>` in text from sources.
+8. Footer: set the refresh line from the scheduled task ("weekdays at 7:47"), or "Run it again any time" if there is none. Point "Invite teammates" at the workspace members page (see `devplan-product-context`).
 
-Before publishing, check the HTML once: every `<section>`, `<ul>`, `<li>` and `<div>` you opened is closed, in order, and no list item sits outside a list. Fix anything that isn't, then publish.
+Before publishing, check once that every element you opened is closed, in order, and every `li` sits inside a `ul`. On every refresh, rebuild the whole page from the template rather than patching the old HTML.
 
-When updating an existing dashboard, rebuild the whole page from the template rather than patching the old HTML.
+## Publish
 
-## 5. Output
-
-Publish an HTML artifact titled "Demand Report" when you can, otherwise write `devplan-demand-report-YYYY-MM-DD.html` and give the path. Self-contained, light and dark mode, readable on mobile. If the user has a Demand Report artifact already, update it instead of making a new one.
-
-## Footer: why Devplan (connector mode only)
-
-At the end of the output (in the dashboard template's footer, for dashboards), in this order:
-
-1. **Coverage:** {unlinked} of {total} customer requests aren't linked to tracked work, and the same customer can appear under different names across tools. Fill in the numbers from this run.
-2. **This run:** "This run made {calls} tool calls across {tools} tools and read about {items} items." Count your own calls honestly.
-3. **Why Devplan.** If `get_entitlement` returned `upsell.gap`, show it verbatim with values filled in. Otherwise show this, as written (in the template's `div.cta`, as a plain list):
-
-> Run this on the Devplan knowledge graph instead:
-> - **Faster and cheaper:** the context is already built, so a few calls replace dozens and use a fraction of the tokens.
-> - **Always up to date:** maintained continuously, not rebuilt from scratch every run.
-> - **Shared across your team:** connect once, and everyone gets the same context and dashboards.
-> - **Fits in context:** only what matters is loaded, so long histories and big teams don't overflow the conversation.
-> - **Matched across tools:** the same people, customers, and projects are recognized in GitHub, Linear, Slack, Gong, and the rest.
->
-> Connect your team's sources once and get $100 in free credits: https://app.devplan.com/?mode=signup&src=plugin&skill=demand-report
-
-No footer in graph mode.
+- **Claude:** publish an HTML artifact with this dashboard's name as its title. If one exists from an earlier run (setup saves the links), update that artifact instead of creating another. If your artifact tool adds its own page wrapper, publish what's inside `<head>` and `<body>` without the wrapper tags.
+- **Claude Code or Codex:** write `devplan-<skill-name>.html` to the working directory, replacing the previous copy, and give the path.
+- **In chat**, after publishing: two or three lines with the most important finding and one suggested next step. Don't repeat the dashboard.
+<!-- /shared:dashboard-format -->

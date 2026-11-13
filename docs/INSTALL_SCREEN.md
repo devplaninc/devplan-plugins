@@ -1,23 +1,19 @@
 # Onboarding: final step "Add Devplan to your AI"
 
-Shown after sign-in, whether the user connected sources or chose "Skip for now".
+Shown at the end of Devplan onboarding, after the user connects a repository. The graph keeps building in the background.
 
 ## Header
 
-**Add Devplan to Claude or Codex**
-Your dashboards run inside the AI you already use.
-
-If the user connected sources, add a badge: "$100 in credits added."
+**Add Devplan to your AI**
+Your dashboards, specs, and product answers, inside the AI you already use.
 
 ## Tabs
 
 ### Claude (web and desktop)
-1. Open **Settings > Customize > Plugins**.
-2. On the **Added** tab, click **Add Marketplace > Add from a Repository** and paste:
-   `https://github.com/devplaninc/devplan-plugins` [Copy]
-3. Click **Sync**, then install **Devplan**.
-4. When prompted, click **Connect** to sign in to Devplan. You're already signed in, so it's one click.
-5. Ask Claude: **"Run my Daily Radar"**
+1. Go to **Customize > Plugins > Add > Add marketplace** and paste:
+   `devplaninc/devplan-plugins` [Copy]
+2. Find **Devplan** and select **Add**.
+3. In a new chat, say **"Set up Devplan"**. You're already signed in, so connecting is one click.
 
 [GIF: 20 seconds]
 
@@ -26,18 +22,23 @@ If the user connected sources, add a badge: "$100 in credits added."
 /plugin marketplace add devplaninc/devplan-plugins
 /plugin install devplan@devplan
 ```
-[Copy] Then run `/mcp`, select **devplan**, and authenticate.
+[Copy] Then say **"Set up Devplan"**.
 
-### Codex
+### ChatGPT and Codex desktop
+1. Open **Plugins**, add a marketplace, and paste `devplaninc/devplan-plugins` [Copy]
+2. Install **Devplan**.
+3. Say **"Set up Devplan"** and connect when asked.
+
+### Codex CLI
 ```
 codex plugin marketplace add devplaninc/devplan-plugins
 ```
-[Copy] Then open **Plugins > Devplan > Add to Codex** and connect when prompted.
+[Copy] Then type `/plugins` and install **Devplan**.
 
 ## Footer
 
-"Not using Claude or Codex? Open Devplan in your browser" (link to the web app).
+"Not using an AI app? Open Devplan in your browser" (link to the web app).
 
 ## Tracking
 
-Fire `install_screen_viewed` with `{tab, connected_sources}`. Measure activation as the first `get_entitlement` call from that user within 24 hours.
+Fire `install_screen_viewed` with `{tab, connected_sources}`. Measure activation as the first Devplan MCP call from that user within 24 hours.

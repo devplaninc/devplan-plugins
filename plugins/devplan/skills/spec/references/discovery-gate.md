@@ -36,7 +36,7 @@ Useful question patterns include:
 
 Use this order:
 
-1. Current product and customer context: Devplan in graph mode, connected tools in connector mode.
+1. Current product and customer context from Devplan.
 2. The local artifact or codebase.
 3. The user's answer, only for consequential gaps.
 
