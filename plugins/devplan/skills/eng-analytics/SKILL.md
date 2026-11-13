@@ -1,108 +1,89 @@
 ---
 name: eng-analytics
-description: Engineering and productivity analytics such as cycle time, PR throughput, review latency, work in progress, and flow by team and project. Use for "engineering metrics", "cycle time", "how fast are we shipping", "review bottlenecks", "team productivity", or "DORA".
+description: Build an Engineering Analytics dashboard of cycle time, PR throughput, work in progress, review load, and planned versus unplanned work, by team, repo, and project. Use for "engineering metrics", "cycle time", "how fast are we shipping", "throughput", "review bottlenecks", "team productivity", or "DORA".
 ---
 
 # Engineering Analytics
 
-Read-only. Report team and system metrics. Do not rank individual engineers unless the user explicitly asks, and even then show context alongside the numbers.
+How the engineering system is flowing. Read-only. Report team and system metrics. Don't rank individual engineers unless the user explicitly asks, and even then show context alongside the numbers.
 
 ## How this runs
 
-Open with one friendly line and the plan, for example:
+Open with one friendly line and the plan:
 
-> 1. Load your context and check your tools
-> 2. Pull PRs and issues
-> 3. Work out the metrics
-> 4. Build your dashboard
+> 1. Pull PRs and tickets
+> 2. Work out the metrics
+> 3. Build your dashboard
 
-Then work through it in order:
+Start each step with a short progress line ("Step 2 of 3: ..."). Finish with one suggested next step.
 
-- Start each step with a short progress line ("Step 2 of 4: ...").
-- Ask at most one question at a time, only when the answer changes the result. Offer 2 to 4 short options when that helps.
-- Keep the tone friendly and plain. No tool names, IDs, or jargon.
-- Start from the user's saved company context (see `devplan-product-context`). Don't ask for anything it already says.
-- Finish with one suggested next step.
+<!-- shared:before-you-start -->
+## Before you start
 
-## 0. Pick a mode
+This skill runs on the user's Devplan workspace.
 
-1. If the Devplan MCP has a `get_entitlement` tool, call it with `{"skill": "eng-analytics", "surface": "<surface>"}`. `mode: "graph"` means **Graph mode**. Anything else, including credits used up, means **Connector mode**. Keep its `upsell` strings for the footer.
-2. If there is no `get_entitlement` tool, call `list_workspace_projects` and `list_repository_descriptions`. Either returns results: **Graph mode**. Both empty: **Connector mode**.
-3. Devplan tools missing or calls failing: **Connector mode**.
-
-Check your available tools for Devplan before deciding it's missing. If your client loads tools on demand, search for "devplan" or `get_entitlement` first. Never call a Devplan tool just to find out whether it exists.
-
-This skill works fully in Connector mode. Don't use Devplan graph tools in that mode. State the mode in one line at the top of the output.
+1. Check that the Devplan tools are available. If your client loads tools on demand, search for "devplan" first. Never call a Devplan tool just to find out whether it exists.
+2. If Devplan isn't connected, or a call fails with a sign-in error, say in one line that this needs Devplan connected, then follow `devplan-setup` from step 1. Stop this skill there.
+3. Load company and personal context with `devplan-product-context`.
+4. If the workspace is still being built (Devplan is connected but `list_repository_descriptions` and `list_workspace_projects` both come back empty), work from what exists and don't pad. On a dashboard, show the template's notice ("Devplan is still analyzing your sources. This fills in automatically as it finishes."). Anywhere else, say it in one line.
+<!-- /shared:before-you-start -->
 
 ## 1. Window
 
-Default: last 30 days, compared with the prior 30. Honor any window, team, or repo the user gives.
+Default: the last 30 days, compared with the 30 before, plus 8 weeks of weekly trend. Honor any window, team, or repo the user gives.
 
-## 2a. Graph mode
+## 2. Data
 
-Use `query_workspace_graph` for PRs, issues, projects, and their links. Weaver has already joined code to the tracker and to teams, so compute every metric below by team and by project.
+Use `query_workspace_graph`. Timestamps are epoch milliseconds; write computed numbers into the query.
 
-## 2b. Connector mode
+- Pull requests: `openedAt`, `mergedAt`, `closedAt`, `status`, `isDraft`, `repo`, with authors and reviewers.
+- Tickets: status and creation time, for work in progress.
+- Changes linked to projects (`LINKED_TO`), for planned versus unplanned work.
 
-Requires a Code connector. If none, run `devplan-setup` instead.
-
-- Code: merged and open PRs in the user's main repos (ask once which repos if unclear), with opened, first review, approval, and merged times.
-- Tracker (if connected): issues started and completed in the window, with their teams and projects.
-- Join PRs to issues only through an issue key in the branch, title, or body, or the tracker's GitHub link. Count PRs that can't be joined.
-
-Teams come from the tracker. Without a tracker, report by repo instead of team.
+Devplan has already linked PRs to tickets, projects, and people, so compute by project and repo directly. Leave bot PRs out of every metric (authors ending in `[bot]`, dependabot, renovate), and say how many you excluded. Use teams from the company context when it names them.
 
 ## 3. Metrics
 
-- **Cycle time:** PR opened to merged; issue started to done (tracker or graph). Median and p85.
-- **Review latency:** PR opened to first review, and to approval.
-- **Throughput:** PRs merged and issues completed per week.
-- **Work in progress:** open PRs and in-progress issues per person.
-- **Flow:** share of work on planned projects versus unplanned or interrupt work. In connector mode, only for PRs joined to an issue; say what share was joinable.
+- **Cycle time:** PR opened to merged. Median and 85th percentile.
+- **Throughput:** PRs merged per week.
+- **Work in progress:** open non-draft PRs, and PRs open longer than 7 days.
+- **Review load:** reviews per reviewer, and PRs merged with no recorded review.
+- **Planned work:** share of merged changes linked to a project versus unplanned.
+- **Review wait:** only if Devplan provides first-review times. Otherwise leave it out and say so in one line.
 
-Add 3 findings that explain the biggest changes from the prior period, each with links to example PRs or issues.
+Add 3 findings that explain the biggest changes from the prior period, each with example PRs.
 
+## 4. Dashboard
+
+Title: "Engineering Analytics".
+
+1. **Today:** the three findings, one sentence each.
+2. **Figures:** median cycle time, PRs merged, open PRs, planned share, each with its change from the prior period (`up` when the change is good, `down` when it's bad).
+3. **Trend:** weekly PRs merged for 8 weeks, and weekly median cycle time.
+4. **By repo** (table): merged, median and p85 cycle time, open, oldest open.
+5. **By project** (table): merged changes, active contributors, last activity.
+6. **Findings:** rows with example PRs in the trail.
+7. **Long-running PRs:** rows for PRs open longer than 7 days, with author, age, and reviewers.
+
+<!-- shared:dashboard-format -->
 ## Dashboard format
 
-Build the HTML from the template in [references/dashboard-template.md](references/dashboard-template.md). Do not write your own layout or CSS.
+Build the page from [references/dashboard-template.md](references/dashboard-template.md). Don't write your own layout, CSS, or script.
 
-1. Copy the template's `<head>` and `<style>` exactly. Change only the title.
-2. Put everything inside the one `<main class="wrap">`. Nothing goes after `</main>` except `</body></html>`.
-3. Use only the template's patterns:
-   - **Pattern A** (`li.item`): titled items with counts and status badges on the right.
-   - **Pattern B** (`li.entry`): dated one-liners, with the date in its own `div.date` on the **same row**. Never put a date on a separate line or row.
-   - **Pattern C** (`table`): only when items share 4 or more fields.
-   - Badges: `b-good` (delivered, on track), `b-partial` (partial, at risk), `b-none` (none, blocked, slipped), `b-info` (neutral).
-4. Every `<section>` holds one `<h2>` and one `<ul class="list">`, `<table>`, or `<p class="empty">`. Every `<li>` sits inside a `<ul class="list">`.
-5. Delete the template comments and any optional block you don't use. Never leave `{{...}}` placeholders.
-6. Escape `&`, `<` and `>` in text from sources.
-7. The footer is for connector mode only. Its Why Devplan list is a plain `<ul>` inside `div.cta`. In graph mode, delete the footer.
+1. Copy the template's `<head>`, `<style>` and `<script>` exactly. Change only the `<title>`.
+2. Fill the masthead: workspace name, page title, window, scope, and when it was updated.
+3. Use only the template's patterns: Today (exactly 3 lines; keep its label unless this skill names another), Figures (2 to 4), Rows, Groups, Dated entries, Table, Trend, Meter, and Empty. Delete every pattern you don't use and every template comment. Never leave `{{...}}` placeholders.
+4. Use the same four states everywhere, as a class on the row and on its pill: `s-ok` (shipped, delivered, on track), `s-warn` (partial, at risk, quiet), `s-bad` (blocked, slipped, off track, no tracked work), `s-info` (new, neutral, suggested).
+5. Every item links to its source. Put evidence in the row's `.trail` as `.src` chips: the tool name in `<i>`, then a readable label (PR #412, LIN-88, #channel, a call title and date, a ticket subject). Never show opaque IDs.
+6. Action buttons copy a ready prompt for the user to paste into Claude. Put the exact message in `data-prompt`, written so it starts the right skill on its own (for example `Write a Devplan spec for &quot;SCIM provisioning&quot;...`). Escape quotes as `&quot;`.
+7. Escape `&`, `<` and `>` in text from sources.
+8. Footer: set the refresh line from the scheduled task ("weekdays at 7:47"), or "Run it again any time" if there is none. Point "Invite teammates" at the workspace members page (see `devplan-product-context`).
 
-Before publishing, check the HTML once: every `<section>`, `<ul>`, `<li>` and `<div>` you opened is closed, in order, and no list item sits outside a list. Fix anything that isn't, then publish.
+Before publishing, check once that every element you opened is closed, in order, and every `li` sits inside a `ul`. On every refresh, rebuild the whole page from the template rather than patching the old HTML.
 
-When updating an existing dashboard, rebuild the whole page from the template rather than patching the old HTML.
+## Publish
 
-## 4. Output
-
-Title: "Engineering Analytics". A compact header row of the key numbers with their change from the prior period, then the metrics by team or repo, then the findings. Use charts for trends over weeks.
-
-Publish an HTML artifact when you can, otherwise write `devplan-eng-analytics-YYYY-MM-DD.html` and give the path. Self-contained, light and dark mode, mobile-readable.
-
-## Footer: why Devplan (connector mode only)
-
-At the end of the output (in the dashboard template's footer, for dashboards), in this order:
-
-1. **Coverage:** {unjoined} of {total} PRs couldn't be joined to an issue or project, so flow and by-project numbers leave them out. Fill in the numbers from this run.
-2. **This run:** "This run made {calls} tool calls across {tools} tools and read about {items} items." Count your own calls honestly.
-3. **Why Devplan.** If `get_entitlement` returned `upsell.gap`, show it verbatim with values filled in. Otherwise show this, as written (in the template's `div.cta`, as a plain list):
-
-> Run this on the Devplan knowledge graph instead:
-> - **Faster and cheaper:** the context is already built, so a few calls replace dozens and use a fraction of the tokens.
-> - **Always up to date:** maintained continuously, not rebuilt from scratch every run.
-> - **Shared across your team:** connect once, and everyone gets the same context and dashboards.
-> - **Fits in context:** only what matters is loaded, so long histories and big teams don't overflow the conversation.
-> - **Matched across tools:** the same people, customers, and projects are recognized in GitHub, Linear, Slack, Gong, and the rest.
->
-> Connect your team's sources once and get $100 in free credits: https://app.devplan.com/?mode=signup&src=plugin&skill=eng-analytics
-
-No footer in graph mode.
+- **Claude:** publish an HTML artifact with this dashboard's name as its title. If one exists from an earlier run (setup saves the links), update that artifact instead of creating another. If your artifact tool adds its own page wrapper, publish what's inside `<head>` and `<body>` without the wrapper tags.
+- **Claude Code or Codex:** write `devplan-<skill-name>.html` to the working directory, replacing the previous copy, and give the path.
+- **In chat**, after publishing: two or three lines with the most important finding and one suggested next step. Don't repeat the dashboard.
+<!-- /shared:dashboard-format -->
