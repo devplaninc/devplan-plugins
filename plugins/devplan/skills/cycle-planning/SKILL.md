@@ -1,6 +1,6 @@
 ---
 name: cycle-planning
-description: Plan an engineering cycle, sprint, or quarter. Asks for the timeframe and team size, sizes capacity from the team's observed cycle time and throughput, weighs strategy, goals, Devplan's suggested priorities, and planned and in-progress work, offers a few strategic directions to choose from, then publishes a cycle plan of what fits, what's stretch, and what waits. Use for "plan the next cycle", "sprint planning", "quarter planning", "what can we get done in 6 weeks", "capacity planning", or "build a roadmap for next quarter".
+description: Plan a cycle, sprint, or quarter sized from the team's real pace: asks timeframe and team size, offers a few strategic directions, then lays out what fits, what's stretch, and what waits. Use for "plan the next cycle", "sprint planning", "quarter planning", "what can we get done in 6 weeks", "capacity planning", or "build a roadmap for next quarter".
 ---
 
 # Cycle Planning
@@ -25,7 +25,7 @@ Start each step with a short progress line ("Step 2 of 5: ..."). Ask one questio
 This skill runs on the user's Devplan workspace.
 
 1. Check that the Devplan tools are available. If your client loads tools on demand, search for "devplan" first. Never call a Devplan tool just to find out whether it exists.
-2. If Devplan isn't connected, or a call fails with a sign-in error, say in one line that this needs Devplan connected, then follow `devplan-setup` from step 1. Stop this skill there.
+2. If Devplan isn't connected, or a call fails with a sign-in error, say in one line that this needs Devplan, then ask setup's first question, "Do you have a Devplan account?", with its three options (**Yes, connect it**, **No, create one**, **What is Devplan?**), and follow `devplan-setup` from step 1. Stop this skill there. Don't give connect steps or commands of your own, and don't offer to do the task without Devplan (no local drafts, notes-based plans, or git summaries).
 3. Load company and personal context with `devplan-product-context`.
 4. If the workspace is still being built (Devplan is connected but `list_repository_descriptions` and `list_workspace_projects` both come back empty), work from what exists and don't pad. On a dashboard, show the template's notice ("Devplan is still analyzing your sources. This fills in automatically as it finishes."). Anywhere else, say it in one line.
 <!-- /shared:before-you-start -->
@@ -87,7 +87,7 @@ Estimate from the team's git history in Devplan, not from ideal hours. Use the l
    - Effort in engineer-weeks = PRs ÷ PRs per engineer-week.
    - Calendar time = the larger of (effort ÷ engineers on it) and (the longest chain of PRs that must land one after another × p85 cycle time).
    - Plan on the low PR count and median pace. Use the high PR count and p85 cycle time as the risk case.
-5. **Show the basis in one line,** for example: "Based on 410 PRs from 4 engineers over 90 days (8 PRs per engineer-week; cycle time 0.9 hours median, 41 hours at p85). Comparable projects took 28 to 40 PRs."
+5. **Show the basis in one line,** in this shape, with this workspace's numbers: "Based on N PRs from M engineers over 90 days (X PRs per engineer-week; cycle time A hours median, B hours at p85). Comparable projects took C to D PRs." Never reuse numbers from this example.
 
 Never invent precision. With no comparable project, give a wide range and say what would narrow it.
 <!-- /shared:estimating -->
@@ -142,7 +142,7 @@ Build the page from [references/dashboard-template.md](references/dashboard-temp
 3. Use only the template's patterns: Today (exactly 3 lines; keep its label unless this skill names another), Figures (2 to 4), Rows, Groups, Dated entries, Table, Trend, Meter, and Empty. Delete every pattern you don't use and every template comment. Never leave `{{...}}` placeholders.
 4. Use the same four states everywhere, as a class on the row and on its pill: `s-ok` (shipped, delivered, on track), `s-warn` (partial, at risk, quiet), `s-bad` (blocked, slipped, off track, no tracked work), `s-info` (new, neutral, suggested).
 5. Every item links to its source. Put evidence in the row's `.trail` as `.src` chips: the tool name in `<i>`, then a readable label (PR #412, LIN-88, #channel, a call title and date, a ticket subject). Never show opaque IDs.
-6. Action buttons copy a ready prompt for the user to paste into Claude. Put the exact message in `data-prompt`, written so it starts the right skill on its own (for example `Write a Devplan spec for &quot;SCIM provisioning&quot;...`). Escape quotes as `&quot;`.
+6. Action buttons copy a ready prompt for the user to paste into their chat. Put the exact message in `data-prompt`, written so it starts the right skill on its own (for example `Write a Devplan spec for &quot;SCIM provisioning&quot;...`). Escape quotes as `&quot;`.
 7. Escape `&`, `<` and `>` in text from sources.
 8. Footer: set the refresh line from the scheduled task ("weekdays at 7:47"), or "Run it again any time" if there is none. Point "Invite teammates" at the workspace members page (see `devplan-product-context`).
 
@@ -151,6 +151,6 @@ Before publishing, check once that every element you opened is closed, in order,
 ## Publish
 
 - **Claude:** publish an HTML artifact with this dashboard's name as its title. If one exists from an earlier run (setup saves the links), update that artifact instead of creating another. If your artifact tool adds its own page wrapper, publish what's inside `<head>` and `<body>` without the wrapper tags.
-- **Claude Code or Codex:** write `devplan-<skill-name>.html` to the working directory, replacing the previous copy, and give the path.
+- **Claude Code or Codex:** write the complete page, from `<!doctype html>` through `</html>` with its `<head>`, to `devplan/devplan-<skill-name>.html` in the working directory, replacing the previous copy, and give the path. The first time you create the `devplan/` folder inside a git repository, suggest adding `devplan/` to `.gitignore`; don't edit it yourself.
 - **In chat**, after publishing: two or three lines with the most important finding and one suggested next step. Don't repeat the dashboard.
 <!-- /shared:dashboard-format -->

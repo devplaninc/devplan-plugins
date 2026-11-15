@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "Devplan: product intelligence for software teams, in Claude, ChatGPT and Codex",
-    "version": "0.2.0"
+    "version": "0.2.1"
   },
   "plugins": [
     {
       "name": "devplan",
       "source": "./plugins/devplan",
       "description": "Product intelligence for software teams, powered by your Devplan workspace. Six dashboards refreshed every weekday: Daily Radar, Execution Monitoring, Demand Report with suggested projects and market trends, Stale Commitments, a searchable Changelog, and Engineering Analytics. Plan cycles from your team's real pace, and write specs that are tracked in Devplan automatically. Requires a Devplan account; setup walks you through creating one.",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "category": "productivity",
       "homepage": "https://devplan.com",
       "displayName": "Devplan",

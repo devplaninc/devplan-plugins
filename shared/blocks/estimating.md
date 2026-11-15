@@ -26,6 +26,6 @@ Estimate from the team's git history in Devplan, not from ideal hours. Use the l
    - Effort in engineer-weeks = PRs ÷ PRs per engineer-week.
    - Calendar time = the larger of (effort ÷ engineers on it) and (the longest chain of PRs that must land one after another × p85 cycle time).
    - Plan on the low PR count and median pace. Use the high PR count and p85 cycle time as the risk case.
-5. **Show the basis in one line,** for example: "Based on 410 PRs from 4 engineers over 90 days (8 PRs per engineer-week; cycle time 0.9 hours median, 41 hours at p85). Comparable projects took 28 to 40 PRs."
+5. **Show the basis in one line,** in this shape, with this workspace's numbers: "Based on N PRs from M engineers over 90 days (X PRs per engineer-week; cycle time A hours median, B hours at p85). Comparable projects took C to D PRs." Never reuse numbers from this example.
 
 Never invent precision. With no comparable project, give a wide range and say what would narrow it.

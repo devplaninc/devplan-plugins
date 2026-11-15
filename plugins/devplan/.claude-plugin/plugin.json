@@ -1,7 +1,7 @@
 {
   "name": "devplan",
   "displayName": "Devplan",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Product intelligence for software teams, powered by your Devplan workspace. Six dashboards refreshed every weekday: Daily Radar, Execution Monitoring, Demand Report with suggested projects and market trends, Stale Commitments, a searchable Changelog, and Engineering Analytics. Plan cycles from your team's real pace, and write specs that are tracked in Devplan automatically. Requires a Devplan account; setup walks you through creating one.",
   "icon": "./assets/logo.png",
   "author": {

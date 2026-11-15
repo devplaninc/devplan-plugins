@@ -1,6 +1,6 @@
 ---
 name: devplan-setup
-description: Set up Devplan - connect or create a Devplan workspace, confirm company context, build every dashboard, and schedule weekday refreshes. Use right after install, when the user says "set up Devplan", "get started", "what does Devplan do", wants to change their dashboards, schedule, or company context, or another Devplan skill finds Devplan isn't connected.
+description: Set up Devplan - connect or create a Devplan workspace, confirm company context, build every dashboard, and schedule weekday refreshes. Use right after install, when the user says "set up Devplan", "get started", "what does Devplan do", says "refresh my Devplan dashboards", wants to change their dashboards, schedule, or company context, or another Devplan skill finds Devplan isn't connected.
 ---
 
 # Devplan setup
@@ -9,7 +9,7 @@ Goal: by the end, the user has Devplan connected, their company context confirme
 
 ## How this runs
 
-Open with a short welcome that shows what they're about to get, then the plan:
+On a first run, your first message is always this welcome and the plan, on every surface, even when Devplan is already connected:
 
 > Welcome to Devplan. In about ten minutes you'll have:
 > - Six dashboards built from your team's real work, refreshed every weekday morning
@@ -29,7 +29,8 @@ Then go one step at a time:
 - Keep the tone friendly and plain. No tool names, IDs, or jargon.
 - End each step with one line on what's next.
 - If the user wants to skip a step, skip it and move on.
-- If setup already ran (saved settings list dashboard links), say so and ask what to change: **Company context**, **Dashboards**, **Schedule**, **Start over**. Jump to that step.
+- If setup already ran (saved settings list dashboard links, or `devplan/devplan-*.html` files exist in the working folder), say so and ask what to change: **Company context**, **Dashboards**, **Schedule**, **Start over**. Jump to that step.
+- If the user asks to refresh their dashboards, skip the welcome and the questions: rebuild every dashboard that exists, in step 4's order, updating each in place, then give the same short summary a scheduled run would.
 
 ## Step 1 of 5: Connect Devplan
 
@@ -42,7 +43,7 @@ Check whether the Devplan tools are available. If your client loads tools on dem
 - **What is Devplan?** Answer in four lines, then ask again:
   > Devplan connects to your code, tickets, Slack, docs, calls, and support, and keeps a live map of your product: what exists, what's shipping, what customers are asking for, and what was decided.
   > It links every PR, ticket, conversation, and customer request to the people, projects, and features it belongs to, across all your tools.
-  > Claude, Slack, and your team work from that same map, so nobody starts from scratch.
+  > Your agents, Slack and your team work from the same map.
   > Setup takes about ten minutes of your time. Devplan does the rest in the background.
 
 - **No, create one.** Show what to expect, then the link:
@@ -59,11 +60,14 @@ Check whether the Devplan tools are available. If your client loads tools on dem
 
 - **Yes, connect it.** Give the connect steps.
 
-Connect steps, by surface:
+Connect steps, by surface. Give only the ones for the surface you're on, word for word. Never suggest other commands, and never send the user to the Devplan website to connect: signing in there doesn't connect this app.
 
-- **Claude (web and desktop):** Customize > Plugins > Devplan > Connectors tab > Connect Devplan, then sign in.
-- **Claude Code:** run `/mcp`, select `devplan`, and sign in.
-- **ChatGPT and Codex:** open Plugins > Devplan and connect, or @-mention Devplan in a chat and sign in when asked.
+- **Claude (web and desktop):** "Open **Plugins** in the sidebar, then **Devplan**, and click **Connect**. Claude shows a connector form: keep the defaults, click **Add**, then sign in to Devplan."
+- **Claude Code:** if a sign-in link appears in the chat, open it and sign in. Otherwise: "Run `/mcp`, choose **plugin:devplan:devplan**, and sign in. If it isn't listed, start a new Claude Code session first."
+- **Codex CLI:** "In a separate terminal, run `codex mcp add devplan --url https://app.devplan.com/api/v1/mcp` and sign in to Devplan in the browser that opens. Then start a new Codex session and say 'Set up Devplan'."
+- **ChatGPT and the Codex app:** "Open **Plugins**, then **Devplan**, and connect. If Devplan isn't listed, add a custom MCP server with the URL `https://app.devplan.com/api/v1/mcp`."
+
+Then add one line: "Claude may ask before each Devplan tool it uses. Devplan's read tools only read your workspace, so you can choose **Always allow** for them." (Adapt "Claude" to the app you're in.)
 
 When the user says they're connected, check again. If the tools still don't appear, say: "Start a new chat and say 'Set up Devplan'. I'll pick up at step 2."
 
@@ -116,6 +120,8 @@ Company context has six parts: company description, target customers, competitor
 
 Options: **Build and schedule**, **Pick a different time**, **Build without scheduling**. Only list dashboards step 2 found ready; mention the rest will be added once their sources are connected.
 
+**In Claude Code and Codex, don't offer scheduling.** Their schedulers run in the cloud, where this app's Devplan sign-in isn't available, so a scheduled refresh would fail. Say instead: "I'll build them now (a few minutes). To refresh them, say 'Refresh my Devplan dashboards' any time." The only option is **Build them**.
+
 **Build them one at a time,** in this order: Daily Radar, Execution Monitoring, Demand Report, Stale Commitments, Changelog, Engineering Analytics. For each:
 
 - Say "Building 2 of 6: Execution Monitoring".
@@ -123,12 +129,12 @@ Options: **Build and schedule**, **Pick a different time**, **Build without sche
 - Publish it as its own artifact (or file) and keep its link.
 - If one fails or has too little data, say so in one line and continue. Never let one dashboard stop setup.
 
-**Schedule the refresh.** If you have a scheduling tool in this session, create **one** recurring scheduled task on weekdays at the chosen time in the user's time zone, with email notifications on (and push if they want it). Each run starts fresh with no memory of this chat, so write its prompt as a complete standalone instruction:
+**Schedule the refresh (Claude only).** If you have a scheduling tool in this session, create **one** recurring scheduled task on weekdays at the chosen time in the user's time zone, with email notifications on (and push if they want it). If the tool lets you choose which connectors the task gets, attach only Devplan. Each run starts fresh with no memory of this chat, so write its prompt as a complete standalone instruction:
 
 ```
 Refresh my Devplan dashboards. Use the Devplan plugin skills.
 
-1. Rebuild each dashboard below with its skill, and update the existing artifact at its link instead of creating a new one:
+1. Rebuild each dashboard below with its skill. Read the existing artifact at its link first, then update it in place instead of creating a new one:
    - Daily Radar (daily-radar): <link>
    - Execution Monitoring (execution-monitoring): <link>
    - Demand Report (demand-report): <link>
@@ -137,11 +143,13 @@ Refresh my Devplan dashboards. Use the Devplan plugin skills.
    - Engineering Analytics (eng-analytics): <link>
 2. Daily Radar is for <name> (<email>), <role>. Focus: <radar focus>.
 3. Time zone: <IANA zone>. In each footer, the refresh line is "Refreshes weekdays at <time>".
-4. If Devplan isn't connected, skip the dashboards and reply only: "Your Devplan dashboards didn't refresh because Devplan isn't connected. Open Claude and say 'Set up Devplan'."
-5. Finish with an email-ready summary: the three things that matter most today across all dashboards, one line each with a link, then a link to every dashboard. This final message is the email.
+4. Use only Devplan and the web. Don't use other connectors or tools.
+5. When fetching a long spec or project, use `contentMode: "evidence"` rather than full content.
+6. If Devplan isn't connected, skip the dashboards and reply only: "Your Devplan dashboards didn't refresh because Devplan isn't connected. Say 'Set up Devplan' to reconnect."
+7. Finish with an email-ready summary: the three things that matter most today across all dashboards, one line each with a link, then a link to every dashboard. This final message is the email.
 ```
 
-Then tell the user in one or two sentences: it's scheduled, at what time, that the summary goes to their account's email, whether runs need their approval, and where to change it. If no scheduling tool is available, say scheduled refresh isn't available here and suggest saying "Refresh my Devplan dashboards" each morning.
+Then tell the user in two or three sentences: it's scheduled, at what time, that the summary goes to their account's email, whether runs need their approval, what the task can access (name the connectors and tools it was given, if the tool reports them), and where to change it. If no scheduling tool is available, say scheduled refresh isn't available here and suggest saying "Refresh my Devplan dashboards" each morning.
 
 If `save_workspace_context` is available, save the dashboard links, schedule, and time zone in the workspace settings.
 
@@ -149,12 +157,12 @@ If `save_workspace_context` is available, save the dashboard links, schedule, an
 
 Finish with a short recap of what's set up (dashboards with links, refresh time), then what they can do now:
 
-- **Act from a dashboard.** "Write spec" and "New project" buttons copy a ready message. Paste it here and I'll take it from there.
+- **Act from a dashboard.** "Write spec" and "New project" buttons copy a ready message. Paste it into your chat and I'll take it from there.
 - **Ask anything about the product.** "What did we decide about pricing?", "What should I know before changing billing?", "Who's working on SSO?" Answers cite the PRs, tickets, calls, and decisions behind them.
 - **Ask in Slack.** Mention Devplan in a channel and get the answer with its sources. If Slack isn't connected in Devplan yet, add it under Integrations.
 - **Decisions don't get lost.** Devplan captures decisions from Slack, meetings, and specs with their reasoning, so the team stops reopening settled questions.
 - **Plan a cycle.** "Plan the next 6 weeks" sizes what the team can do from how it actually ships, offers a few strategic directions, and lays out what fits.
-- **Specs are tracked automatically.** Any spec written here becomes a Devplan project, and the PRs, tickets, and conversations that touch it link to it as they happen.
+- **Specs are tracked in Devplan.** A spec written here is saved to its Devplan project, and the PRs, tickets, and conversations that touch it link to it as they happen.
 
 Then one subtle team line, once: "Devplan works best when your team shares it: everyone gets the same context, dashboards, and decision history. [Invite teammates](<members page>)." Build the members link as described in `devplan-product-context`.
 
