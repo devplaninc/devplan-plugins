@@ -6,7 +6,7 @@ Product intelligence for software teams, inside Claude, ChatGPT and Codex. Devpl
 
 ## What you get
 
-- **Six dashboards, refreshed every weekday:** a Daily Radar tailored to you, Execution Monitoring for planned and inferred projects, a Demand Report that turns customer demand and market moves into suggested projects, Stale Commitments, a searchable Changelog, and Engineering Analytics.
+- **Six dashboards** (refreshed every weekday in Claude, on request elsewhere): a Daily Radar tailored to you, Execution Monitoring for planned and inferred projects, a Demand Report that turns customer demand and market moves into suggested projects, Stale Commitments, a searchable Changelog, and Engineering Analytics.
 - **Cycle plans you can commit to.** Tell it the timeframe and team size, pick one of a few strategic directions, and get a plan of what fits, sized from how your team actually ships.
 - **Specs that track themselves.** A short discovery conversation, then a spec with a technical plan and estimate. Every spec becomes a Devplan project, and the PRs, tickets, and conversations that touch it link to it as they happen.
 - **Answers with sources.** Ask any product question and get an answer that cites the PRs, tickets, calls, and decisions behind it.
@@ -20,7 +20,7 @@ Say **"Set up Devplan"** in a new chat. Setup takes about ten minutes:
 1. Connect Devplan, or create your workspace and connect your sources
 2. Check what Devplan can see
 3. Confirm your company context and what your Daily Radar should focus on
-4. Build all six dashboards and schedule weekday refreshes
+4. Build all six dashboards, and in Claude schedule weekday refreshes
 5. A quick tour
 
 ## What you can ask
@@ -41,11 +41,21 @@ Say **"Set up Devplan"** in a new chat. Setup takes about ten minutes:
 - **Devplan.** The plugin declares one remote server, `https://app.devplan.com/api/v1/mcp`, and you sign in with your Devplan account. Skills read your Devplan workspace. Setup can save your company context and dashboard settings there, and the Spec skill creates or updates a project for every spec you write.
 - **Your other connected tools (optional).** Cycle Planning reads the most recent strategy or planning doc from a docs tool you've connected (Notion, Confluence, Google Drive), if there is one.
 - **The web.** The Demand Report searches the public web for your competitors' announcements and market trends. Setup reads your company website once to draft your company context.
-- **Dashboards** are published as artifacts in your account, or saved as HTML files in your working folder.
-- **Daily email** is a scheduled task in your own account, sent only to you.
+- **Dashboards** are published as private pages in your Claude account, or saved as HTML files in a `devplan/` folder in your working directory.
+- **Daily email** (Claude only) is a scheduled task in your own account that uses only Devplan, sent only to you.
 - **Links** in dashboards point to your sources and to Devplan at `app.devplan.com`.
 
 Dashboards are read-only: nothing is posted, sent, or changed in your tools.
+
+## Install
+
+Claude Code:
+
+```
+/plugin install devplan --marketplace devplaninc/devplan-plugins
+```
+
+Claude, ChatGPT and Codex: see the [main README](../../README.md).
 
 ## Support
 

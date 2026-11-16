@@ -2,59 +2,89 @@
 
 # Devplan plugin for Claude, ChatGPT and Codex
 
-Your Devplan workspace inside the AI you already use: six dashboards refreshed every weekday, cycle plans sized from how your team actually ships, specs tracked in Devplan automatically, and product answers grounded in your code, tickets, calls, and Slack.
+Your Devplan workspace inside the AI you already use: six dashboards built from your team's real work, cycle plans sized from how your team actually ships, specs tracked in Devplan, and product answers grounded in your code, tickets, calls, and Slack.
 
-The plugin needs a Devplan account. Setup walks you through creating one and connecting your sources.
+**Before you install:** the plugin needs a Devplan account with a **code repository connected**. That's required; tickets, Slack, docs, calls, and support make it better. Setup walks you through creating an account if you don't have one.
 
-## Install
+**Pricing:** Devplan runs on credit packs, starting at $50. Purchased credits never expire. New workspaces get $100 in free credits, valid for 3 months, with no credit card. [See pricing](https://www.devplan.com/pricing/)
 
-Pick the app you use. Once it's installed, say **"Set up Devplan"** in a new chat.
+## Install the plugin (recommended)
+
+The plugin gives you Devplan's tools plus ten skills: guided setup, the dashboards, specs, cycle planning, and product answers. Pick the app you use. Once it's installed, say **"Set up Devplan"** in a new chat.
 
 ### Claude (web and desktop app)
 
-1. Go to **Customize > Plugins > Add > Add marketplace** and enter `devplaninc/devplan-plugins`.
-2. Find **Devplan** and select **Add**.
-3. Say **"Set up Devplan"** in a new chat. Setup connects Devplan for you.
+1. Open **Plugins** in the sidebar, then **Add > Add marketplace > Add from a repository**.
+2. Enter `https://github.com/devplaninc/devplan-plugins` and select **Sync**.
+3. Open **Devplan** and select **Add**.
+4. Say **"Set up Devplan"** in a new chat. When setup asks you to connect, open **Plugins > Devplan > Connect**. Claude shows a connector form: keep the defaults, click **Add**, then sign in to Devplan.
 
-Installed on Claude, the plugin also shows up in Cowork and Claude Code.
+Installed on Claude, the plugin also shows up in Cowork and Claude Code on the same account.
 
 ### Claude Code
 
+From a terminal:
+
 ```
-/plugin marketplace add devplaninc/devplan-plugins
-/plugin install devplan@devplan
+claude plugin install devplan --marketplace https://github.com/devplaninc/devplan-plugins
 ```
 
-Then say **"Set up Devplan"**, or run `/mcp`, select **devplan**, and sign in.
+Or inside Claude Code:
 
-### ChatGPT and Codex desktop app
+```
+/plugin install devplan --marketplace https://github.com/devplaninc/devplan-plugins
+```
 
-1. Open **Plugins**, choose to add a marketplace, and enter `devplaninc/devplan-plugins`. (Or from a terminal: `codex plugin marketplace add devplaninc/devplan-plugins`.)
-2. Open the **Plugins** directory (in Work mode or Codex), and choose the **Devplan** marketplace.
-3. Open **Devplan** and select the **+** button to install it.
-4. Say **"Set up Devplan"**. Sign in to Devplan when asked.
-
-Installed plugins work in both ChatGPT (Chat or Work) and Codex. In ChatGPT, @-mention **Devplan** or pick it from **+ > More**. In a Codex task, use **Sources > Use plugins**.
+Then say **"Set up Devplan"** and open the sign-in link it shows. If no link appears, run `/mcp`, choose **plugin:devplan:devplan**, and sign in.
 
 ### Codex CLI
 
 ```
-codex plugin marketplace add devplaninc/devplan-plugins
-codex
+codex plugin marketplace add https://github.com/devplaninc/devplan-plugins
+codex plugin add devplan@devplan
+codex mcp add devplan --url https://app.devplan.com/api/v1/mcp
 ```
 
-Then type `/plugins`, open the **Devplan** marketplace tab, and install **Devplan**. Start a new session before using it. Plugins aren't available in the Codex IDE extension.
+The last command opens Devplan's sign-in in your browser. It's a one-time step until Devplan is listed in OpenAI's plugin directory. Then start a new Codex session and say **"Set up Devplan"**. Plugins aren't available in the Codex IDE extension.
+
+### ChatGPT and the Codex app
+
+1. Open **Plugins**, choose to add a marketplace, and enter `https://github.com/devplaninc/devplan-plugins`.
+2. Open the **Devplan** marketplace, then **Devplan**, and select **+** to install it.
+3. Say **"Set up Devplan"** and sign in when asked.
+
+In ChatGPT, @-mention **Devplan** or pick it from **+ > More**. In a Codex task, use **Sources > Use plugins**. If you don't see an option to add a marketplace on your plan, use **Connect Devplan directly** below.
 
 ### For workspace admins
 
-- **ChatGPT Business, Enterprise and Edu:** import `devplaninc/devplan-plugins` as a marketplace under **Workspace settings > Plugins > Marketplaces**. It syncs daily; use **Sync now** to pull changes. Set Devplan to **Installed** to install it for everyone.
 - **Claude Team and Enterprise:** add the marketplace in your organization's plugin settings to make Devplan available to everyone.
+- **ChatGPT Business, Enterprise and Edu:** import `https://github.com/devplaninc/devplan-plugins` under **Workspace settings > Plugins > Marketplaces**. It syncs daily; use **Sync now** to pull changes. Set Devplan to **Installed** to install it for everyone.
 
 ### Updating
 
-- Claude: the marketplace syncs from GitHub; reinstall Devplan if a new version doesn't appear.
-- Claude Code: `/plugin marketplace update devplan`
-- ChatGPT, Codex app and CLI: `codex plugin marketplace upgrade`, then restart the app.
+- **Claude:** the marketplace syncs from GitHub. Reinstall Devplan if a new version doesn't appear.
+- **Claude Code:** `claude plugin marketplace update devplan`
+- **ChatGPT, Codex app and CLI:** `codex plugin marketplace upgrade`, then restart the app.
+
+### Uninstalling
+
+- **Claude:** **Plugins > Devplan**, then remove it.
+- **Claude Code:** `claude plugin uninstall devplan@devplan`
+- **Codex CLI and app:** remove Devplan from **Plugins** (`/plugins` in the CLI). If you ran `codex mcp add devplan`, also run `codex mcp remove devplan`.
+
+Uninstalling doesn't delete your Devplan workspace or anything saved in it.
+
+## Or connect Devplan directly
+
+If you can't install plugins, add Devplan as a server instead. You get Devplan's tools, so your assistant can answer from your workspace, but not the skills: no guided setup, dashboards, spec flow, or cycle planning.
+
+- **Server URL:** `https://app.devplan.com/api/v1/mcp` (sign in with your Devplan account)
+- **Claude:** add a custom connector with that URL.
+- **Claude Code:** `claude mcp add --transport http devplan https://app.devplan.com/api/v1/mcp`
+- **Codex:** `codex mcp add devplan --url https://app.devplan.com/api/v1/mcp`
+- **ChatGPT:** **Plugins > Add > Add custom MCP server**, with that URL.
+
+If you later install the plugin, remove this server so you don't have two Devplan connections.
 
 ## Getting started
 
@@ -66,9 +96,11 @@ Setup takes about ten minutes and goes one step at a time:
 
 1. **Connect Devplan.** If you don't have an account yet, setup explains what happens in Devplan first: create a workspace, describe your company, connect a code repository and the rest of your team's tools, and let Devplan build your knowledge graph. You don't need to wait for the graph to finish.
 2. **Check your workspace.** See what Devplan can read and which dashboards are ready.
-3. **Confirm your company context.** Description, customers, competitors, goals, and product overview, shared with your whole workspace. Then tell your Daily Radar what to focus on.
-4. **Build your dashboards and schedule updates.** All six, built in a few minutes and refreshed every weekday morning, with a short summary emailed to you.
+3. **Confirm your company context.** Description, customers, competitors, goals, and product overview. Then tell your Daily Radar what to focus on.
+4. **Build your dashboards.** All six, built in a few minutes. In Claude, setup can also refresh them every weekday morning and email you a short summary.
 5. **A quick tour.** What you can ask, how Slack and decision memory work, and how to bring your team in.
+
+Claude may ask before each Devplan tool it uses. Devplan's read tools only read your workspace, so you can choose **Always allow** for them.
 
 ### Try these next
 
@@ -82,56 +114,46 @@ Setup takes about ten minutes and goes one step at a time:
 | "What slipped this week?" | Commitments that went quiet, slipped, or got blocked |
 | "When did we ship <feature>?" | The searchable Changelog |
 | "How fast are we shipping?" | Cycle time, throughput, work in progress, and planned work |
+| "Refresh my Devplan dashboards" | Every dashboard rebuilt in place |
 
 You don't need to name a skill. Ask product questions as you normally would ("why are we building X?", "what did we decide about pricing?") and the answer starts from your Devplan workspace, with sources.
 
-### Tips
+## What Devplan can access
 
-- **Act from a dashboard.** "Write spec", "Update spec" and "New project" buttons copy a ready message. Paste it into a chat to start.
-- **Change the scope in plain words:** "Daily Radar for the last week", "Demand Report for Acme only".
-- **Dashboards are read-only.** Nothing is posted, sent, or changed unless you ask. Specs are the exception: every spec is tracked as a Devplan project.
-- **Update your context, dashboards, or schedule** by saying "Set up Devplan" again.
+- **Reads.** Skills read your Devplan workspace: projects, the code analysis, changes, discussions, calls, support summaries, and documents from the sources you connected in Devplan. Devplan's own permissions decide what it can see.
+- **Writes, only to Devplan.** The Spec skill creates or updates a Devplan project for each spec you write. Setup can save your company context to your workspace. Nothing is posted, sent, or changed in your other tools.
+- **Other connectors (optional).** Cycle Planning reads the latest strategy or planning doc from a docs tool you've connected in your AI app, if there is one.
+- **The web.** The Demand Report searches the public web for competitor and market news. Setup reads your company website once.
+
+Security and data handling: [devplan.com](https://devplan.com) · [Privacy](https://devplan.com/privacy)
+
+## Where output goes
+
+| | Claude (web, desktop, Cowork) | Claude Code and Codex |
+|---|---|---|
+| Dashboards | Private pages in your Claude account, updated in place on each refresh | HTML files in a `devplan/` folder in your working directory (add `devplan/` to `.gitignore`) |
+| Specs | A document you can edit and share, plus the Devplan project | `devplan/spec-<name>.md`, plus the Devplan project |
+| Weekday refresh | A scheduled task in your account, with a summary emailed to you | Not available. Say "Refresh my Devplan dashboards" when you want fresh ones |
+
+## Cost per session
+
+In Claude Code the plugin adds about 950 tokens to every session, mostly skill descriptions so the right skill loads when you ask. Each skill loads its full instructions only when it runs.
 
 ## Skills
 
-| Skill | Refresh | What it does |
-|---|---|---|
-| `devplan-setup` | Once | Guided setup: connect or create Devplan, check the workspace, confirm company context, build every dashboard, schedule weekday refreshes |
-| `devplan-product-context` | Always on | Starts every product answer from your Devplan workspace and what Claude knows about you |
-| `daily-radar` | Weekdays | Your personal briefing: what shipped, what's moving, what's stuck, and what needs you |
-| `execution-monitoring` | Weekdays | Planned and inferred projects with activity, progress, risks, and drift; start a new project |
-| `demand-report` | Weekdays | Customer demand themes with competitor and market research, and suggested projects that start a spec |
-| `stale-commitments` | Weekdays | Commitments that slipped, went quiet, or got blocked, and who needs to decide |
-| `changelog` | Weekdays | Searchable 30-day changelog by product area, with delivery state |
-| `eng-analytics` | Weekdays | Cycle time, throughput, work in progress, review load, and planned work |
-| `cycle-planning` | On demand | Asks timeframe and team size, offers strategic directions, and plans what fits from observed pace, priorities, and work in flight |
-| `spec` | On demand | Discovery questions, product and technical plan, estimate; tracked in Devplan automatically |
+| Skill | What it does |
+|---|---|
+| `devplan-setup` | Guided setup: connect or create Devplan, check the workspace, confirm company context, build every dashboard, and schedule refreshes where supported |
+| `devplan-product-context` | Starts every product answer from your Devplan workspace |
+| `daily-radar` | Your personal briefing: what shipped, what's moving, what's stuck, and what needs you |
+| `execution-monitoring` | Planned and inferred projects with activity, progress, risks, and drift; start a new project |
+| `demand-report` | Customer demand themes with competitor and market research, and suggested projects that start a spec |
+| `stale-commitments` | Commitments that slipped, went quiet, or got blocked, and who needs to decide |
+| `changelog` | Searchable 30-day changelog by product area, with delivery state |
+| `eng-analytics` | Cycle time, throughput, work in progress, review load, and planned work |
+| `cycle-planning` | Asks timeframe and team size, offers strategic directions, and plans what fits from observed pace and work in flight |
+| `spec` | Discovery questions, product and technical plan, estimate; tracked in Devplan |
 
-## Repo layout
+## Support
 
-```
-.claude-plugin/marketplace.json      Claude marketplace (Codex also reads this)
-.agents/plugins/marketplace.json     Codex marketplace with install and auth policy
-plugins/devplan/
-  .claude-plugin/plugin.json         Claude manifest
-  plugin.json                        Portable manifest + OpenAI extension (Codex/ChatGPT)
-  .mcp.json                          Devplan MCP, Claude format
-  mcp.json                           Devplan MCP, portable format with OAuth (DCR)
-  skills/                            The skills
-shared/
-  dashboard-template.html            The dashboard design every dashboard skill uses
-  blocks/                            Text shared across skills
-scripts/sync.py                      Copies shared blocks and the template into the skills
-docs/
-  SERVER_SPEC.md                     Devplan MCP tools the plugin uses or needs
-  INSTALL_SCREEN.md                  Onboarding final step
-```
-
-## Maintainer notes
-
-- Edit shared text in `shared/`, then run `python3 scripts/sync.py`. Don't edit the copies inside skills between `<!-- shared:... -->` markers or in `references/dashboard-template.md`.
-- Keep `.mcp.json` and `mcp.json` in sync. Claude reads the first, Codex the second.
-- Keep `.claude-plugin/plugin.json` and `plugin.json` versions in sync. Bump both on every release.
-- Skills use new server tools (`get_workspace_context`, `save_workspace_context`, `create_project`) when they exist and fall back to existing tools until then. Nothing needs to change in the plugin when they ship. See `docs/SERVER_SPEC.md`.
-- No lifecycle hooks: hooks make the plugin ineligible for OpenAI's public directory.
-- The earlier free version, which ran on the user's own connectors, is in the git history before v0.2.0.
+[devplan.com](https://devplan.com) · [docs.devplan.com](https://docs.devplan.com) · Contributing: [CONTRIBUTING.md](CONTRIBUTING.md)

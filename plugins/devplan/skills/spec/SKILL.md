@@ -1,6 +1,6 @@
 ---
 name: spec
-description: Turn an idea, request, suggested project, or inferred project into a grounded spec - problem, outcome, scope, success criteria, technical approach, and an effort estimate - after a short discovery conversation, then track it in Devplan automatically. Use for "write a spec", "write a Devplan spec", "plan this feature", "new project", "technical plan", "how should we build", "how long will this take", "estimate this", "PRD", "scope this project", or "update the spec".
+description: Turn an idea, request, or suggested or inferred project into a spec with scope, technical approach, and estimate, after a few discovery questions, and track it in Devplan. Use for "write a spec", "write a Devplan spec", "plan this feature", "new project", "technical plan", "how should we build", "how long will this take", "estimate this", "PRD", "scope this project", or "update the spec".
 ---
 
 # Spec
@@ -26,7 +26,7 @@ Messages pasted from a Devplan dashboard ("Write a Devplan spec for ...", "Updat
 This skill runs on the user's Devplan workspace.
 
 1. Check that the Devplan tools are available. If your client loads tools on demand, search for "devplan" first. Never call a Devplan tool just to find out whether it exists.
-2. If Devplan isn't connected, or a call fails with a sign-in error, say in one line that this needs Devplan connected, then follow `devplan-setup` from step 1. Stop this skill there.
+2. If Devplan isn't connected, or a call fails with a sign-in error, say in one line that this needs Devplan, then ask setup's first question, "Do you have a Devplan account?", with its three options (**Yes, connect it**, **No, create one**, **What is Devplan?**), and follow `devplan-setup` from step 1. Stop this skill there. Don't give connect steps or commands of your own, and don't offer to do the task without Devplan (no local drafts, notes-based plans, or git summaries).
 3. Load company and personal context with `devplan-product-context`.
 4. If the workspace is still being built (Devplan is connected but `list_repository_descriptions` and `list_workspace_projects` both come back empty), work from what exists and don't pad. On a dashboard, show the template's notice ("Devplan is still analyzing your sources. This fills in automatically as it finishes."). Anywhere else, say it in one line.
 <!-- /shared:before-you-start -->
@@ -107,7 +107,7 @@ Estimate from the team's git history in Devplan, not from ideal hours. Use the l
    - Effort in engineer-weeks = PRs ÷ PRs per engineer-week.
    - Calendar time = the larger of (effort ÷ engineers on it) and (the longest chain of PRs that must land one after another × p85 cycle time).
    - Plan on the low PR count and median pace. Use the high PR count and p85 cycle time as the risk case.
-5. **Show the basis in one line,** for example: "Based on 410 PRs from 4 engineers over 90 days (8 PRs per engineer-week; cycle time 0.9 hours median, 41 hours at p85). Comparable projects took 28 to 40 PRs."
+5. **Show the basis in one line,** in this shape, with this workspace's numbers: "Based on N PRs from M engineers over 90 days (X PRs per engineer-week; cycle time A hours median, B hours at p85). Comparable projects took C to D PRs." Never reuse numbers from this example.
 
 Never invent precision. With no comparable project, give a wide range and say what would narrow it.
 <!-- /shared:estimating -->
@@ -115,13 +115,16 @@ Never invent precision. With no comparable project, give a wide range and say wh
 ## Output
 
 - In Claude, publish the spec as a document artifact titled with the feature name, so the user can edit and share it. If documents are unavailable, publish an HTML artifact.
-- In Codex or Claude Code, write `spec-<feature-slug>.md` to the working directory and give the path.
+- In Codex or Claude Code, write `devplan/spec-<feature-slug>.md` in the working directory and give the path. The first time you create the `devplan/` folder inside a git repository, suggest adding `devplan/` to `.gitignore`.
 
 ## 4. Track it in Devplan
 
 Do this right after the spec is written, without asking. Every spec is tracked.
 
-1. **Find an existing project.** If the spec is for a project that already exists (the request named one, or `list_workspace_projects` has one with the same intent), update it: fetch its requirements with their `updatedAt`, then call `update_project` with `action: "update_requirements"`, the full spec as `content`, and the matching `expectedDocumentUpdatedAt`. Refetch and retry once on a conflict.
+Never call a Devplan write tool to test whether it works, and never with placeholder or test content. Every write carries the real spec. Before any update, fetch the project in full and use the field values the server returned.
+
+1. **Find an existing project.** If the spec is for a project that already exists (the request named one, or `list_workspace_projects` has one with the same intent), update it. Fetch the project with `fetch_internal_entities_by_ids` (`entityType: "project"`, `contentMode: "full"`), then call `update_project` with `action: "update_requirements"`, `projectId`, the full spec as `content`, `documentId` (the id in the project's `prd` field), `expectedUpdatedAt` (the project's `updatedAt`), and `expectedDocumentUpdatedAt` (the `prd`'s `updatedAt`), each exactly as returned. Refetch and retry once on a conflict.
+   - **Inferred project with no requirements document yet** (the project has no `prd` field: Devplan found it in the code and nobody has written a spec for it): there is nothing to update, and creating a new project would duplicate it. If the server offers a way to add a first spec to an existing project, use it. If not, don't create anything silently. Ask: "Devplan found this project in your code, but it can't take a spec yet. Track this spec as a new planned project?" with options **Create a planned project**, **Keep the spec here only**. If they choose to create one, follow step 2 and say in one line that the inferred project stays as it is.
 2. **Otherwise create one.** If a `create_project` tool is available, call it with the title, a one-line summary, the full spec as markdown, the estimate (PRs, engineer-weeks, and calendar weeks as ranges, confidence, and the one-line basis), the evidence it cites, `origin: "plugin-spec"`, and an idempotency key made from the title and today's date. If not, call `start_feature_planning` with the full spec as `requirements`, then check `check_feature_planning_status` once or twice for the project link. Don't wait more than about a minute; if it's still running, say it's being created.
 3. **Tell the user in one line, with the link:** "Tracked in Devplan: <link>. PRs, tickets, and conversations that touch it will link to it as they happen, and Execution Monitoring will show its progress and risks."
 4. **If it fails,** say so in one line and offer to try again. The spec itself is still saved.

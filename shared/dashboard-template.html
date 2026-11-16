@@ -244,7 +244,7 @@ td.num,th.num{text-align:right}
               <h3>{{CHILD TITLE}}</h3>
               <p>{{ONE SENTENCE}}</p>
             </div>
-            <!-- OPTIONAL ACTION. data-prompt is the exact message the user will paste into Claude. -->
+            <!-- OPTIONAL ACTION. data-prompt is the exact message the user will paste into their chat. -->
             <div class="side"><button class="act" type="button" data-prompt="{{PROMPT}}">{{ACTION, e.g. "Write spec"}}</button><span class="m">{{e.g. "Scope M"}}</span></div>
           </li>
         </ul>
@@ -343,16 +343,16 @@ td.num,th.num{text-align:right}
     var l=document.querySelector(b.parentNode.dataset.for);if(l)apply(l);
   })});
 
-  // Action buttons: copy the prompt so the user can paste it into Claude.
+  // Action buttons: copy the prompt so the user can paste it into their chat.
   function toast(msg){var t=document.createElement('div');t.className='toast';t.setAttribute('role','status');t.textContent=msg;document.body.appendChild(t);setTimeout(function(){t.remove()},2600)}
   function panel(btn,text){
     var host=btn.closest('.row,.sh')||btn.parentNode,old=host.querySelector('.panel');if(old){old.remove();return}
-    var p=document.createElement('div');p.className='panel';p.textContent='Copy this and paste it into a Claude chat:';
+    var p=document.createElement('div');p.className='panel';p.textContent='Copy this and paste it into your chat:';
     var ta=document.createElement('textarea');ta.readOnly=true;ta.value=text;p.appendChild(ta);host.appendChild(p);ta.focus();ta.select();
   }
   document.querySelectorAll('.act[data-prompt]').forEach(function(btn){btn.addEventListener('click',function(){
     var text=btn.dataset.prompt;
-    try{navigator.clipboard.writeText(text).then(function(){toast('Copied. Paste it into Claude to start.')},function(){panel(btn,text)})}catch(e){panel(btn,text)}
+    try{navigator.clipboard.writeText(text).then(function(){toast('Copied. Paste it into your chat to start.')},function(){panel(btn,text)})}catch(e){panel(btn,text)}
   })});
 })();
 </script>
