@@ -1,6 +1,6 @@
 ---
 name: devplan-setup
-description: Set up Devplan - connect or create a Devplan workspace, confirm company context, build every dashboard, and schedule weekday refreshes. Use right after install, when the user says "set up Devplan", "get started", "what does Devplan do", says "refresh my Devplan dashboards", wants to change their dashboards, schedule, or company context, or another Devplan skill finds Devplan isn't connected.
+description: Set up Devplan - connect or create a Devplan workspace, confirm company context, build every dashboard, and schedule twice-daily weekday refreshes. Use right after install, when the user says "set up Devplan", "get started", "what does Devplan do", says "refresh my Devplan dashboards", wants to change their dashboards, schedule, or company context, or another Devplan skill finds Devplan isn't connected.
 ---
 
 # Devplan setup
@@ -12,8 +12,8 @@ Goal: by the end, the user has Devplan connected, their company context confirme
 On a first run, your first message is always this welcome and the plan, on every surface, even when Devplan is already connected:
 
 > Welcome to Devplan. In about ten minutes you'll have:
-> - Six dashboards built from your team's real work, refreshed every weekday morning
-> - Product answers in any chat, grounded in your code, tickets, calls, and Slack, with sources
+> - Four dashboards built from your team's real work, refreshed twice every weekday
+> - Answers to any product or technical question, grounded in your code, tickets, calls, and Slack, with sources
 > - A shared memory of what your company decided and why
 >
 > 1. Connect Devplan
@@ -29,8 +29,8 @@ Then go one step at a time:
 - Keep the tone friendly and plain. No tool names, IDs, or jargon.
 - End each step with one line on what's next.
 - If the user wants to skip a step, skip it and move on.
-- If setup already ran (saved settings list dashboard links, or `devplan/devplan-*.html` files exist in the working folder), say so and ask what to change: **Company context**, **Dashboards**, **Schedule**, **Start over**. Jump to that step.
-- If the user asks to refresh their dashboards, skip the welcome and the questions: rebuild every dashboard that exists, in step 4's order, updating each in place, then give the same short summary a scheduled run would.
+- If setup already ran (saved settings list dashboard links or a Site, or `devplan/devplan*.html` files exist in the working folder), say so and ask what to change: **Company context**, **Dashboards**, **Schedule**, **Start over**. Jump to that step.
+- If the user asks to refresh their dashboards, skip the welcome and the questions: rebuild every dashboard that exists, in step 4's order (Daily Radar, Execution Monitoring, Demand Report, Engineering Analytics), updating each in place, then give the same short summary a scheduled run would.
 
 ## Step 1 of 5: Connect Devplan
 
@@ -86,10 +86,8 @@ Show a short summary: the workspace name, what Devplan can see (for example "4 r
 | Dashboard | Needs |
 |---|---|
 | Daily Radar | Code or ticket activity |
-| Execution Monitoring | Projects or code activity |
+| Execution Monitoring | Projects, tickets, or code activity |
 | Demand Report | Customer evidence: support tickets, calls, customer Slack, or requests |
-| Stale Commitments | Projects, tickets, or discussions |
-| Changelog | Code changes |
 | Engineering Analytics | Pull requests |
 
 - **Graph still building** (repos and projects both empty): "Devplan is still building your graph. I'll set everything up now. Your dashboards fill in as the analysis finishes, and each morning's refresh picks up the rest."
@@ -110,26 +108,28 @@ Company context has six parts: company description, target customers, competitor
 
 **Save it:** if `save_workspace_context` is available, save the parts and say "Saved to Devplan. Your teammates start from this too." Otherwise say "Add this under Knowledge > Workspace in Devplan so your whole team shares it," and show the text to copy.
 
-**Then personalize the Daily Radar.** If you already know the user's role and focus from memory or earlier conversations, confirm it in one line. Otherwise ask once: "What should your Daily Radar focus on?" with options **My team's work**, **Specific projects**, **Customers and revenue**, **Everything**. Follow up for names only if they pick specific projects. Keep the answer as the radar focus for step 4.
+**Then personalize the Daily Radar.** If you already know the user's role and focus areas from memory or earlier conversations, confirm them in one line. Otherwise ask once: "Which areas should your Daily Radar focus on?" Offer up to three focus areas drawn from what step 2 found (the busiest product areas from the feature catalog, or teams from the company context, for example **Billing and payments**, **Mobile app**, **Customer onboarding**), plus **Everything**, and let them pick several or type their own. Don't ask for project names. Keep the answer as the radar focus areas for step 4.
 
 ## Step 4 of 5: Build your dashboards and schedule updates
 
 **Confirm once.** Name what you'll build and when it refreshes:
 
-> Your workspace supports 6 dashboards: Daily Radar, Execution Monitoring, Demand Report, Stale Commitments, Changelog, and Engineering Analytics. I'll build them now (a few minutes) and refresh them every weekday at 7:47 AM your time, with a short summary emailed to you.
+> Your workspace supports 4 dashboards: Daily Radar, Execution Monitoring, Demand Report, and Engineering Analytics. I'll build them now (a few minutes) and refresh them every weekday at 7:47 AM and 12:47 PM your time. You'll get a short summary when something changed, and nothing when it didn't.
 
-Options: **Build and schedule**, **Pick a different time**, **Build without scheduling**. Only list dashboards step 2 found ready; mention the rest will be added once their sources are connected.
+Options: **Build and schedule**, **Pick different times**, **Build without scheduling**. Only list dashboards step 2 found ready; mention the rest will be added once their sources are connected.
 
-**In Claude Code and Codex, don't offer scheduling.** Their schedulers run in the cloud, where this app's Devplan sign-in isn't available, so a scheduled refresh would fail. Say instead: "I'll build them now (a few minutes). To refresh them, say 'Refresh my Devplan dashboards' any time." The only option is **Build them**.
+**In Claude Code and Codex CLI, don't offer scheduling.** Their schedulers can't use this app's Devplan sign-in, so a scheduled refresh would fail. Say instead: "I'll build them now (a few minutes). To refresh them, say 'Refresh my Devplan dashboards' any time." The only option is **Build them**.
 
-**Build them one at a time,** in this order: Daily Radar, Execution Monitoring, Demand Report, Stale Commitments, Changelog, Engineering Analytics. For each:
+**Build them one at a time,** in this order: Daily Radar, Execution Monitoring, Demand Report, Engineering Analytics. For each:
 
-- Say "Building 2 of 6: Execution Monitoring".
-- Follow that dashboard's skill, using the company context, the radar focus, and the settings gathered so far.
-- Publish it as its own artifact (or file) and keep its link.
-- If one fails or has too little data, say so in one line and continue. Never let one dashboard stop setup.
+- Say "Building 2 of 4: Execution Monitoring".
+- Follow that dashboard's skill, using the company context, the radar focus areas, and the settings gathered so far.
+- Publish it as that skill's Publish section says. In Claude, each is its own artifact; keep its link. In ChatGPT and the Codex app, each is a tab in the one "Devplan" Site; keep the Site's link.
+- If one fails or has too little data, give it its empty state, say so in one line, and continue. Never let one dashboard stop setup.
 
-**Schedule the refresh (Claude only).** If you have a scheduling tool in this session, create **one** recurring scheduled task on weekdays at the chosen time in the user's time zone, with email notifications on (and push if they want it). If the tool lets you choose which connectors the task gets, attach only Devplan. Each run starts fresh with no memory of this chat, so write its prompt as a complete standalone instruction:
+### Schedule: Claude
+
+If you have a scheduling tool in this session, create **one** recurring scheduled task that runs at both times on weekdays in the user's time zone (for example `CRON_TZ=<zone> 47 7,12 * * 1-5`), with email notifications on (and push if they want it). If the tool lets you choose which connectors the task gets, attach only Devplan. Each run starts fresh with no memory of this chat, so write its prompt as a complete standalone instruction:
 
 ```
 Refresh my Devplan dashboards. Use the Devplan plugin skills.
@@ -138,27 +138,49 @@ Refresh my Devplan dashboards. Use the Devplan plugin skills.
    - Daily Radar (daily-radar): <link>
    - Execution Monitoring (execution-monitoring): <link>
    - Demand Report (demand-report): <link>
-   - Stale Commitments (stale-commitments): <link>
-   - Changelog (changelog): <link>
    - Engineering Analytics (eng-analytics): <link>
-2. Daily Radar is for <name> (<email>), <role>. Focus: <radar focus>.
-3. Time zone: <IANA zone>. In each footer, the refresh line is "Refreshes weekdays at <time>".
+2. Daily Radar is for <name> (<email>), <role>. Focus areas: <radar focus areas>.
+3. Time zone: <IANA zone>. In each footer, the refresh line is "Refreshes weekdays at 7:47 and 12:47". In each masthead, "Last refreshed" is the time this run finished.
 4. Use only Devplan and the web. Don't use other connectors or tools.
 5. When fetching a long spec or project, use `contentMode: "evidence"` rather than full content.
-6. If Devplan isn't connected, skip the dashboards and reply only: "Your Devplan dashboards didn't refresh because Devplan isn't connected. Say 'Set up Devplan' to reconnect."
-7. Finish with an email-ready summary: the three things that matter most today across all dashboards, one line each with a link, then a link to every dashboard. This final message is the email.
+6. If a dashboard's content is the same as the live version, leave that artifact alone.
+7. If Devplan isn't connected, change nothing and reply only: "Your Devplan dashboards didn't refresh because Devplan isn't connected. Say 'Set up Devplan' to reconnect."
+8. If nothing changed on any dashboard, reply only: "No changes since the last refresh."
+9. Otherwise finish with an email-ready summary: up to three things that changed and matter most, one short line each, then a link to every dashboard. This final message is the email.
 ```
 
-Then tell the user in two or three sentences: it's scheduled, at what time, that the summary goes to their account's email, whether runs need their approval, what the task can access (name the connectors and tools it was given, if the tool reports them), and where to change it. If no scheduling tool is available, say scheduled refresh isn't available here and suggest saying "Refresh my Devplan dashboards" each morning.
+Then tell the user in two or three sentences: it's scheduled, at what times, that the summary goes to their account's email only when something changed, whether runs need their approval, what the task can access (name the connectors and tools it was given, if the tool reports them), and where to change it. If no scheduling tool is available, say scheduled refresh isn't available here and suggest saying "Refresh my Devplan dashboards" each morning.
 
-If `save_workspace_context` is available, save the dashboard links, schedule, and time zone in the workspace settings.
+### Schedule: ChatGPT and the Codex app
+
+Use the app's scheduled tasks (ChatGPT) or automations (Codex app) to create **one** recurring task at both times on weekdays in the user's time zone, with Devplan as its only connector where you can choose. Write its prompt as a complete standalone instruction:
+
+```
+Refresh my Devplan dashboards in my "Devplan" Site: <site link>. Use the Devplan plugin skills and only the Devplan connector and the web.
+
+1. Rebuild each tab with its skill, in this order: Daily Radar (daily-radar), Execution Monitoring (execution-monitoring), Demand Report (demand-report), Engineering Analytics (eng-analytics). Update the existing Site in place; never create a new Site.
+2. Daily Radar is for <name> (<email>), <role>. Focus areas: <radar focus areas>.
+3. Time zone: <IANA zone>. The footer's refresh line is "Refreshes weekdays at 7:47 and 12:47". The masthead's "Last refreshed" is the time this run finished, so it always shows the last successful refresh.
+4. Build the whole page and check it before publishing. Publish one new version only if it's complete; if anything fails, publish nothing, so the previous version stays live.
+5. If no tab changed since the live version, don't publish and reply only: "No changes since the last refresh."
+6. If the refresh fails (Devplan not connected, a tool error, or the Site can't be published), reply only: "Your Devplan dashboards didn't refresh: <one-line reason>. The version from <last refreshed time> is still live. Say 'Set up Devplan' to fix it." Send this as a notification.
+7. If Sites isn't available, write the same page to devplan/devplan.html instead and say so in one line.
+8. Otherwise finish with up to three things that changed and matter most, one short line each, and the Site link.
+```
+
+Then tell the user in two sentences: it's scheduled, at what times, that they only hear from it when something changed or a refresh failed, and where to change it. If the app has no scheduler here, say so and suggest "Refresh my Devplan dashboards".
+
+If `save_workspace_context` is available, save the dashboard links (or the Site link), schedule, and time zone in the workspace settings.
 
 ## Step 5 of 5: A quick tour
 
 Finish with a short recap of what's set up (dashboards with links, refresh time), then what they can do now:
 
-- **Act from a dashboard.** "Write spec" and "New project" buttons copy a ready message. Paste it into your chat and I'll take it from there.
-- **Ask anything about the product.** "What did we decide about pricing?", "What should I know before changing billing?", "Who's working on SSO?" Answers cite the PRs, tickets, calls, and decisions behind them.
+- **Act from a dashboard.** Buttons like "Write spec", "Draft message", and "Draft nudge" copy a ready message. Paste it into your chat and I'll take it from there. Evidence sits behind each item's "Evidence" link.
+- **Ask any product or technical question.** Devplan context sits behind every answer, so ask the way you'd ask a teammate who's read everything. Answers cite the PRs, tickets, calls, and decisions behind them.
+  - Product: "What did we decide about pricing, and why?", "Which customers asked for SSO, and what did we tell them?"
+  - Technical: "What should I know before changing billing?", "Which services touch auth, and who knows them best?", "Why did we build webhooks this way?"
+  - Planning: "How long would SCIM take us?", "What's actually blocking the mobile release?"
 - **Ask in Slack.** Mention Devplan in a channel and get the answer with its sources. If Slack isn't connected in Devplan yet, add it under Integrations.
 - **Decisions don't get lost.** Devplan captures decisions from Slack, meetings, and specs with their reasoning, so the team stops reopening settled questions.
 - **Plan a cycle.** "Plan the next 6 weeks" sizes what the team can do from how it actually ships, offers a few strategic directions, and lays out what fits.
@@ -166,4 +188,4 @@ Finish with a short recap of what's set up (dashboards with links, refresh time)
 
 Then one subtle team line, once: "Devplan works best when your team shares it: everyone gets the same context, dashboards, and decision history. [Invite teammates](<members page>)." Build the members link as described in `devplan-product-context`.
 
-Suggest one first thing to try, based on what you saw in step 2, for example "Write a spec for <the top suggested project in your Demand Report>".
+End with one concrete thing to try first, written as the exact message to send, built from what you saw in step 2. Prefer a technical or product question about their busiest area, for example: "Try this first: *What should I know before changing <busiest product area>?*" If the Demand Report has a strong theme, offer that instead: "*Write a spec for <top suggested project>*".

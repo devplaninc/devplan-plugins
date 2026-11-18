@@ -2,7 +2,7 @@
 
 # Devplan plugin for Claude, ChatGPT and Codex
 
-Your Devplan workspace inside the AI you already use: six dashboards built from your team's real work, cycle plans sized from how your team actually ships, specs tracked in Devplan, and product answers grounded in your code, tickets, calls, and Slack.
+Your Devplan workspace inside the AI you already use: four dashboards built from your team's real work, cycle plans sized from how your team actually ships, specs tracked in Devplan, and product answers grounded in your code, tickets, calls, and Slack.
 
 **Before you install:** the plugin needs a Devplan account with a **code repository connected**. That's required; tickets, Slack, docs, calls, and support make it better. Setup walks you through creating an account if you don't have one.
 
@@ -97,8 +97,8 @@ Setup takes about ten minutes and goes one step at a time:
 1. **Connect Devplan.** If you don't have an account yet, setup explains what happens in Devplan first: create a workspace, describe your company, connect a code repository and the rest of your team's tools, and let Devplan build your knowledge graph. You don't need to wait for the graph to finish.
 2. **Check your workspace.** See what Devplan can read and which dashboards are ready.
 3. **Confirm your company context.** Description, customers, competitors, goals, and product overview. Then tell your Daily Radar what to focus on.
-4. **Build your dashboards.** All six, built in a few minutes. In Claude, setup can also refresh them every weekday morning and email you a short summary.
-5. **A quick tour.** What you can ask, how Slack and decision memory work, and how to bring your team in.
+4. **Build your dashboards.** All four, built in a few minutes. In Claude, ChatGPT, and the Codex app, setup also refreshes them at 7:47 AM and 12:47 PM every weekday and sends a short summary only when something changed.
+5. **A quick tour.** Product and technical questions to try first, how Slack and decision memory work, and how to bring your team in.
 
 Claude may ask before each Devplan tool it uses. Devplan's read tools only read your workspace, so you can choose **Always allow** for them.
 
@@ -107,13 +107,13 @@ Claude may ask before each Devplan tool it uses. Devplan's read tools only read 
 | Say | What you get |
 |---|---|
 | "Run my Daily Radar" | What shipped, what's moving, what's stuck, and what needs you |
-| "How are our projects going?" | Execution Monitoring: every planned and inferred project, with activity, progress, and risks |
-| "What are customers asking for?" | Your Demand Report: demand themes, market moves, and the projects they suggest |
+| "How are our projects going?" | Execution Monitoring: active projects from Devplan, Linear, and Jira, what slipped, inferred work, and the changelog |
+| "What are customers asking for?" | Your Demand Report: themes and the projects that answer them, isolated asks, adoption blockers, customer promises, and two weeks of market moves |
 | "Plan the next 6 weeks" | Cycle Planning: a few strategic directions, then a plan sized from your team's real pace |
 | "Write a spec for <a feature>" | A few questions, then a spec with a technical plan and estimate, tracked in Devplan |
-| "What slipped this week?" | Commitments that went quiet, slipped, or got blocked |
-| "When did we ship <feature>?" | The searchable Changelog |
-| "How fast are we shipping?" | Cycle time, throughput, work in progress, and planned work |
+| "What slipped this week?" | Slipped, blocked, and at-risk projects at the top of Execution Monitoring |
+| "What shipped this week?" | The changelog at the bottom of Execution Monitoring |
+| "How fast are we shipping?" | Cycle time by stage, throughput, and a summary by person |
 | "Refresh my Devplan dashboards" | Every dashboard rebuilt in place |
 
 You don't need to name a skill. Ask product questions as you normally would ("why are we building X?", "what did we decide about pricing?") and the answer starts from your Devplan workspace, with sources.
@@ -129,11 +129,11 @@ Security and data handling: [devplan.com](https://devplan.com) · [Privacy](http
 
 ## Where output goes
 
-| | Claude (web, desktop, Cowork) | Claude Code and Codex |
-|---|---|---|
-| Dashboards | Private pages in your Claude account, updated in place on each refresh | HTML files in a `devplan/` folder in your working directory (add `devplan/` to `.gitignore`) |
-| Specs | A document you can edit and share, plus the Devplan project | `devplan/spec-<name>.md`, plus the Devplan project |
-| Weekday refresh | A scheduled task in your account, with a summary emailed to you | Not available. Say "Refresh my Devplan dashboards" when you want fresh ones |
+| | Claude (web, desktop, Cowork) | ChatGPT and the Codex app | Claude Code and Codex CLI |
+|---|---|---|---|
+| Dashboards | Private pages in your Claude account, updated in place on each refresh | One "Devplan" Site with a tab per report, updated in place; a local `devplan/devplan.html` when Sites isn't available | HTML files in a `devplan/` folder in your working directory (add `devplan/` to `.gitignore`) |
+| Specs | A document you can edit and share, plus the Devplan project | A document, plus the Devplan project | `devplan/spec-<name>.md`, plus the Devplan project |
+| Refresh | A scheduled task at 7:47 and 12:47 on weekdays; summary emailed only when something changed | A scheduled task at the same times; the last good version stays live if a run fails, and you're alerted | Not available. Say "Refresh my Devplan dashboards" when you want fresh ones |
 
 ## Cost per session
 
@@ -146,12 +146,10 @@ In Claude Code the plugin adds about 950 tokens to every session, mostly skill d
 | `devplan-setup` | Guided setup: connect or create Devplan, check the workspace, confirm company context, build every dashboard, and schedule refreshes where supported |
 | `devplan-product-context` | Starts every product answer from your Devplan workspace |
 | `daily-radar` | Your personal briefing: what shipped, what's moving, what's stuck, and what needs you |
-| `execution-monitoring` | Planned and inferred projects with activity, progress, risks, and drift; start a new project |
-| `demand-report` | Customer demand themes with competitor and market research, and suggested projects that start a spec |
-| `stale-commitments` | Commitments that slipped, went quiet, or got blocked, and who needs to decide |
-| `changelog` | Searchable 30-day changelog by product area, with delivery state |
-| `eng-analytics` | Cycle time, throughput, work in progress, review load, and planned work |
-| `cycle-planning` | Asks timeframe and team size, offers strategic directions, and plans what fits from observed pace and work in flight |
+| `execution-monitoring` | Active projects from Devplan, Linear, and Jira; slipped, at risk, and blocked work; inferred work by theme; a searchable changelog |
+| `demand-report` | Demand themes with existing and suggested projects, isolated asks, adoption blockers, customer promises, and two weeks of competitor and market moves |
+| `eng-analytics` | Cycle time by stage, throughput, work in progress, review load, and a summary by person |
+| `cycle-planning` | Asks timeframe and team size, offers strategic directions, and plans each cycle with a timeline, estimates, and a 20% buffer |
 | `spec` | Discovery questions, product and technical plan, estimate; tracked in Devplan |
 
 ## Support
