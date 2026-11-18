@@ -2,7 +2,7 @@
 
 # Devplan for Claude and ChatGPT
 
-Devplan turns your code, tickets, Slack, docs, calls, customer feedback, and CRM data into a live map of your product, with the customer asks, team decisions, and shipped work pre-computed. Your agent starts every task knowing what was decided and why, what's shipping, and what customers are asking for, so it gets the work right the first time. And because it reads answers Devplan already worked out instead of digging through raw sources, it uses far fewer tokens.
+Devplan turns your code, tickets, Slack, docs, calls, customer feedback, and CRM data into pre-computed product knowledge: what was decided and why, what's shipping, and what customers are asking for. Your agent starts every task already knowing it, so it gets the work right the first time and spends far fewer tokens getting there.
 
 This plugin brings that knowledge into the Claude and ChatGPT apps:
 
