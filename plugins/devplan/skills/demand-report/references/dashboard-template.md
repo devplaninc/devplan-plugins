@@ -37,6 +37,7 @@ Copy this page and fill it in. Keep the `<head>`, `<style>` and `<script>` exact
   --band:#000;--band-ink:#fff;--band-dim:#a0a0a6;--band-accent:#5a77ff;
   --ok:#4cc488;--ok-soft:#10261a;--warn-ink:#f0bd62;--warn-soft:#2a2112;--bad:#f2786f;--bad-soft:#2c1514;color-scheme:dark}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
 a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline;text-underline-offset:2px}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
@@ -71,6 +72,8 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline;tex
 
 /* Notice: graph still building, partial data */
 .notice{display:flex;gap:12px;align-items:flex-start;margin-top:22px;padding:14px 16px;border:1px solid var(--accent-line);background:var(--accent-soft);border-radius:10px;font-size:14px;color:var(--ink-2)}
+.notice p{margin:0;flex:1}
+.notice .act{flex:none;align-self:center}
 .notice::before{content:"";flex:0 0 10px;height:10px;margin-top:6px;border-radius:3px;background:var(--accent);box-shadow:14px 0 0 -1px color-mix(in srgb,var(--accent) 45%,transparent)}
 
 /* Sections */
@@ -244,8 +247,8 @@ a.act{display:inline-block;text-decoration:none}
   <!-- OPTIONAL TAB PANEL. Wrap each report's sections in one on the combined page; .ph replaces that report's masthead line. Delete the wrapper on single-report pages. -->
   <div class="tabpanel" role="tabpanel" id="p-{{SKILL}}" aria-labelledby="tab-{{SKILL}}">
   <div class="ph"><h2>{{REPORT NAME}}</h2><span>{{WINDOW}}</span><span>{{SCOPE}}</span></div>
-  <!-- OPTIONAL. Graph still building or a source is missing. One sentence on what is missing and that the page fills in on its own. -->
-  <div class="notice">{{e.g. "Devplan is still analyzing 2 of your 4 sources. This dashboard fills in automatically as they finish."}}</div>
+  <!-- OPTIONAL NOTICE. Graph still building, or a source missing or stale. One sentence; add a button only when there is a fix, such as reconnecting. Place it where the skill says (top of page by default). -->
+  <div class="notice"><p>{{e.g. "Devplan is still analyzing 2 of your 4 sources. This dashboard fills in automatically as they finish."}}</p><a class="act" href="https://app.devplan.com">{{e.g. "Reconnect"}}</a></div>
   <!-- OPTIONAL SUMMARY. 3 to 5 short bullets, plain text, no links. -->
   <div class="summary">
     <h2>Summary</h2>

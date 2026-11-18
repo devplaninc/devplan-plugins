@@ -80,20 +80,19 @@ Title: "Execution Monitoring".
 
 1. **Summary:** 3 to 5 concise bullets on the main activity in the window: where the team's effort went, what landed, what slipped. Plain text, no links.
 2. **Figures:** active projects, slipped or blocked, at risk, inferred themes.
-3. **Slipped, at risk, and blocked:** one section, ordered slipped, blocked, then at risk. Each row: what was committed, by whom, the original date, current state, days overdue or idle, the source tracker in the side line ("Jira epic", "Linear issue", "Devplan project"), evidence, and an action: **Draft nudge** (`Draft a short Slack message to <owner> about "<item>", due <date>: <state and evidence>. Ask whether to recommit, re-date, descope, or what would unblock it.`) or **Re-plan** (`Help me re-plan "<item>". It was due <date> and is <state>: <evidence>. Give me options to recommit, re-date, or descope.`). If nothing qualifies, say so with the Empty pattern.
-4. **Projects:** the section header gets a primary **New project** button. One group per project with activity in the last 14 days, ordered at risk, then on track. The parent row: name linked to its source, the source in the side line ("Linear project", "Jira epic", "Devplan"), one-line summary of where it stands, owner, due date, completion, last activity, state pill, and evidence. Child rows: its risks and drift items, each with evidence. Projects with drift get **Update spec**.
-5. **Inferred work:** start with one line explaining the section: "Work Devplan sees happening without a project or ticket behind it, grouped by theme." Then one row per theme: a short name, a concise description of the work, who's doing it, how much activity, evidence, and a **Write spec** button to turn it into a real project.
+3. **Projects:** the section header gets a primary **New project** button. One group per project with activity in the last 14 days, plus any slipped or blocked commitment, ordered slipped, blocked, at risk, then on track. A commitment that isn't tied to a project gets its own row in the same list. The parent row: name linked to its source, the source in the side line ("Linear project", "Jira epic", "Devplan project"), one-line summary of where it stands, owner, due date and days overdue when slipped, completion, last activity, state pill, and evidence. Slipped, blocked, and at-risk rows get **Draft nudge** (`Draft a short Slack message to <owner> about "<item>", due <date>: <state and evidence>. Ask whether to recommit, re-date, descope, or what would unblock it.`) or **Re-plan** (`Help me re-plan "<item>". It was due <date> and is <state>: <evidence>. Give me options to recommit, re-date, or descope.`). Child rows: risks and drift, each with evidence. Projects with drift get **Update spec**.
+4. **Tracker callout:** if Linear, Jira, or another tracker isn't connected or has stopped syncing, put one notice directly below Projects (not at the top, and not as its own section) saying which tracker and since when, with a **Reconnect** button linking to https://app.devplan.com.
+5. **Inferred work:** start with one line explaining the section: "Work Devplan sees happening without a project or ticket behind it, grouped by theme." Then one row per theme: a short name, a concise description of the work, who's doing it, how much activity, and evidence. No buttons.
 6. **Changelog:** at the bottom. Dated entries for the last 14 days, newest first, with a search box (`placeholder="Search changes"`) and one chip per product area. Each entry: date, area label, plain-language description, evidence, and a state pill (`s-ok` generally available, `s-info` merged or deployed, `s-warn` enabled for some). Give every entry `data-area` set to its product area.
 
 Button prompts (`data-prompt`):
 
 - **New project:** `Write a Devplan spec for a new project. Ask me what it is first.`
-- **Write spec** (inferred): `Write a Devplan spec for "<inferred theme>". Devplan inferred it from recent work: <2 or 3 readable sources, people>.`
 - **Update spec** (drift): `Update the Devplan spec for "<project name>". Work has drifted from it: <the drift, with 2 or 3 sources>.`
 
-Empty states: no tracker connected means "Connect Linear or Jira in Devplan to see tickets and epics here"; no code changes means "Connect a repository in Devplan to fill in the changelog".
+Empty states: no code changes means "Connect a repository in Devplan to fill in the changelog". A missing tracker is the callout under Projects, not an empty section.
 
-In chat, offer: "Want me to draft the nudges for what slipped, or write a spec for one of the inferred themes?" Also offer a plain markdown copy of the last day's changelog for Slack, Notion, or release notes. For a spec, follow the `spec` skill.
+In chat, offer: "Want me to draft the nudges for what slipped?" Also offer a plain markdown copy of the last day's changelog for Slack, Notion, or release notes. For a spec, follow the `spec` skill.
 
 <!-- shared:dashboard-format -->
 ## Dashboard format

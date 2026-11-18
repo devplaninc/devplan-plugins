@@ -111,7 +111,7 @@ Claude may ask before each Devplan tool it uses. Devplan's read tools only read 
 | "What are customers asking for?" | Your Demand Report: themes and the projects that answer them, isolated asks, adoption blockers, customer promises, and two weeks of market moves |
 | "Plan the next 6 weeks" | Cycle Planning: a few strategic directions, then a plan sized from your team's real pace |
 | "Write a spec for <a feature>" | A few questions, then a spec with a technical plan and estimate, tracked in Devplan |
-| "What slipped this week?" | The slipped, at risk, and blocked section of Execution Monitoring |
+| "What slipped this week?" | Slipped, blocked, and at-risk projects at the top of Execution Monitoring |
 | "What shipped this week?" | The changelog at the bottom of Execution Monitoring |
 | "How fast are we shipping?" | Cycle time by stage, throughput, and a summary by person |
 | "Refresh my Devplan dashboards" | Every dashboard rebuilt in place |
