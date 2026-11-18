@@ -11,7 +11,7 @@ What customers need, what we promised them, what the market is doing, and what t
 
 Open with one friendly line and the plan:
 
-> 1. Collect customer evidence and promises
+> 1. Load Devplan's suggested projects, customer evidence, and promises
 > 2. Check the last two weeks of market and competitor moves
 > 3. Find the demand themes and the projects that answer them
 > 4. Build your Demand Report
@@ -33,9 +33,18 @@ This skill runs on the user's Devplan workspace.
 
 Default: customer evidence from the last 90 days, all customers. Market and competitor items: a rolling 2 weeks, always. Honor any window, account, segment, or product area the user gives. Older evidence can corroborate a recent theme. Weight everything by the company goals in the company context.
 
-## 2. Customer evidence
+## 2. Devplan suggested projects (the starting point)
 
-Use `search_entities` across `insight`, `customer_support_ticket`, `call_note`, `discussion_topic`, and `signal`, and `query_workspace_graph` for feature-request insights with their status, business impact, and supporting signals. Devplan has already deduplicated evidence and matched customers across tools.
+Devplan already turns customer requests into suggested projects. They are the input for the themes, so start here:
+
+1. Page through `list_workspace_projects` with `status: "DRAFT"`, then `"IN_REVIEW"`, following `nextCursor` until it's gone (pages are small).
+2. Keep the projects Devplan suggested from customer demand: their description names a person at an account ("Jane Doe at Acme needs...", "Acme's Jane Doe wants..."), usually with no owner. Skip internal work, inferred workstreams (multi-bullet descriptions with an engineer owner), and labelled QA or test projects.
+3. For each, keep: title, account(s), requester, status, link, and created date.
+4. Add feature-request insights from the graph (`MATCH (i:Insight {kind:'feature_request'})`) that have no matching suggested project; fetch them in `evidence` mode for the accounts behind them.
+
+## 3. Customer evidence
+
+Use customer evidence to corroborate and size what step 2 found, not to replace it. Use `search_entities` across `insight`, `customer_support_ticket`, `call_note`, `discussion_topic`, and `signal`, and `query_workspace_graph` for feature-request insights with their status, business impact, and supporting signals. Devplan has already deduplicated evidence and matched customers across tools.
 
 If a search filtered by date comes back empty, search again without the date filter and filter by each result's source date yourself. Some sources aren't indexed by source time.
 
@@ -45,7 +54,7 @@ Then check the existing projects for each candidate theme with `list_workspace_p
 
 **Customer promises.** Find commitments made to customers in the last 60 days: in call notes, support tickets, customer Slack channels, and emails Devplan has ("we'll ship by", "ETA", "I'll follow up", "on the roadmap for Q1"). For each: account, who promised it, when, what, the date promised if any, and the linked project or ticket. Judge it: **Delivered** (`s-ok`), **On track** (`s-info`), **At risk** (`s-warn`: due within 7 days with evidence it won't make it), **Slipped** (`s-bad`: the date passed and it isn't done), **Blocked** (`s-bad`). Leave out promises that were explicitly withdrawn or superseded.
 
-## 3. Market and competitors
+## 4. Market and competitors
 
 Use web search. Keep it to about six searches.
 
@@ -58,30 +67,29 @@ Keep only items dated within the last 2 weeks with a source you can link. Market
 - A trend that makes a theme a buying requirement raises it.
 - Market items that match no customer demand go in the market section only.
 
-## 4. Themes
+## 5. Themes
 
-1. **Name themes as specific product implications:** a capability, a workflow, or an adoption blocker. Broad aspirations ("single source of truth") are context, not themes.
-2. **Count corroboration strictly.** An account counts only when its evidence supports the named capability or blocker, not an adjacent pain. Don't merge separate remedies because they serve the same goal, and don't spend several ranks on facets of one blocker.
-3. **Recurring vs isolated.** Two or more independent accounts make a theme. Single-account asks go in the isolated list.
-4. **Adoption blockers need proof** that the issue blocked approval, adoption, or reliance, not just a wish.
-5. **Rank** by independent accounts, then recency, then goal fit and market pressure. Return fewer themes rather than padding with weak evidence.
+1. **Group the suggested projects into themes.** A theme is a product capability or adoption problem that two or more suggested projects (or insights) address. Every suggested project lands in exactly one theme or in Isolated asks; never drop one. Aim for 4 to 8 themes; split a theme when its projects need different remedies, and merge when they're the same remedy.
+2. **Name themes as specific product implications:** a capability, a workflow, or an adoption blocker. Broad aspirations ("single source of truth") are context, not themes.
+3. **Keep themes stable between runs.** If a Demand Report already exists (setup saves the link), read it first and reuse its theme names and grouping for projects that haven't changed. Only add, split, or retire a theme when new suggested projects or evidence require it, and say what changed in one line in chat.
+4. **Count accounts strictly.** An account counts once per theme, across all its suggested projects and corroborating evidence. A theme needs two or more independent accounts; anything with one account is an isolated ask.
+5. **Adoption blockers need proof** that the issue blocked approval, adoption, or reliance, not just a wish.
+6. **Rank** by independent accounts, then recency of the newest ask, then goal fit and market pressure.
 
-## 5. Projects under each theme
+## 6. Projects under each theme
 
-For each theme, list what answers it, in this order:
+For each theme, list:
 
-1. **Existing projects:** projects already in Devplan, Linear, or Jira that answer the theme: name, state, link.
-2. **Devplan suggested projects:** suggestions Devplan already generated that answer the theme. Show them under the theme, not in a separate list.
-3. **New suggestions:** only where nothing above covers the theme, 1 or 2 projects: a title, the problem in one sentence tied to a company goal where one fits, rough scope (S, M, or L), the code areas it touches, likely owners from who has worked in those areas (leave blank rather than guess), and the main risk. Prefer the smallest project that changes the customer's experience.
+1. **Existing projects:** planned projects in Devplan, Linear, or Jira that already answer the theme (an owner, a spec, or a status past draft): name, state, link.
+2. **Devplan suggested projects:** every suggested project grouped into this theme, with its account. These are the theme's backbone.
+3. **New suggestions:** only where nothing above covers part of the theme, at most one small project: title, the problem in one sentence, rough scope (S, M, or L), and the main risk.
 
-Drop suggestions that duplicate existing projects.
-
-## 6. Dashboard
+## 7. Dashboard
 
 Title: "Demand Report". Scope line: accounts and sources covered. No summary and no figures; start straight with the themes.
 
-1. **Themes:** one group per theme, ranked. The parent row: theme name, type, accounts and mentions, status as its state (`s-bad` no tracked work, `s-warn` partial or planned, `s-ok` delivered), "Competitive gap" in the side line when it applies, and evidence. Child rows under the label "Existing projects" (with link and state), then "Suggested projects" (Devplan's and new ones, each with a **Write spec** button). A theme already covered by existing projects gets **Draft customer update** instead, to tell the asking accounts where it stands.
-2. **Isolated asks:** single-account requests worth watching, each with **Draft reply** (to the requester, acknowledging the ask and where it stands) or **Write spec** when it's clearly worth building.
+1. **Themes:** one group per theme, ranked. The parent row: theme name, type, accounts and mentions, status as its state (`s-bad` no tracked work, `s-warn` partial or planned, `s-ok` delivered), "Competitive gap" in the side line when it applies, and evidence. Child rows under the label "Existing projects" (with link and state), then "Devplan suggested projects" (each with its account, a link to the suggested project, and a **Write spec** button), then any new suggestion. A theme already covered by existing projects gets **Draft customer update** instead, to tell the asking accounts where it stands.
+2. **Isolated asks:** suggested projects and requests from a single account that fit no theme, each with **Draft reply** (to the requester, acknowledging the ask and where it stands) or **Write spec** when it's clearly worth building.
 3. **Adoption blockers:** rows with the proof they blocked approval or adoption, each with **Write spec** for the fix, or **Draft message** to the account owner when the fix already exists.
 4. **Customer promises:** rows ordered slipped, blocked, at risk, on track, then delivered: what was promised, to which account, by whom, when, the date promised, current state with evidence, and days overdue. Slipped and at-risk rows get **Draft follow-up** (to the customer, with an honest update) and, when an internal decision is needed, **Draft nudge** to the owner. Delivered rows get **Draft follow-up** to tell the customer it's live.
 5. **Market and competitors (last 2 weeks):** dated entries with search and chips for "Competitor" and "Trend", each with its source behind the Evidence link and a state pill: "Gap" (`s-bad`), "Partial" (`s-warn`), "Context" (`s-info`). Gaps get **Write spec** or **Investigate**.
