@@ -2,16 +2,17 @@
 
 # Devplan for Claude and ChatGPT
 
-Devplan turns your code, tickets, Slack, docs, calls, and support into a live map of your product, with the customer asks, team decisions, and shipped work already worked out. Your agent starts every task knowing what was decided and why, what's shipping, and what customers are asking for, so it gets the work right the first time.
+Devplan turns your code, tickets, Slack, docs, calls, customer feedback, and CRM data into a live map of your product, with the customer asks, team decisions, and shipped work pre-computed. Your agent starts every task knowing what was decided and why, what's shipping, and what customers are asking for, so it gets the work right the first time. And because it reads answers Devplan already worked out instead of digging through raw sources, it uses far fewer tokens.
 
 This plugin brings that knowledge into the Claude and ChatGPT apps:
 
 - **Agents that start from what your company knows.** Every product or technical answer, spec, and plan draws on your real decisions, customer asks, and shipped work, with sources you can check.
+- **Fewer tokens per task.** Agents pull pre-computed answers instead of searching and re-reading Slack threads, tickets, and code on every question.
 - **Four dashboards, refreshed twice every weekday.** Your daily radar, Execution Monitoring, Demand Report, and Engineering Analytics, built from your team's real work.
 - **Specs and cycle plans that track themselves.** Specs are estimated from your team's git history and saved as Devplan projects; cycle plans are sized from how your team actually ships.
 - **Answers in Slack too.** Mention Devplan in any channel and get the same answer, with its sources.
 
-**Before you install:** the plugin needs a Devplan account with a **code repository connected**. That's required; tickets, Slack, docs, calls, and support make it better. Setup walks you through creating an account if you don't have one.
+**Before you install:** the plugin needs a Devplan account with a **code repository connected**. That's required; tickets, Slack, docs, calls, customer feedback, and CRM data make it better. Setup walks you through creating an account if you don't have one.
 
 **Pricing:** Devplan runs on credit packs, starting at $50. Purchased credits never expire. New workspaces get $100 in free credits, valid for 3 months, with no credit card. [See pricing](https://www.devplan.com/pricing/)
 
