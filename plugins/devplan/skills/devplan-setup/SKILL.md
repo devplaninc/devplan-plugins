@@ -14,7 +14,8 @@ On a first run, your first message is always this welcome and the plan, on every
 > Welcome to Devplan. In about ten minutes you'll have:
 > - Four dashboards built from your team's real work, refreshed twice every weekday
 > - Answers to any product or technical question, grounded in your code, tickets, calls, and Slack, with sources
-> - A shared memory of what your company decided and why
+> - Your customer asks, team decisions, and shipped work turned into knowledge your agents use, so they get work right the first time
+> - Answers in Slack too: mention Devplan in any channel
 >
 > 1. Connect Devplan
 > 2. Check your workspace
@@ -31,6 +32,22 @@ Then go one step at a time:
 - If the user wants to skip a step, skip it and move on.
 - If setup already ran (saved settings list dashboard links or a Site, or `devplan/devplan*.html` files exist in the working folder), say so and ask what to change: **Company context**, **Dashboards**, **Schedule**, **Start over**. Jump to that step.
 - If the user asks to refresh their dashboards, skip the welcome and the questions: rebuild every dashboard that exists, in step 4's order (Daily Radar, Execution Monitoring, Demand Report, Engineering Analytics), updating each in place, then give the same short summary a scheduled run would.
+
+## In a terminal (Claude Code or Codex CLI)
+
+Engineers in a terminal want Devplan's knowledge while they code, not dashboards. On these surfaces, run a shorter setup instead of the five steps:
+
+> Welcome to Devplan. Devplan turns your customer asks, team decisions, and shipped work into knowledge your coding agent can use, so it gets the change right the first time. Three quick steps:
+>
+> 1. Connect Devplan
+> 2. Check your workspace and company context
+> 3. Try it on the code in front of you
+
+1. **Connect Devplan:** step 1 below, with the terminal connect steps.
+2. **Check your workspace and company context:** step 2's summary in two or three lines, then step 3's company-context check. Skip the Daily Radar focus question.
+3. **Try it on the code in front of you:** find the repository in the working directory (its git remote or folder name) and match it to `list_repository_descriptions`. Name its busiest product area from the feature catalog, then end with one exact message to try first, for example: "Try this: *What should I know before changing <that area>?*" If the folder isn't a connected repository, say which repos Devplan knows and suggest a question about one of them. Then list, in three lines, what else works here: "Write a spec for <feature>" (estimated from your team's git history and saved to Devplan), "Why did we build <thing> this way?", and "Who knows <service> best?".
+
+Don't build dashboards or offer scheduling here. Close with one line: "Dashboards are available any time: say 'Build my Daily Radar' (or Execution Monitoring, Demand Report, Engineering Analytics) and I'll write it to `devplan/`." Build one only when asked, following that dashboard's skill.
 
 ## Step 1 of 5: Connect Devplan
 
@@ -118,7 +135,7 @@ Company context has six parts: company description, target customers, competitor
 
 Options: **Build and schedule**, **Pick different times**, **Build without scheduling**. Only list dashboards step 2 found ready; mention the rest will be added once their sources are connected.
 
-**In Claude Code and Codex CLI, don't offer scheduling.** Their schedulers can't use this app's Devplan sign-in, so a scheduled refresh would fail. Say instead: "I'll build them now (a few minutes). To refresh them, say 'Refresh my Devplan dashboards' any time." The only option is **Build them**.
+**In Claude Code and Codex CLI, this step only runs when the user asks for dashboards** (see "In a terminal" above). Don't offer scheduling there: their schedulers can't use this app's Devplan sign-in. Build what was asked and say "To refresh, say 'Refresh my Devplan dashboards' any time."
 
 **Build them one at a time,** in this order: Daily Radar, Execution Monitoring, Demand Report, Engineering Analytics. For each:
 
