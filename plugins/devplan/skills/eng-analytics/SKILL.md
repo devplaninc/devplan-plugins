@@ -30,7 +30,7 @@ This skill runs on the user's Devplan workspace.
 
 ## 1. Window
 
-Default: the last 30 days, compared with the 30 before, plus 8 weeks of weekly trend. Honor any window, team, or repo the user gives.
+Default: two views. **Daily:** the last 30 days by day, compared with the 30 days before. **Weekly:** the last 8 weeks by week. State both time frames with exact dates. Honor any window, team, or repo the user gives.
 
 ## 2. Data
 
@@ -45,25 +45,29 @@ Devplan has already linked PRs to people, so compute by repo and person directly
 ## 3. Metrics
 
 - **Cycle time:** PR opened to merged. Median and 85th percentile.
-- **Cycle time by stage:** split each merged PR's cycle time into stages and give the median hours of each: draft (created to ready for review, if drafts are tracked), waiting for first review, in review (first review to approval), and approval to merge. Use only stages Devplan has timestamps for. If it has none beyond opened and merged, show coding-to-merge as one stage and say in one line which stages need review data.
 - **Throughput:** PRs merged per week.
 - **Work in progress:** open non-draft PRs, and PRs open longer than 7 days.
 - **Review load:** reviews per reviewer, and PRs merged with no recorded review.
-- **By person:** for each engineer active in the window, PRs merged, median cycle time, open PRs, reviews given.
+- **By person:** for each engineer active in the window, PRs merged, median cycle time, open PRs, and reviews given on others' PRs (exclude self-reviews).
+- **For each view:** PRs merged and median cycle time per bucket (day or week), and PRs merged per person and per repo over that view's window. Compute buckets in the graph query from the window start (`toInteger((pr.mergedAt - $start) / 86400000)` for days, `/ 604800000` for weeks).
 
-Add up to 3 findings that explain the biggest changes from the prior period or the slowest stage, each with example PRs and one concrete suggestion for what to do about it.
+Add up to 3 findings that explain the biggest changes from the prior period, each with example PRs and one concrete suggestion for what to do about it.
 
 ## 4. Dashboard
 
-Title: "Engineering Analytics". No summary.
+Title: "Engineering Analytics". Masthead window: "Last 30 days · <dates>". No summary.
 
-1. **Figures:** median cycle time, PRs merged, open PRs, and the slowest stage with its median hours, each with its change from the prior period (`up` when the change is good, `down` when it's bad).
-2. **Cycle time** (Meter): the median cycle time split by stage, one segment per stage with its hours in the legend, captioned with the total median and p85. Below it, the weekly median cycle time Trend for 8 weeks.
-3. **Throughput** (Trend): weekly PRs merged for 8 weeks.
-4. **Findings:** rows with example PRs behind the Evidence link. Each has an action button with the suggestion as a ready prompt, for example **Fix review wait** (`Help me cut our review wait. PRs wait <N> hours for a first review, mostly in <repo>. Draft a review rotation and a Slack message proposing it to the team.`) or **Investigate** (`Why did cycle time in <repo> rise from <A> to <B> hours since <date>? Look at <2 or 3 PR titles>.`).
-5. **By person** (table): name, PRs merged, median cycle time, open PRs, reviews given. Alphabetical.
-6. **By repo** (table): merged, median and p85 cycle time, open, oldest open.
-7. **Long-running PRs:** rows for PRs open longer than 7 days, with author, age, reviewers, and a **Draft nudge** button.
+1. **View toggle** (Daily and Weekly) right under the masthead, with each view's exact time frame beside it. It switches the four charts below; the figures and tables stay on the 30-day window and say so.
+2. **Figures:** PRs merged, median cycle time, p85 cycle time, and share merged without human review, each with its change from the prior 30 days (`up` when the change is good, `down` when it's bad).
+3. **Throughput** (Trend): PRs merged per day or per week.
+4. **Cycle time** (Trend): median cycle time per day or per week, in hours.
+5. **PRs merged by person** and **PRs merged by repo** (Horizontal bars), side by side on wide screens, for the selected view's window.
+6. **Findings:** rows with example PRs behind the Evidence link. Each has an action button with the suggestion as a ready prompt, for example **Fix review wait** (`Help me cut our review wait. PRs wait <N> hours for a first review, mostly in <repo>. Draft a review rotation and a Slack message proposing it to the team.`) or **Investigate** (`Why did cycle time in <repo> rise from <A> to <B> hours since <date>? Look at <2 or 3 PR titles>.`).
+7. **By person** (table): name, PRs merged, median cycle time, open PRs, reviews given. Alphabetical.
+8. **By repo** (table): merged, median and p85 cycle time, open, oldest open.
+9. **Long-running PRs:** rows for PRs open longer than 7 days, with author, age, reviewers, and a **Draft nudge** button.
+
+Every bar shows its value on hover (`data-tip`).
 
 <!-- shared:dashboard-format -->
 ## Dashboard format
@@ -72,7 +76,7 @@ Build the page from [references/dashboard-template.md](references/dashboard-temp
 
 1. Copy the template's `<head>`, `<style>` and `<script>` exactly. Change only the `<title>`.
 2. Fill the masthead: workspace name, page title, window, scope, and "Last refreshed" with the time this run finished.
-3. Use only the template's patterns: Summary, Figures, Rows, Groups, Folds, Dated entries, Table, Trend, Meter, Timeline, Tabs, and Empty. Use Summary and Figures only where this skill asks for them. Delete every pattern you don't use and every template comment. Never leave `{{...}}` placeholders.
+3. Use only the template's patterns: Summary, Figures, Rows, Groups, Folds, Dated entries, Table, Trend, Horizontal bars, View toggle, Meter, Timeline, Tabs, and Empty. Every bar in Trend and Horizontal bars gets a `data-tip` with its label and value ("Nov 3 · 22 PRs") so hovering shows the number. Use Summary and Figures only where this skill asks for them. Delete every pattern you don't use and every template comment. Never leave `{{...}}` placeholders.
 4. **Be concise.** Summary bullets are one short line each, with no links. Row text is one or two short sentences. Cut anything the reader can't act on or doesn't need to know.
 5. Use the same four states everywhere, as a class on the row and on its pill: `s-ok` (shipped, delivered, on track), `s-warn` (partial, at risk), `s-bad` (blocked, slipped, off track, no tracked work), `s-info` (new, neutral, suggested).
 6. **Evidence** always uses the template's evidence toggle: a `details.ev` whose summary reads "Evidence · N" (N = number of pills), closed by default, holding `.src` pills. Each pill: the tool in `<i>` (GitHub, Linear, Jira, Slack, Gong, Zendesk, Notion, Devplan, Web), then a readable title: the PR's title, the ticket's title, #channel and topic, the call title and date, the ticket subject. No PR numbers or opaque IDs. The graph doesn't store PR titles: take the title from the Change that used the PR (its summary, or the commit message from `fetch_internal_entities_by_ids` in `evidence` mode, without the trailing "(#123)"). If a PR has no Change yet, label it "<repo> · <author> · opened <date>". Link every pill to its source: the PR, or `https://github.com/<repo>/commit/<sha>` when a Change gives only commits.

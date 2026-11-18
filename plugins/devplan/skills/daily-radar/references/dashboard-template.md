@@ -163,6 +163,23 @@ td.num,th.num{text-align:right}
 .bars{display:flex;align-items:flex-end;gap:6px;height:92px;border-bottom:1px solid var(--rule-2)}
 .bars span{flex:1;min-width:6px;height:calc(var(--v) * 100%);background:var(--accent-line);border-radius:4px 4px 0 0;position:relative}
 .bars span:last-child{background:var(--accent)}
+.bars span:hover,.hb .fill:hover{background:var(--accent);cursor:default}
+.bars span[data-tip]:hover::after,.hb .fill[data-tip]:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);font:500 12px/1 var(--sans);padding:6px 8px;border-radius:6px;white-space:nowrap;z-index:3;pointer-events:none}
+/* Horizontal bars: totals by person or repo; --v is value / largest value */
+.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 32px}
+.hbars{display:grid;gap:8px;margin:14px 0 4px;align-content:start}
+.hbars figcaption{font:500 12px/1 var(--mono);color:var(--dim);margin-bottom:4px}
+.hb{display:grid;grid-template-columns:minmax(90px,180px) minmax(0,1fr);gap:12px;align-items:center;font-size:13px;color:var(--ink-2)}
+.hb .track{height:18px;position:relative}
+.hb .fill{position:absolute;left:0;top:0;bottom:0;width:calc(var(--v) * 100%);min-width:3px;background:var(--accent-line);border-radius:0 4px 4px 0}
+.hb .fill[data-tip]:hover::after{left:auto;right:0;transform:none;bottom:calc(100% + 4px)}
+/* View toggle: switches every [data-view] block on the page */
+.viewbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding-top:22px}
+.viewbar .span{font:400 13px/1.4 var(--mono);color:var(--dim)}
+.toggle{display:inline-flex;border:1px solid var(--rule-2);border-radius:8px;overflow:hidden}
+.toggle button{font:500 13px/1 var(--sans);color:var(--dim);background:var(--paper);border:0;padding:8px 14px;cursor:pointer}
+.toggle button+button{border-left:1px solid var(--rule-2)}
+.toggle button[aria-pressed="true"]{color:#fff;background:var(--accent)}
 .axis{display:flex;justify-content:space-between;font:400 11px/1 var(--mono);color:var(--dim);margin-top:6px}
 
 .meter{margin:18px 0 6px}
@@ -224,6 +241,7 @@ a.act{display:inline-block;text-decoration:none}
   .kids-label{margin-left:22px}
   .sh .tools{margin-left:0;width:100%}.find{width:100%}
   .side .acts{justify-content:flex-start}
+  .pair{grid-template-columns:1fr}
   .g{grid-template-columns:96px minmax(0,1fr)}
   .fold-body{margin-left:6px;padding-left:12px}
 }
@@ -349,8 +367,15 @@ a.act{display:inline-block;text-decoration:none}
   <!-- PATTERN E: TREND. Weekly values; --v is value divided by the largest value (0 to 1). Last bar is the current period. -->
   <figure class="trend">
     <figcaption>{{e.g. "PRs merged per week"}}</figcaption>
-    <div class="bars" role="img" aria-label="{{e.g. "PRs merged per week: 18, 22, 25, 31"}}"><span style="--v:.58" title="{{Oct 20: 18}}"></span></div>
+    <div class="bars" role="img" aria-label="{{e.g. "PRs merged per week: 18, 22, 25, 31"}}"><span style="--v:.58" data-tip="{{Oct 20 · 18 PRs}}"></span></div>
     <div class="axis"><span>{{FIRST LABEL}}</span><span>{{LAST LABEL}}</span></div>
+  </figure>
+  <!-- PATTERN E2: VIEW TOGGLE. Put right under the masthead when a page has daily and weekly (or other) views. Each button's data-set names a view; every element with a matching data-view shows, others with a data-view hide. Say the time frame of each view in its .span. -->
+  <div class="viewbar"><div class="toggle" role="group" aria-label="View"><button type="button" data-set="daily" aria-pressed="true">Daily</button><button type="button" data-set="weekly" aria-pressed="false">Weekly</button></div><span class="span" data-view="daily">{{e.g. "Last 30 days · Oct 19 – Nov 17"}}</span><span class="span" data-view="weekly">{{e.g. "Last 8 weeks · Sep 22 – Nov 17"}}</span></div>
+  <!-- PATTERN E3: HORIZONTAL BARS. Totals by person or repo. --v is value / largest value; data-tip is the hover label. -->
+  <!-- Wrap two Horizontal bars in <div class="pair"> to show them side by side. -->
+  <figure class="hbars"><figcaption>{{e.g. "PRs merged by person"}}</figcaption>
+    <div class="hb"><span>{{LABEL}}</span><div class="track"><span class="fill" style="--v:.8" data-tip="{{e.g. 66 PRs}}"></span></div></div>
   </figure>
   <!-- PATTERN F: METER. How a whole is split: capacity, or cycle time by stage. Each --w is that part divided by the whole; the parts add up to 1 or less. Use only the segments you need. -->
   <figure class="meter">
@@ -434,6 +459,10 @@ a.act{display:inline-block;text-decoration:none}
     e.preventDefault();e.stopPropagation();var text=btn.dataset.prompt;
     try{navigator.clipboard.writeText(text).then(function(){toast('Copied. Paste it into your chat to start.')},function(){panel(btn,text)})}catch(e){panel(btn,text)}
   })});
+  // View toggle: daily, weekly, or any named views.
+  var setBtns=[].slice.call(document.querySelectorAll('.toggle [data-set]'));
+  function view(name){setBtns.forEach(function(b){b.setAttribute('aria-pressed',b.dataset.set===name?'true':'false')});document.querySelectorAll('[data-view]').forEach(function(el){el.hidden=el.dataset.view!==name})}
+  if(setBtns.length){setBtns.forEach(function(b){b.addEventListener('click',function(){view(b.dataset.set)})});view(setBtns[0].dataset.set)}
   // Tabs: show one report at a time; the URL hash remembers which.
   var tabs=[].slice.call(document.querySelectorAll('.tabs [role="tab"]'));
   function show(id){tabs.forEach(function(b){var on=b.getAttribute('aria-controls')===id,p=document.getElementById(b.getAttribute('aria-controls'));b.setAttribute('aria-selected',on?'true':'false');if(p)p.hidden=!on})}
