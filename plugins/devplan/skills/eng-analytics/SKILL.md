@@ -1,6 +1,6 @@
 ---
 name: eng-analytics
-description: Build an Engineering Analytics dashboard of cycle time by stage, PR throughput, work in progress, and review load, by repo and person. Use for "engineering metrics", "cycle time", "how fast are we shipping", "throughput", "review bottlenecks", "team productivity", or "DORA".
+description: Build an Engineering Analytics dashboard of PR throughput, cycle time, review load, and work in progress, daily or weekly, by person and repo. Use for "engineering metrics", "cycle time", "how fast are we shipping", "throughput", "review bottlenecks", "team productivity", or "DORA".
 ---
 
 # Engineering Analytics
