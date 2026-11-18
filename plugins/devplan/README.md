@@ -2,13 +2,14 @@
 
 # Devplan
 
-Product intelligence for software teams, inside Claude, ChatGPT and Codex. Devplan reads your code, tickets, Slack, docs, calls, and support, and keeps a live map of your product: what exists, what's shipping, what customers ask for, and what was decided. This plugin puts that map to work in your chats.
+Devplan turns your customer asks, team decisions, and shipped work into pre-computed knowledge, so your agents complete work correctly the first time. It reads your code, tickets, Slack, docs, calls, and support, and keeps a live map of your product. This plugin puts that knowledge to work in Claude and ChatGPT, best in their desktop and web apps.
 
 ## What you get
 
-- **Four dashboards** (refreshed at 7:47 and 12:47 every weekday in Claude, ChatGPT, and the Codex app; on request elsewhere): Your daily radar, Execution Monitoring across Devplan, Linear, and Jira with what slipped and a searchable changelog, a Demand Report with customer promises, market moves, and suggested projects, and Engineering Analytics.
+- **Four dashboards** (refreshed at 7:47 and 12:47 every weekday in Claude and ChatGPT; on request in a terminal): Your daily radar, Execution Monitoring across Devplan, Linear, and Jira with what slipped and a searchable changelog, a Demand Report with customer promises, market moves, and suggested projects, and Engineering Analytics.
 - **Cycle plans you can commit to.** Tell it the timeframe and team size, pick one of a few strategic directions, and get a plan of what fits, sized from how your team actually ships.
 - **Specs that track themselves.** A short discovery conversation, then a spec with a technical plan and estimate. Every spec becomes a Devplan project, and the PRs, tickets, and conversations that touch it link to it as they happen.
+- **Answers in Slack too.** Mention Devplan in any channel once Slack is connected in Devplan.
 - **Answers with sources.** Ask any product or technical question and get an answer that cites the PRs, tickets, calls, and decisions behind it.
 
 The plugin needs a Devplan account. Setup walks you through creating one.
@@ -20,7 +21,7 @@ Say **"Set up Devplan"** in a new chat. Setup takes about ten minutes:
 1. Connect Devplan, or create your workspace and connect your sources
 2. Check what Devplan can see
 3. Confirm your company context and what your Daily Radar should focus on
-4. Build all four dashboards and schedule twice-daily weekday refreshes
+4. Build all four dashboards and schedule twice-daily weekday refreshes (in Claude Code and Codex CLI, setup skips dashboards and ends with a question about the code you're in)
 5. A quick tour
 
 ## What you can ask
@@ -41,7 +42,7 @@ Say **"Set up Devplan"** in a new chat. Setup takes about ten minutes:
 - **Devplan.** The plugin declares one remote server, `https://app.devplan.com/api/v1/mcp`, and you sign in with your Devplan account. Skills read your Devplan workspace. Setup can save your company context and dashboard settings there, and the Spec skill creates or updates a project for every spec you write.
 - **Your other connected tools (optional).** Cycle Planning reads the most recent strategy or planning doc from a docs tool you've connected (Notion, Confluence, Google Drive), if there is one.
 - **The web.** The Demand Report searches the public web for your competitors' announcements and market trends. Setup reads your company website once to draft your company context.
-- **Dashboards** are published as private pages in your Claude account, as one "Devplan" Site in ChatGPT and the Codex app, or saved as HTML files in a `devplan/` folder in your working directory.
+- **Dashboards** are published as private pages in your Claude account, as one "Devplan" Site in ChatGPT, or saved as HTML files in a `devplan/` folder in your working directory.
 - **Refresh summaries** come from a scheduled task in your own account that uses only Devplan, sent only to you and only when something changed or a refresh failed.
 - **Links** in dashboards point to your sources and to Devplan at `app.devplan.com`.
 
