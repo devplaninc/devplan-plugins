@@ -381,6 +381,8 @@ a.act{display:inline-block;text-decoration:none}
 </main>
 <script>
 (function(){
+  // External links open in a new tab: dashboards run in sandboxed frames that sites like GitHub refuse to load inside.
+  document.querySelectorAll('a[href^="http"]').forEach(function(a){a.target='_blank';a.rel='noopener noreferrer'});
   // Masthead tile field, echoing the logomark. Static; redrawn on resize.
   var c=document.querySelector('.mast canvas');
   function draw(){
