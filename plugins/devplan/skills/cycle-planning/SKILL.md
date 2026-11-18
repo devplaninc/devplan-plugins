@@ -34,7 +34,8 @@ This skill runs on the user's Devplan workspace.
 
 Ask only what you don't already know, one question at a time:
 
-1. **Timeframe.** "How long is this cycle?" Options: **2 weeks**, **6 weeks**, **This quarter**, **Custom dates**. Work out the start and end dates and the number of working weeks.
+1. **Timeframe.** "What are you planning for?" Options: **The next 2-week cycle**, **The next 6 weeks**, **This quarter**, **Custom dates**. Work out the start and end dates and the number of working weeks.
+   - **Cycles inside it.** If the timeframe is longer than one cycle, split it into cycles. Use the team's cycle or sprint length from Linear or Jira if Devplan shows one; otherwise ask once: "How long are your cycles?" (**1 week**, **2 weeks**, **6 weeks**). A single-cycle plan has one cycle; a quarter of 2-week cycles has six.
 2. **Engineers.** "How many engineers are working on it?" Offer the count Devplan sees as active in the last 30 days as the first option ("8, the engineers active in the last month"), plus **Fewer**, **More**. Then ask once whether anyone is out for part of the cycle, if it matters.
 3. **Scope** (only if the workspace has several teams or product areas): "Whole product or one team?" with the teams or areas from the company context.
 
@@ -53,7 +54,7 @@ Quietly collect, using `list_workspace_projects`, `query_workspace_graph`, `sear
 Follow "How to estimate" below for the team's pace and each candidate's PRs.
 
 - **Unplanned work:** the share of merged changes not linked to any project (support, bugs, interrupts). Reserve that share of capacity. If it can't be measured, reserve 25%.
-- **Capacity** in engineer-weeks = engineers × working weeks × (1 − unplanned share), minus known time off. Keep about 10% as buffer on top. Capacity in PRs = that × PRs per engineer-week.
+- **Capacity** in engineer-weeks = engineers × working weeks × (1 − unplanned share), minus known time off. Then hold back a **20% buffer** of that and plan only the other 80%. Show the buffer explicitly everywhere capacity appears ("Buffer 20% · 7 eng-weeks"). Capacity in PRs = planned capacity × PRs per engineer-week. Do the same per cycle.
 - **Each candidate:** PRs required (low-high), converted to engineer-weeks. For in-progress work, only the PRs still to go. Where a spec already has an estimate, compare it with the PR-based one and use the PR-based one unless the spec explains the difference.
 
 If a candidate can't be sized, say so and give it a wide range.
@@ -105,27 +106,27 @@ For each direction show, in 3 lines: what it prioritizes, the top 3 items it wou
 
 ## 5. Build the plan
 
-Fit work into capacity in this order: commitments inside the cycle, then in-progress work for the chosen direction, then new work by the direction's ranking. Stop at capacity. The next items that would fit at the median but not the 85th percentile are **Stretch**. Everything else waits, with a reason.
+Fit work into capacity in this order: commitments inside the window, then in-progress work for the chosen direction, then new work by the direction's ranking. Stop at the 80% line. With several cycles, fill them in order and place each item in the cycle where it starts; an item may span cycles. Give each cycle one primary theme and one goal (a measurable outcome) that follow from what's in it. The next items that would fit at the median but not the 85th percentile are **Stretch**. Everything else waits, with a reason.
 
-For each planned item: owner (from who's working in that area; leave blank rather than guess), PRs required and effort range, why it's in (direction, goal, evidence), dependencies, and the main risk. Flag any engineer who would be on more than two items at once.
+For each planned item: owner (from who's working in that area; leave blank rather than guess), its estimate (PRs and engineer-weeks as ranges, plus calendar weeks), its start and end week, why it's in (direction, goal, evidence), dependencies, and the main risk. Flag any engineer who would be on more than two items at once.
 
 ## 6. Cycle plan
 
-Title: "Cycle Plan". Masthead window: the cycle dates and working weeks; scope: engineers and team.
+Title: "Cycle Plan". Masthead window: the planning dates and working weeks; scope: engineers, team, and number of cycles. No figures.
 
-1. **The plan** (the Today pattern, labeled "The plan"): the direction and the three most important outcomes of the cycle, one sentence each.
-2. **Figures:** capacity in engineer-weeks, planned, stretch, and buffer.
-3. **Capacity** (Meter): in progress, new work, stretch, and buffer, as shares of capacity.
-4. **Committed:** one group per planned item, ordered by sequence. Parent row: title linked to the Devplan project if there is one, why it's in, owner, effort range, and the evidence trail. Child rows: dependencies and risks. Items without a spec get a **Write spec** button.
-5. **Stretch:** rows, each with what would need to go right.
-6. **Not this cycle:** rows with the reason (capacity, direction, not ready, blocked).
-7. **How this was sized** (table): engineers, working weeks, unplanned share, PRs per engineer-week, cycle time (median and p85), capacity in PRs, and the comparable projects with their PR counts.
-8. **Assumptions and risks:** rows for the assumptions that would change the plan most.
+1. **Summary** (Summary pattern, no links): one bullet per cycle, in this shape: "**Cycle 1 · Nov 24–Dec 5: <theme>.** Goal: <outcome>. Projects: <A>, <B>, <C>." Then one bullet with the direction and the capacity line: "<N> eng-weeks capacity, 80% planned, 20% buffer held back."
+2. **Timeline** (Timeline pattern), right under the summary: one week column per working week, a Cycles row naming each cycle and its theme, one bar per committed item from its start to end week (color by the cycle it starts in), stretch items hatched, and a "Buffer (20%)" row. Each bar's `title` gives the item and its estimate.
+3. **Capacity** (Meter): in progress, new work, stretch, and the 20% buffer, as shares of total capacity. The caption says "80% planned · 20% buffer".
+4. **Committed:** one Fold per planned item, closed by default, ordered by start week. The summary row: title linked to the Devplan project if there is one, cycle, owner, and the estimate in the side column ("Est. 3–4 eng-weeks · 8–11 PRs"). The body: why it's in, start and end week, dependencies and risks as child rows, evidence, and a **Write spec** button for items without a spec.
+5. **Stretch:** rows, each with its estimate and what would need to go right.
+6. **Not this time:** rows with the reason (capacity, direction, not ready, blocked).
+7. **How this was sized** (table): engineers, working weeks, cycles, unplanned share, buffer (20%), PRs per engineer-week, cycle time (median and p85), capacity in PRs, and the comparable projects with their PR counts.
+8. **Assumptions and risks:** rows for the assumptions that would change the plan most, each with an **Investigate** button where checking it would help.
 
 The **Write spec** button's `data-prompt`:
 
 ```
-Write a Devplan spec for "<item>". It's planned for <cycle dates> in my cycle plan (<direction>), sized at <effort range>. Key evidence: <2 or 3 readable sources>.
+Write a Devplan spec for "<item>". It's planned for <cycle name and dates> in my cycle plan (<direction>), estimated at <effort range>. Key evidence: <2 or 3 readable sources>.
 ```
 
 In the footer, use "Run it again any time" for the refresh line.
@@ -138,19 +139,22 @@ After publishing, offer one next step: "Want me to move the committed projects i
 Build the page from [references/dashboard-template.md](references/dashboard-template.md). Don't write your own layout, CSS, or script.
 
 1. Copy the template's `<head>`, `<style>` and `<script>` exactly. Change only the `<title>`.
-2. Fill the masthead: workspace name, page title, window, scope, and when it was updated.
-3. Use only the template's patterns: Today (exactly 3 lines; keep its label unless this skill names another), Figures (2 to 4), Rows, Groups, Dated entries, Table, Trend, Meter, and Empty. Delete every pattern you don't use and every template comment. Never leave `{{...}}` placeholders.
-4. Use the same four states everywhere, as a class on the row and on its pill: `s-ok` (shipped, delivered, on track), `s-warn` (partial, at risk, quiet), `s-bad` (blocked, slipped, off track, no tracked work), `s-info` (new, neutral, suggested).
-5. Every item links to its source. Put evidence in the row's `.trail` as `.src` chips: the tool name in `<i>`, then a readable label (PR #412, LIN-88, #channel, a call title and date, a ticket subject). Never show opaque IDs.
-6. Action buttons copy a ready prompt for the user to paste into their chat. Put the exact message in `data-prompt`, written so it starts the right skill on its own (for example `Write a Devplan spec for &quot;SCIM provisioning&quot;...`). Escape quotes as `&quot;`.
-7. Escape `&`, `<` and `>` in text from sources.
-8. Footer: set the refresh line from the scheduled task ("weekdays at 7:47"), or "Run it again any time" if there is none. Point "Invite teammates" at the workspace members page (see `devplan-product-context`).
+2. Fill the masthead: workspace name, page title, window, scope, and "Last refreshed" with the time this run finished.
+3. Use only the template's patterns: Summary, Figures, Rows, Groups, Folds, Dated entries, Table, Trend, Meter, Timeline, Tabs, and Empty. Use Summary and Figures only where this skill asks for them. Delete every pattern you don't use and every template comment. Never leave `{{...}}` placeholders.
+4. **Be concise.** Summary bullets are one short line each, with no links. Row text is one or two short sentences. Cut anything the reader can't act on or doesn't need to know.
+5. Use the same four states everywhere, as a class on the row and on its pill: `s-ok` (shipped, delivered, on track), `s-warn` (partial, at risk), `s-bad` (blocked, slipped, off track, no tracked work), `s-info` (new, neutral, suggested).
+6. **Evidence** always uses the template's evidence toggle: a `details.ev` whose summary reads "Evidence · N" (N = number of pills), closed by default, holding `.src` pills. Each pill: the tool in `<i>` (GitHub, Linear, Jira, Slack, Gong, Zendesk, Notion, Devplan, Web), then a readable title: the PR's title, the ticket's title, #channel and topic, the call title and date, the ticket subject. No PR numbers or opaque IDs. Link every pill to its source.
+7. **Actions.** Any finding, decision, risk, ask, or item that needs someone to do something gets a button that copies a ready prompt: Write spec, Update spec, Draft message, Draft reply, Draft nudge, Prep review, Re-plan, Investigate. Put the exact message in `data-prompt`, written so it starts the right skill or task on its own and names the item and 2 or 3 readable sources (for example `Write a Devplan spec for &quot;SCIM provisioning&quot;...` or `Draft a Slack message to Ali asking whether &quot;Webhook retries&quot; still lands Friday. Context: ...`). Escape quotes as `&quot;`. One or two buttons per item, never more.
+8. **Empty states.** Never drop an empty section or leave it blank. Keep its heading and use the Empty pattern: one sentence on why it's empty and the one fix. If a source is missing, name it and link "Connect <source>" to https://app.devplan.com (Integrations). If the window is too narrow or the data is just quiet, say so and add a button with a prompt that widens it or tries the next useful thing. If the whole page has nothing, show the notice and one Empty section with the fix.
+9. Escape `&`, `<` and `>` in text from sources.
+10. Footer: set the refresh line from the scheduled task ("weekdays at 7:47 and 12:47"), or "Run it again any time" if there is none. Point "Invite teammates" at the workspace members page (see `devplan-product-context`).
 
 Before publishing, check once that every element you opened is closed, in order, and every `li` sits inside a `ul`. On every refresh, rebuild the whole page from the template rather than patching the old HTML.
 
 ## Publish
 
 - **Claude:** publish an HTML artifact with this dashboard's name as its title. If one exists from an earlier run (setup saves the links), update that artifact instead of creating another. If your artifact tool adds its own page wrapper, publish what's inside `<head>` and `<body>` without the wrapper tags.
-- **Claude Code or Codex:** write the complete page, from `<!doctype html>` through `</html>` with its `<head>`, to `devplan/devplan-<skill-name>.html` in the working directory, replacing the previous copy, and give the path. The first time you create the `devplan/` folder inside a git repository, suggest adding `devplan/` to `.gitignore`; don't edit it yourself.
+- **ChatGPT, or the Codex app, with Sites:** every report lives in one Site named "Devplan", one tab per report (the Tabs pattern, each report's sections inside its own tab panel, in this order: Daily Radar, Execution Monitoring, Demand Report, Engineering Analytics). Update only this report's tab and keep the others exactly as they are. If the Site doesn't exist yet, create it with this tab. Publish a new version only once the whole page is built and checked, so the last good version stays live if anything fails. Skip publishing when nothing in the report changed since the live version.
+- **Sites unavailable, Claude Code, or Codex CLI:** write the complete page, from `<!doctype html>` through `</html>` with its `<head>`, to the working directory and give the path. In ChatGPT and Codex, that's the combined tabbed page at `devplan/devplan.html`; in Claude Code, `devplan/devplan-<skill-name>.html`. Replace the previous copy only once the new one is complete. The first time you create the `devplan/` folder inside a git repository, suggest adding `devplan/` to `.gitignore`; don't edit it yourself.
 - **In chat**, after publishing: two or three lines with the most important finding and one suggested next step. Don't repeat the dashboard.
 <!-- /shared:dashboard-format -->
