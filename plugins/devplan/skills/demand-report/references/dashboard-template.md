@@ -446,6 +446,9 @@ a.act{display:inline-block;text-decoration:none}
       });
       li.hidden=!ok;if(ok)shown++;
     });
+    // Show "N of total" in the section's count so filtering is visible.
+    var sec=list.closest('section'),n=sec&&sec.querySelector('.sh .n'),total=[].filter.call(list.children,function(li){return !li.classList.contains('nomatch')}).length;
+    if(n){if(!n.dataset.total)n.dataset.total=n.textContent;n.textContent=(shown===total)?n.dataset.total:shown+' of '+total}
     var nm=list.querySelector('.nomatch');
     if(!shown&&!nm){nm=document.createElement('li');nm.className='nomatch';nm.textContent='No matches.';list.appendChild(nm)}
     if(nm)nm.hidden=!!shown;
