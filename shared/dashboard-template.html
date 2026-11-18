@@ -84,6 +84,8 @@ section{padding-top:38px}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
 .chip{font:500 12px/1 var(--sans);color:var(--dim);background:transparent;border:1px solid var(--rule-2);border-radius:999px;padding:6px 10px;cursor:pointer}
 .chip[aria-pressed="true"]{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
+.chips .lbl{font:500 12px/26px var(--mono);color:var(--dim);margin-right:4px}
+.chips+.chips{margin-top:6px}
 
 /* Rows */
 .list{list-style:none;margin:0;padding:0}
@@ -345,10 +347,11 @@ a.act{display:inline-block;text-decoration:none}
       <!-- OPTIONAL SEARCH. data-find points at the list it filters. -->
       <div class="tools"><input class="find" type="search" id="find-{{ID}}" data-find="#{{LIST ID}}" placeholder="{{e.g. Search changes}}" aria-label="{{Search changes}}"></div>
     </div>
-    <!-- OPTIONAL CHIPS. Filter by data-area on each item. -->
-    <div class="chips" data-for="#{{LIST ID}}"><button class="chip" type="button" data-area="{{AREA}}" aria-pressed="false">{{AREA}}</button></div>
+    <!-- OPTIONAL CHIPS. One row per filter. data-key names the item attribute it filters (data-area, data-person, ...); each chip's data-value must match it. Chips in a row combine with OR, rows combine with AND. -->
+    <div class="chips" data-for="#{{LIST ID}}" data-key="area"><span class="lbl">Area</span><button class="chip" type="button" data-value="{{AREA}}" aria-pressed="false">{{AREA}}</button></div>
+    <div class="chips" data-for="#{{LIST ID}}" data-key="person"><span class="lbl">Person</span><button class="chip" type="button" data-value="{{PERSON}}" aria-pressed="false">{{PERSON}}</button></div>
     <ul class="list" id="{{LIST ID}}">
-      <li class="entry" data-area="{{AREA}}"><time datetime="{{YYYY-MM-DD}}">{{Nov 12}}</time><div><span class="area">{{AREA}}</span>{{ONE SENTENCE}}<details class="ev"><summary>Evidence · {{COUNT}}</summary><div class="trail"><a class="src" href="{{URL}}"><i>{{SOURCE}}</i>{{LABEL}}</a></div></details></div><span class="pill s-ok">{{STATE}}</span></li>
+      <li class="entry" data-area="{{AREA}}" data-person="{{PERSON}}"><time datetime="{{YYYY-MM-DD}}">{{Nov 12}}</time><div><span class="area">{{AREA}}</span>{{ONE SENTENCE}}<details class="ev"><summary>Evidence · {{COUNT}}</summary><div class="trail"><a class="src" href="{{URL}}"><i>{{SOURCE}}</i>{{LABEL}}</a></div></details></div><span class="pill s-ok">{{STATE}}</span></li>
     </ul>
   </section>
   <!-- PATTERN D: TABLE. Only when items share 4 or more fields. -->
@@ -426,11 +429,16 @@ a.act{display:inline-block;text-decoration:none}
   // Search and chip filters.
   function apply(list){
     var box=document.querySelector('[data-find="#'+list.id+'"]'),q=box?box.value.trim().toLowerCase().split(/\s+/).filter(Boolean):[];
-    var on=[].slice.call(document.querySelectorAll('[data-for="#'+list.id+'"] .chip[aria-pressed="true"]')).map(function(b){return b.dataset.area});
+    var groups=[].slice.call(document.querySelectorAll('.chips[data-for="#'+list.id+'"]')).map(function(g){
+      var key=g.dataset.key||'area';
+      return {key:key,on:[].slice.call(g.querySelectorAll('.chip[aria-pressed="true"]')).map(function(b){return b.dataset.value||b.dataset.area})};
+    });
     var shown=0;
     [].forEach.call(list.children,function(li){
       if(li.classList.contains('nomatch'))return;
-      var txt=li.textContent.toLowerCase(),ok=q.every(function(w){return txt.indexOf(w)>-1})&&(!on.length||on.indexOf(li.dataset.area)>-1);
+      var txt=li.textContent.toLowerCase(),ok=q.every(function(w){return txt.indexOf(w)>-1})&&groups.every(function(g){
+        if(!g.on.length)return true;var vals=(li.dataset[g.key]||'').split('|');return g.on.some(function(v){return vals.indexOf(v)>-1});
+      });
       li.hidden=!ok;if(ok)shown++;
     });
     var nm=list.querySelector('.nomatch');
