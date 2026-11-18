@@ -2,7 +2,7 @@
 
 # Devplan for Claude and ChatGPT
 
-Devplan turns your customer asks, team decisions, and shipped work into pre-computed knowledge, so your agents complete work correctly the first time. It reads your code, tickets, Slack, docs, calls, and support, and keeps a live map of your product: what exists, what's shipping, what customers are asking for, and what was decided and why.
+Devplan turns your code, tickets, Slack, docs, calls, and support into a live map of your product, with the customer asks, team decisions, and shipped work already worked out. Your agent starts every task knowing what was decided and why, what's shipping, and what customers are asking for, so it gets the work right the first time.
 
 This plugin brings that knowledge into the Claude and ChatGPT apps:
 
@@ -28,13 +28,13 @@ The desktop and web apps give you the full experience: live dashboards that refr
 
 Installed on Claude, the plugin also shows up in Cowork and Claude Code on the same account.
 
-### ChatGPT desktop and web (and the Codex app)
+### ChatGPT desktop and web
 
 1. Open **Plugins**, choose to add a marketplace, and enter `https://github.com/devplaninc/devplan-plugins`.
 2. Open the **Devplan** marketplace, then **Devplan**, and select **+** to install it.
 3. Say **"Set up Devplan"** and sign in when asked.
 
-In ChatGPT, @-mention **Devplan** or pick it from **+ > More**. In a Codex task, use **Sources > Use plugins**. If you don't see an option to add a marketplace on your plan, use **Connect Devplan directly** below.
+In ChatGPT, @-mention **Devplan** or pick it from **+ > More**. If you don't see an option to add a marketplace on your plan, use **Connect Devplan directly** below.
 
 ### For workspace admins
 
@@ -75,14 +75,6 @@ You don't need to name a skill. Ask product questions as you normally would and 
 
 **In Slack:** once Slack is connected in Devplan (Integrations), mention Devplan in any channel or thread to get the same answers, with sources, where your team already talks.
 
-## Where output goes
-
-| | Claude desktop and web | ChatGPT desktop and web, Codex app |
-|---|---|---|
-| Dashboards | Private pages in your Claude account, updated in place on each refresh | One "Devplan" Site with a tab per report, updated in place; a local `devplan/devplan.html` when Sites isn't available |
-| Specs | A document you can edit and share, plus the Devplan project | A document, plus the Devplan project |
-| Refresh | A scheduled task at 7:47 and 12:47 on weekdays; summary emailed only when something changed | A scheduled task at the same times; the last good version stays live if a run fails, and you're alerted |
-
 ## What Devplan can access
 
 - **Reads.** Skills read your Devplan workspace: projects, the code analysis, changes, discussions, calls, support summaries, and documents from the sources you connected in Devplan. Devplan's own permissions decide what it can see.
@@ -95,7 +87,7 @@ Security and data handling: [devplan.com](https://devplan.com) · [Privacy](http
 ## Updating and uninstalling
 
 - **Claude:** the marketplace syncs from GitHub; reinstall Devplan if a new version doesn't appear. To remove it, open **Plugins > Devplan** and remove it.
-- **ChatGPT and the Codex app:** run `codex plugin marketplace upgrade`, then restart the app. To remove it, remove Devplan from **Plugins**.
+- **ChatGPT:** reinstall Devplan from **Plugins** if a new version doesn't appear. To remove it, remove Devplan from **Plugins**.
 
 Uninstalling doesn't delete your Devplan workspace or anything saved in it.
 
@@ -121,10 +113,6 @@ If you later install the plugin, remove this server so you don't have two Devpla
 | `eng-analytics` | Throughput, cycle time, review load, and work in progress, daily or weekly, by person and repo |
 | `cycle-planning` | Asks timeframe and team size, offers strategic directions, and plans each cycle with a timeline, estimates, and a 20% buffer |
 | `spec` | Discovery questions, product and technical plan, estimate; tracked in Devplan |
-
-## Support
-
-[devplan.com](https://devplan.com) · [docs.devplan.com](https://docs.devplan.com) · Contributing: [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## Claude Code and Codex CLI
 
@@ -172,3 +160,7 @@ The last command opens Devplan's sign-in in your browser. It's a one-time step u
 | "Write a spec for <feature>" | A spec with a technical plan and an estimate from your team's git history, saved to Devplan for your PM |
 | "Why did we build <thing> this way?" | The PRs, threads, and calls behind it |
 | "Who knows <service> best?" | The people who've worked on it most, from the graph |
+
+## Support
+
+[devplan.com](https://devplan.com) · [docs.devplan.com](https://docs.devplan.com) · Contributing: [CONTRIBUTING.md](CONTRIBUTING.md)

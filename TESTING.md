@@ -20,7 +20,7 @@ Use a new chat for each step.
    - the tour gives product and technical example questions and ends with one exact message to try first
    - one confirmation builds every ready dashboard, one at a time
    - in Claude, it creates **one** scheduled task at 7:47 and 12:47 on weekdays with email on, with only Devplan attached where the tool allows, and says what the task can access
-   - in ChatGPT and the Codex app, it builds **one** "Devplan" Site with four tabs and **one** scheduled task at both times; the tab is remembered in the URL hash
+   - in ChatGPT, it builds **one** "Devplan" Site with four tabs and **one** scheduled task at both times; the tab is remembered in the URL hash
    - in Claude Code and Codex CLI, setup runs three steps (connect, workspace and company context, try it), builds no dashboards, skips the radar focus question, and ends with an exact question about the repo in the working folder; asking "Build my daily radar" afterwards writes it to `devplan/`
    - with Sites unavailable, the combined page lands at `devplan/devplan.html`; in Claude Code, dashboards land in `devplan/` as full pages (open one from disk: no broken characters)
    - the tour ends with a single, quiet Invite teammates line

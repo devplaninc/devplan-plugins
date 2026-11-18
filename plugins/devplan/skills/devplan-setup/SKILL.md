@@ -82,7 +82,7 @@ Connect steps, by surface. Give only the ones for the surface you're on, word fo
 - **Claude (web and desktop):** "Open **Plugins** in the sidebar, then **Devplan**, and click **Connect**. Claude shows a connector form: keep the defaults, click **Add**, then sign in to Devplan."
 - **Claude Code:** if a sign-in link appears in the chat, open it and sign in. Otherwise: "Run `/mcp`, choose **plugin:devplan:devplan**, and sign in. If it isn't listed, start a new Claude Code session first."
 - **Codex CLI:** "In a separate terminal, run `codex mcp add devplan --url https://app.devplan.com/api/v1/mcp` and sign in to Devplan in the browser that opens. Then start a new Codex session and say 'Set up Devplan'."
-- **ChatGPT and the Codex app:** "Open **Plugins**, then **Devplan**, and connect. If Devplan isn't listed, add a custom MCP server with the URL `https://app.devplan.com/api/v1/mcp`."
+- **ChatGPT:** "Open **Plugins**, then **Devplan**, and connect. If Devplan isn't listed, add a custom MCP server with the URL `https://app.devplan.com/api/v1/mcp`."
 
 Then add one line: "Claude may ask before each Devplan tool it uses. Devplan's read tools only read your workspace, so you can choose **Always allow** for them." (Adapt "Claude" to the app you're in.)
 
@@ -141,7 +141,7 @@ Options: **Build and schedule**, **Pick different times**, **Build without sched
 
 - Say "Building 2 of 4: Execution Monitoring".
 - Follow that dashboard's skill, using the company context, the radar focus areas, and the settings gathered so far.
-- Publish it as that skill's Publish section says. In Claude, each is its own artifact; keep its link. In ChatGPT and the Codex app, each is a tab in the one "Devplan" Site; keep the Site's link.
+- Publish it as that skill's Publish section says. In Claude, each is its own artifact; keep its link. In ChatGPT, each is a tab in the one "Devplan" Site; keep the Site's link.
 - If one fails or has too little data, give it its empty state, say so in one line, and continue. Never let one dashboard stop setup.
 
 ### Schedule: Claude
@@ -168,9 +168,9 @@ Refresh my Devplan dashboards. Use the Devplan plugin skills.
 
 Then tell the user in two or three sentences: it's scheduled, at what times, that the summary goes to their account's email only when something changed, whether runs need their approval, what the task can access (name the connectors and tools it was given, if the tool reports them), and where to change it. If no scheduling tool is available, say scheduled refresh isn't available here and suggest saying "Refresh my Devplan dashboards" each morning.
 
-### Schedule: ChatGPT and the Codex app
+### Schedule: ChatGPT
 
-Use the app's scheduled tasks (ChatGPT) or automations (Codex app) to create **one** recurring task at both times on weekdays in the user's time zone, with Devplan as its only connector where you can choose. Write its prompt as a complete standalone instruction:
+Use ChatGPT's scheduled tasks to create **one** recurring task at both times on weekdays in the user's time zone, with Devplan as its only connector where you can choose. Write its prompt as a complete standalone instruction:
 
 ```
 Refresh my Devplan dashboards in my "Devplan" Site: <site link>. Use the Devplan plugin skills and only the Devplan connector and the web.
